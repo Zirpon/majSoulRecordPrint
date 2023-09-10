@@ -53,9 +53,13 @@ class Api:
                     format(csvFileName)}
         return response
 
-    def graphicCSV(self):
-        if transformer.graphicCSV():
-            response = {'message': 'graphicCSV \n\n\n<p>战绩图表已生成 {0}<p>\n\n\n\n\n<p><p><p><p>'.format(transformer.graphicCSV())}
+    def graphicCSV(self, n):
+        transformer.recentGameN = int(n)
+        transformer.LoadData()
+        transformer.printCountList()
+        transformer.printCSV()
+        nn = transformer.graphicCSV()
+        response = {'message': 'graphicCSV \n\n\n<p>战绩图表已生成 {0}<p>\n\n\n\n\n<p><p><p><p>'.format(nn)}
         return response
 
     def error(self):
