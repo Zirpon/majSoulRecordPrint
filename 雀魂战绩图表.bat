@@ -1,0 +1,1 @@
+python majSoulRecordTransformer.py --graphic 30

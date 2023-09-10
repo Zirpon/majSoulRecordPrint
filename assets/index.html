@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<style>
+    #response-container {
+        display: none;
+        padding: 3rem;
+        margin: 3rem 5rem;
+        font-size: 120%;
+        border: 5px dashed #ccc;
+    }
+
+    label {
+        margin-left: 0.3rem;
+        margin-right: 0.3rem;
+
+        word-break: break-all;
+        text-decoration: line-through;
+        /***display: block;
+	    text-decoration: line-through;***/
+    }
+
+    button {
+        font-size: 100%;
+        padding: 0.5rem;
+        margin: 0.3rem;
+        text-transform: uppercase;
+        
+        margin: 0;
+        padding: 0;
+        border: 0;
+        background: none;
+        font-size: 100%;
+        vertical-align: baseline;
+        font-family: inherit;
+        font-weight: inherit;
+        color: inherit;
+        -webkit-appearance: none;
+        appearance: none;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-variant: small-caps;
+        font-size: 18px;
+        margin: 3px;
+        padding: 5px 7px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        border-radius: 3px;
+        background-color: transparent;
+        border-color: rgba(175, 47, 47, 0.2);
+    }
+
+</style>
+</head>
+<head>
+    <meta charset="utf-8">
+    <title>Todos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <section class="logo">
+        <img src="logo.jpg" alt="maumaumau">
+    </section>
+
+<h1>雀魂战绩 JS API Example</h1>
+<p id='pywebview-status'><i>pywebview</i> is not ready</p>
+
+<label for="id_input">雀魂ID:</label><input id="majSoulID" type="text" placeholder="put a id here" autocomplete="on"><br/>
+<label for="name_input">雀魂Name:</label><input id="majSoulName"  type="text" placeholder="put a name here" autocomplete="on"><br/>
+<label for="nGame_input">查询场数:</label><input id="majSoulGameN"  type="text" placeholder="put a number here" autocomplete="on"><br/>
+
+<button onClick="setIdName()">save</button><br/>
+
+<button onClick="loadData()">加载 json格式 雀魂战绩 paipus.txt</button><br/>
+
+<p>todo:是否加载友人场 人机场</p>
+<p>todo:输入查询最近场数 默认30场</p>
+
+<button id="printCountList" onClick="printCountList()">打印全部战绩记录</button><br/>
+
+<button onClick="printCSV()">打印我的CSV战绩</button><br/>
+
+<button onClick="graphicCSV()">战绩数据可视化</button><br/>
+
+<div id="response-container"></div>
+<script>
+    var majSoulIDContainer = document.getElementById('majSoulID')
+    var majSoulNameContainer = document.getElementById('majSoulName')
+    var majSoulGameNContainer = document.getElementById('majSoulGameN')
+
+    window.addEventListener('pywebviewready', function() {
+        var container = document.getElementById('pywebview-status')
+        container.innerHTML = '<i>pywebview</i> is ready'
+        document.getElementById('majSoulID').value = localStorage.getItem('majSoulID')
+        document.getElementById('majSoulName').value = localStorage.getItem('majSoulName')
+        document.getElementById('majSoulGameN').value = localStorage.getItem('majSoulGameN')
+        
+        /***
+        console.log(localStorage)
+        console.log(document.cookies)
+        console.log(localStorage.getItem('majSoulID'))
+        console.log(localStorage.getItem('majSoulName'))
+        console.log(document.getElementById('majSoulID').value)
+        console.log(document.getElementById('majSoulName').value)
+        ***/
+    })
+
+    function showResponse(response) {
+        var container = document.getElementById('response-container')
+
+        container.innerText = response.message
+        container.style.display = 'block'
+    }
+
+    function setIdName() {
+        
+        setCookies()
+        var majSoulID = document.getElementById('majSoulID').value;
+        var majSoulName = document.getElementById('majSoulName').value;
+        var majSoulGameN = document.getElementById('majSoulGameN').value;
+
+        pywebview.api.setIdName(majSoulID, majSoulName, majSoulGameN).then(showResponse)
+
+    }
+
+    function setCookies() {
+        localStorage.setItem('majSoulID', document.getElementById('majSoulID').value)
+        localStorage.setItem('majSoulName', document.getElementById('majSoulName').value)
+        localStorage.setItem('majSoulGameN', document.getElementById('majSoulGameN').value)
+
+        //showCookies()
+    }
+
+    function showCookies() {
+        majSoulIDContainer.innerHTML = localStorage.getItem('majSoulID')
+        majSoulNameContainer.innerHTML = localStorage.getItem('majSoulName')
+        majSoulGameNContainer.innerHTML = localStorage.getItem('majSoulGameN')
+        //cookieContainer.innerHTML = document.cookie
+        
+        /***
+        console.log(localStorage)
+        console.log(document.cookies)
+        console.log(localStorage.getItem('majSoulID'))
+        console.log(localStorage.getItem('majSoulName'))
+        console.log(document.getElementById('majSoulID').value)
+        console.log(document.getElementById('majSoulName').value)
+        ***/
+    }
+
+    function loadData() {
+        pywebview.api.loadData().then(showResponse)
+    }
+
+    function printCountList() {
+        var btn = document.getElementById('printCountList')
+
+        pywebview.api.printCountList().then(showResponse)
+    }
+
+    function printCSV() {
+        pywebview.api.printCSV().then(showResponse)
+    }
+    
+    function get_cookies() {
+        pywebview.api.get_cookies().then(showResponse)
+    }
+
+    function graphicCSV() {
+        pywebview.api.graphicCSV().then(showResponse)
+    }
+
+</script>
+</body>
+</html>
