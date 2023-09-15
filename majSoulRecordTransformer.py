@@ -28,6 +28,25 @@ RankTitle = ['初心1', '初心2','初心3',
              '雀豪1','雀豪2','雀豪3',
              '雀圣1','雀圣2','雀圣3',
              '魂天']
+roomMode = {
+    0:'友人场',
+    1:'铜之间',
+    2:'银之间',
+    3:'金之间',
+    4:'玉之间', 
+    5:'王座间',
+    100:'比赛场',
+    101:'乱斗之间',
+    102:'修罗之战',
+    103:'宝牌狂热',
+    104:'赤羽之战',
+}
+
+roundMode = {
+    4:'东风场',
+    8:'南风场',
+}
+
 RankPoint = [20,80,200,
              609,808,1001,
              1200,1400,2000,
@@ -57,6 +76,7 @@ def LoadData():
         count_dict["uuid"] = gamedata['uuid']
         #count_dict["version"] = gamedata['version']
         count_dict["playerdata"] = sorted(gamedata['playerdata'], key = lambda i: i['finalpoint'],reverse=True)
+        count_dict["roomdata"] = gamedata['roomdata']
 
         # 人机局标识
         botMatchFlag = 0
@@ -67,7 +87,8 @@ def LoadData():
             and count_dict["playerdata"][i]['rank'] == 1 \
             and count_dict["playerdata"][i]['pt'] == 0 \
             and count_dict["playerdata"][i]['id'] == 0 \
-            and count_dict["playerdata"][i]['deltapt'] == 0:
+            and count_dict["playerdata"][i]['deltapt'] == 0 \
+            or count_dict['roomdata']['room'] == 0:
                 botMatchFlag += 1
         #count_dict["roomdata"] = gamedata['roomdata']
         if botMatchFlag == 0:
@@ -98,7 +119,9 @@ def printCountList():
             """
             #gamedata['starttime'] = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(gamedata['starttime']))
             endtime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(gamedata['endtime']))
-            f.writelines(gamedata['uuid']+'\n')
+            f.writelines(gamedata['uuid']+'\t')
+            f.writelines(roundMode[gamedata['roomdata']['round']]+'\t')
+            f.writelines(roomMode[gamedata['roomdata']['room']]+'\n')
 
             for playerdata in gamedata["playerdata"]:
                 playerdata["rankTitle"] = RankTitle[playerdata["rank"]-1]
