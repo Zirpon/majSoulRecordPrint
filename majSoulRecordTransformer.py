@@ -5,8 +5,10 @@ import csv
 
 """
 todo:
-输入查询最近战绩场数
-输入ID 名字 然后保存 而不是依赖配置文件
+换一下app 那个猫猫图片
+设置一下app 版本号 并且按钮可见
+
+
 """
 MJSoulID = 0
 MJSoulName = ""
