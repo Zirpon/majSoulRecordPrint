@@ -7,8 +7,7 @@ import csv
 todo:
 换一下app 那个猫猫图片
 设置一下app 版本号 并且按钮可见
-
-
+把爬取牌谱的 开源代码 看看 看看能不能整合过来 或者 整过去 就不用 开两个软件了
 """
 MJSoulID = 0
 MJSoulName = ""
