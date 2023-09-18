@@ -1,14 +1,9 @@
 # majSoulRecordPrint
  雀魂战绩数据可视化
 
->此应用依赖 [雀魂牌谱分析工具](https://github.com/zyr17/MajsoulPaipuAnalyzer) 项目生成的雀魂战绩`json`文件 `paipus.txt`
-
 ## 使用方法
 
-- [ ] 使用此应用先到[雀魂牌谱分析工具软件发布页](https://github.com/zyr17/MajsoulPaipuAnalyzer/releases/)下载工具软件
-- [ ] 使用工具软件登录雀魂以后 点击工具栏获取牌谱跟下载牌谱
-- [ ] 拷贝本项目执行文件到牌谱的下载目录`XXX\MajsoulPaipuAnalyzer-win-x64\data\majsoul\{雀魂ID}\`下 
-- [ ] 运行
+- [ ] 运行 - 登录 - 获取牌谱
 
 ## 界面
 
@@ -21,3 +16,12 @@
 Windows: [![Build status](https://ci.appveyor.com/api/projects/status/fyirnuhsunq73brc?svg=true)](https://ci.appveyor.com/project/zyr17/majsoulpaipuanalyzer)
 
 - [ ] 环境: windows python3 pipenv Pyinstaller
+
+## 免责声明
+该工具为个人制作，未对雀魂代码逻辑进行改动，但是为了获取牌谱数据使用了极少量前端代码的API，包括**获取用户牌谱列表**。所有相关操作代码均在[browseinject.js](assets/browseinject.js)中，工具不会代替用户执行任何其他交互性操作。请自行判断使用该工具的风险。如果使用该工具或（不存在的）该工具的衍生物产生的一切后果作者均不会承担任何责任。
+
+## 致谢
+
+该项目使用或曾经使用了这些项目的资源，感谢他们。
+
+[雀魂牌谱分析工具](https://github.com/zyr17/MajsoulPaipuAnalyzer)

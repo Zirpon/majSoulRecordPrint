@@ -10,3 +10,6 @@ paipus.txt
 __pycache__/
 pack/
 删除雀魂战绩缓存.bat
+gamedata.json
+load_html.py
+MajSoulHistory.png

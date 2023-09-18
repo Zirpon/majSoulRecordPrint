@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div id="app"></div>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <!-- Babel Script -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.9"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "react": "https://esm.sh/react?dev",
+            "react-dom/client": "https://esm.sh/react-dom/client?dev"
+        }
+    }
+    </script>
+    <script type="text/babel", data-type="module">        
+        function Header(props) {
+            console.log(props) // { title: "Hello React" }
+            return <h1>Develop. Preview. Ship.  </h1>;
+        }
+
+        {/*
+            输出对象属性 { props.title }
+            模板字符串 {`Hello ${title}`}
+            函数返回值 { getTitle() }
+            三元表达式 { title ? title : "Hello" }
+        */}
+
+        function Header2({ title }) {
+            console.log(title) // "Hello React"
+            return <h1>{title ? title : 'Hello React!'}</h1>
+        }
+
+        function ShoppingList(products) {
+            const listItems = products.map(product =>
+                <li
+                key = {product.id}
+                style = {{
+                    color: product.isFruit ? 'magenta' : 'green'
+                }}
+                >
+                    {product.title}
+                </li>
+            );
+
+            return (
+                <ul>{listItems}</ul>
+            );
+        }
+
+        const user = {
+            name: 'Hedy Lamarr',
+            imageUrl: 'https://www.pythonpool.com/wp-content/uploads/2021/05/tuple-768x432.png',
+            imageSize: 90,
+        };
+
+        function Profile() {
+            return (
+                <>
+                    <h1>{user.name}</h1>
+                    <img
+                        className="avatar"
+                        src={user.imageUrl}
+                        alt={'Photo of ' + user.name}
+                        style={{
+                        width: user.imageSize,
+                        height: user.imageSize
+                        }}
+                    />
+                </>
+            );
+        }
+
+        function Item({ name, isPacked }) {
+            return (
+                <li className="item">
+                {name} {isPacked && '✔'}
+                </li>
+            );
+        }
+
+        function PackingList() {
+            return (
+                <section>
+                <h1>Sally Ride's Packing List</h1>
+                <ul>
+                    <Item 
+                    isPacked={true} 
+                    name="Space suit" 
+                    />
+                    <Item 
+                    isPacked={true} 
+                    name="Helmet with a golden leaf" 
+                    />
+                    <Item 
+                    isPacked={false} 
+                    name="Photo of Tam" 
+                    />
+                </ul>
+                </section>
+            );
+        }
+
+        function MyInput() {
+            const [text, setText] = React.useState('hello');
+
+            function handleChange(e) {
+                setText(e.target.value);
+            }
+
+            return (
+                <>
+                    <input value={text} onChange={handleChange} />
+                    <p>You typed: {text}</p>
+                    <button onClick={() => setText('hello')}>
+                        Reset
+                    </button>
+                    <br/>
+                </>
+            );
+        }
+
+        function MyCheckbox() {
+            const [liked, setLiked] = React.useState(true);
+
+            function handleChange(e) {
+                console.log({liked})
+                setLiked(e.target.checked);
+            }
+            return (
+                <>
+                <label>
+                    <input
+                    type="checkbox"
+                    checked={liked}
+                    onChange={handleChange}
+                    />
+                    I liked this
+                </label>
+                <p>You {liked ? 'liked' : 'did not like'} this.</p>
+                </>
+            );
+        }
+
+        function Form() {
+            const [name, setName] = React.useState('Taylor');
+            const [age, setAge] = React.useState(42);
+
+            return (
+                <>
+                <input
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                />
+                <button onClick={() => setAge(age + 1)}>
+                    Increment age
+                </button>
+                <p>Hello, {name}. You are {age}.</p>
+                </>
+            );
+        }
+
+        function Square({ value, onSquareClick }) {
+            return (
+                <button className="square" onClick={onSquareClick}>
+                {value}
+                </button>
+            );
+        }
+
+        function Board({ xIsNext, squares, onPlay }) {
+            function handleClick(i) {
+                if (calculateWinner(squares) || squares[i]) {
+                    return;
+                }
+                const nextSquares = squares.slice();
+                if (xIsNext) {
+                    nextSquares[i] = 'X';
+                } else {
+                    nextSquares[i] = 'O';
+                }
+                onPlay(nextSquares);
+            }
+
+            const winner = calculateWinner(squares);
+            let status;
+            if (winner) {
+                status = 'Winner: ' + winner;
+            } else {
+                status = 'Next player: ' + (xIsNext ? 'X' : 'O');
+            }
+
+            return (
+                <>
+                <div className="status">{status}</div>
+                <div className="board-row">
+                    <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+                    <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+                    <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+                </div>
+                <div className="board-row">
+                    <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+                    <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+                    <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+                </div>
+                <div className="board-row">
+                    <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+                    <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+                    <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+                </div>
+                </>
+            );
+        }
+
+        function Game() {
+            const [history, setHistory] = React.useState([Array(9).fill(null)]);
+            const [currentMove, setCurrentMove] = React.useState(0);
+            const xIsNext = currentMove % 2 === 0;
+            const currentSquares = history[currentMove];
+
+            function handlePlay(nextSquares) {
+                const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+                setHistory(nextHistory);
+                setCurrentMove(nextHistory.length - 1);
+            }
+
+            function jumpTo(nextMove) {
+                setCurrentMove(nextMove);
+            }
+
+            const moves = history.map((squares, move) => {
+                let description;
+                if (move > 0) {
+                description = 'Go to move #' + move;
+                } else {
+                description = 'Go to game start';
+                }
+                return (
+                <li key={move}>
+                    <button onClick={() => jumpTo(move)}>{description}</button>
+                </li>
+                );
+            });
+
+            return (
+                <div className="game">
+                <div className="game-board">
+                    <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+                </div>
+                <div className="game-info">
+                    <ol>{moves}</ol>
+                </div>
+                </div>
+            );
+        }
+
+        function calculateWinner(squares) {
+            const lines = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6],
+            ];
+            for (let i = 0; i < lines.length; i++) {
+                const [a, b, c] = lines[i];
+                if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+                return squares[a];
+                }
+            }
+            return null;
+        }
+
+        function FilterableProductTable({ products }) {
+            const [filterText, setFilterText] = React.useState('');
+            const [inStockOnly, setInStockOnly] = React.useState(false);
+
+            return (
+                <div>
+                <SearchBar
+                    filterText={filterText} 
+                    inStockOnly={inStockOnly} 
+                    onFilterTextChange={setFilterText} 
+                    onInStockOnlyChange={setInStockOnly} />
+                <ProductTable 
+                    products={products} 
+                    filterText={filterText}
+                    inStockOnly={inStockOnly} />
+                </div>
+            );
+        }
+
+        function ProductCategoryRow({ category }) {
+            return (
+                <tr>
+                <th colSpan="2">
+                    {category}
+                </th>
+                </tr>
+            );
+        }
+
+        function ProductRow({ product }) {
+            const name = product.stocked ? product.name :
+                <span style={{ color: 'red' }}>
+                {product.name}
+                </span>;
+
+            return (
+                <tr>
+                <td>{name}</td>
+                <td>{product.price}</td>
+                </tr>
+            );
+        }
+
+        function ProductTable({ products, filterText, inStockOnly }) {
+            const rows = [];
+            let lastCategory = null;
+
+            products.forEach((product) => {
+                if ( product.name.toLowerCase().indexOf(filterText.toLowerCase()) === -1 ) {
+                    return;
+                }
+                if (inStockOnly && !product.stocked) {
+                    return;
+                }
+                if (product.category !== lastCategory) {
+                    rows.push( 
+                        <ProductCategoryRow 
+                        category={product.category} 
+                        key={product.category} />
+                    );
+                }
+                rows.push(
+                <ProductRow
+                    product={product}
+                    key={product.name} />
+                );
+                lastCategory = product.category;
+            });
+
+            return (
+                <table>
+                <thead>
+                    <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>{rows}</tbody>
+                </table>
+            );
+        }
+
+        function SearchBar({
+            filterText,
+            inStockOnly,
+            onFilterTextChange,
+            onInStockOnlyChange
+            }) {
+            return (
+                <form>
+                <input 
+                    type="text" 
+                    value={filterText} placeholder="Search..." 
+                    onChange={(e) => onFilterTextChange(e.target.value)} />
+                <label>
+                    <input 
+                    type="checkbox" 
+                    checked={inStockOnly} 
+                    onChange={(e) => onInStockOnlyChange(e.target.checked)} />
+                    {' '}
+                    Only show products in stock
+                </label>
+                </form>
+            );
+        }
+
+        const PRODUCTS = [
+            {category: "Fruits", price: "$1", stocked: true, name: "Apple"},
+            {category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit"},
+            {category: "Fruits", price: "$2", stocked: false, name: "Passionfruit"},
+            {category: "Vegetables", price: "$2", stocked: true, name: "Spinach"},
+            {category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin"},
+            {category: "Vegetables", price: "$1", stocked: true, name: "Peas"}
+        ];
+
+        function AppFruit() {
+            return <FilterableProductTable products={PRODUCTS} />;
+        }
+
+        function HomePage() {
+            const names = ['Mike', 'Grace', 'Margaret'];
+            const [likes, setLikes] = React.useState(0);
+            const products = [
+                { title: 'Cabbage', isFruit: false, id: 1 },
+                { title: 'Garlic', isFruit: false, id: 2 },
+                { title: 'Apple', isFruit: true, id: 3 },
+            ];
+
+            function handleClick() {
+                setLikes(likes + 1 + 10);
+            }
+
+            return (
+                <div>
+                {/* 嵌套的 Header 组件 */}
+                <Header title="Hello JavaScript!" />
+                <Header2 title="Hello React" />
+                <ul>
+                    {
+                        names.map((name) => (<li key={name}> {name} </li>))
+                    }
+                </ul>
+                {ShoppingList(products)}
+                <button onClick={handleClick}>Likes ({likes})</button>
+                <Profile />
+                {PackingList()}
+                {MyInput()}
+                <br/>
+                {MyCheckbox()}
+                <Form />
+                <br/><br/>
+                
+                <br/><br/>
+                {AppFruit()}
+                <br/><br/><br/><br/>
+
+                <br/><br/><br/><br/>
+                </div>
+            );
+        }
+
+        const app = document.getElementById('app');
+        ReactDOM.render(
+            <HomePage />, app
+        );
+    </script>
+  </body>
+<style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      padding: 0;
+    }
+    
+    h1 {
+      margin-top: 0;
+      font-size: 22px;
+    }
+    
+    h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+    
+    h3 {
+      margin-top: 0;
+      font-size: 18px;
+    }
+    
+    h4 {
+      margin-top: 0;
+      font-size: 16px;
+    }
+    
+    h5 {
+      margin-top: 0;
+      font-size: 14px;
+    }
+    
+    h6 {
+      margin-top: 0;
+      font-size: 12px;
+    }
+    
+    code {
+      font-size: 1.2em;
+    }
+    
+    ul {
+      padding-inline-start: 20px;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+      padding: 0;
+    }
+    
+    .square {
+      background: #fff;
+      border: 1px solid #999;
+      float: left;
+      font-size: 24px;
+      font-weight: bold;
+      line-height: 34px;
+      height: 34px;
+      margin-right: -1px;
+      margin-top: -1px;
+      padding: 0;
+      text-align: center;
+      width: 34px;
+    }
+    
+    .board-row:after {
+      clear: both;
+      content: '';
+      display: table;
+    }
+    
+    .status {
+      margin-bottom: 10px;
+    }
+    .game {
+      display: flex;
+      flex-direction: row;
+    }
+    
+    .game-info {
+      margin-left: 20px;
+    }
+
+    
+    :root {
+        color: rgba(255, 255, 255, 0.87);
+    }
+
+    
+    input {
+        background-color: #592b08;
+        outline: 1px solid #AFECAB;
+        color:rgb(50, 230, 14);
+        caret-color:#ffa502;
+    }
+
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: linear-gradient(-135deg,#c850c0,#4158d0);
+    }
+
+</style>
+</html>

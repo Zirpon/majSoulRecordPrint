@@ -2,12 +2,14 @@
 import time
 import json
 import csv
+from os import path
 
 """
 todo:
 换一下app 那个猫猫图片
-设置一下app 版本号 并且按钮可见
-把爬取牌谱的 开源代码 看看 看看能不能整合过来 或者 整过去 就不用 开两个软件了
+html 好看的表 简单CSS 横着
+白色背景换成彩色
+整理一下 资源文件 现在文件多了 乱了
 """
 MJSoulID = 0
 MJSoulName = ""
@@ -57,9 +59,11 @@ RankPoint = [20,80,200,
 sortedCountList = []
 
 def LoadData():
-    with open("paipus.txt",'r',encoding='utf-8') as load_f:
+    if not path.exists("gamedata.json"):
+        return
+    with open("gamedata.json",'r',encoding='utf-8') as load_f:
         newload_dict = json.load(load_f)
-    
+
     global sortedCountList
     count_list = []
     count_dict = {}
@@ -69,7 +73,8 @@ def LoadData():
         i+=1
         #if i == 1:
         #    print(gameRecord['gamedata'])
-        gamedata = gameRecord['gamedata']
+        #gamedata = gameRecord['gamedata']
+        gamedata = gameRecord
         #count_dict["source"] = gamedata['source']			
         #count_dict["accountid"] = gamedata['accountid']
         #count_dict["starttime"] = gamedata['starttime']
@@ -79,8 +84,8 @@ def LoadData():
         count_dict["playerdata"] = sorted(gamedata['playerdata'], key = lambda i: i['finalpoint'],reverse=True)
         count_dict["roomdata"] = gamedata['roomdata']
 
-        # 人机局标识
-        botMatchFlag = 0
+        # 人机局不计入
+        noCountFlag = 0
         for i in range(len(count_dict["playerdata"])):
             count_dict["playerdata"][i]["顺位"] = i+1
             #count_dict["playerdata"][i]["rank"] = RankTitle[count_dict["playerdata"][i]["rank"]+1]
@@ -89,10 +94,10 @@ def LoadData():
             and count_dict["playerdata"][i]['pt'] == 0 \
             and count_dict["playerdata"][i]['id'] == 0 \
             and count_dict["playerdata"][i]['deltapt'] == 0 \
-            or count_dict['roomdata']['room'] == 0:
-                botMatchFlag += 1
+            or count_dict['roomdata']['room'] == 0 or count_dict['roomdata']['room'] == 100: #比赛场:休闲普通场等 不计入
+                noCountFlag += 1
         #count_dict["roomdata"] = gamedata['roomdata']
-        if botMatchFlag == 0:
+        if noCountFlag == 0:
             count_list.append(count_dict)
         count_dict = {}
     #print(count_list)
@@ -285,7 +290,7 @@ def graphicCSV():
         #print(x,y)
         ax1.set_ylabel("顺位", color=color)
         ax1.set_xlabel("近期%d场比赛" % recentGameN, color=color)
-        print("近期%d场比赛" % recentGameN)
+        #print("近期%d场比赛" % recentGameN)
         ax1.plot(x, y, color=color, linestyle='-', label="顺位",  marker='h')
         ax1.set_ylim(4.5,0.5)
         ax1.set_yticks([1,2,3,4], ['1st', '2nd', '3rd','4th'])

@@ -1,17 +1,20 @@
-from webview import create_window as webview_create_window
-from webview import start as webview_start
+import webview
 import majSoulRecordTransformer as transformer
 import json
-from os import path as os_path
+from os import path
+import webview.menu as wm
 
 """
 This example demonstrates how to create a pywebview api without using a web
 server
 """
 
+ApiWindowTitle = 'API'
+MajSoulWindowTitle = 'MajSoul'
+
 class Api:
     def __init__(self):
-        if os_path.exists("setting.json"):
+        if path.exists("setting.json"):
             with open("setting.json",'r+',encoding='utf-8') as load_f:
                 transformer.settingDict = json.load(load_f)
                 transformer.MJSoulID = transformer.settingDict['MJSoulID']
@@ -65,8 +68,80 @@ class Api:
     def error(self):
         raise Exception('This is a Python exception')
 
+class menuApi():
+    def __init__(self):
+        self.menu_items = [
+            wm.Menu(
+                'Test Menu',
+                [
+                    wm.MenuAction('Change Active Window Content', self.change_active_window_content),
+                    wm.MenuSeparator(),
+                    wm.Menu(
+                        'Random',
+                        [
+                            wm.MenuAction('获取牌谱数据', self.click_me),
+                            wm.MenuAction('File Dialog', self.open_file_dialog),
+                        ],
+                    ),
+                ],
+            ),
+            wm.MenuAction('置顶', self.on_top),
+            wm.Menu('about', [wm.MenuAction('v0.2', self.do_nothing)]),
+        ]
+
+    def change_active_window_content(self):
+        active_window = webview.active_window()
+        with open('./assets/test.html','r',encoding='utf-8') as f:
+            content = f.read()
+            active_window.load_html(content)
+        f.close()
+
+    def click_me(self):
+        active_window = webview.active_window()
+        if active_window.title == MajSoulWindowTitle:
+            with open('./assets/browseinject.js','r',encoding='utf-8') as f:
+                content = f.read()
+                active_window.evaluate_js(
+                    content + 
+                    r"""
+                    """
+                )
+            f.close()
+        elif active_window.title == ApiWindowTitle:
+            active_window.evaluate_js(r"""alert("click me finished");""")
+
+    def do_nothing(self):
+        pass
+
+    def on_top(self):
+        active_window = webview.active_window()
+        active_window.on_top = not active_window.on_top
+        if active_window.on_top:
+            active_window.evaluate_js(r"""alert("已置顶");""")
+        else:
+            active_window.evaluate_js(r"""alert("已取消置顶");""")
+
+    def say_this_is_window_2(self):
+        active_window = webview.active_window()
+        if active_window:
+            active_window.load_html('<h1>This is window 2</h2>')
+
+    def open_file_dialog(self):
+        active_window = webview.active_window()
+        active_window.create_file_dialog(webview.SAVE_DIALOG, directory='/', save_filename='test.file')
+
+    class menuJS_api:    
+        def savegamedataJson(self, filename, content):
+            #print(content)
+            with open(filename, 'w', encoding='utf-8') as f:
+                f.write(content)
+            f.close()
+            return {'message': path.abspath(filename)}
+
 if __name__ == '__main__':
     api = Api()
-    webview_create_window('API example', "./assets/index.html", js_api=api, on_top=True)
-    webview_start(private_mode=False)
-    #webview.start(debug=True)
+    menuApi = menuApi()
+
+    apiWindow = webview.create_window(ApiWindowTitle, "./assets/index.html", js_api=api)
+    majWindow = webview.create_window(MajSoulWindowTitle, 'https://game.maj-soul.com/1/', js_api=menuApi.menuJS_api())
+    webview.start(private_mode=False, menu=menuApi.menu_items, debug=True)
