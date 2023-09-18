@@ -30,15 +30,7 @@ var UserID = -1;
 var paipugamedata = {};
 var paipugamedata0 = {};
 
-function setUserID(id){
-    UserID = id;
-}
-
-function getAccountID() {
-    return GameMgr.Inst.account_id
-}
-
-function analyzeGameRecord(record_list){
+async function analyzeGameRecord(record_list){
     // collect errors and report once
     let target_gamedata = null;
     if (UserID == 0) target_gamedata = paipugamedata0;
@@ -251,6 +243,7 @@ function iserrorpaipu(gamedata) {
     ;
 }
 
+let retCollectallpaipu = -1
 function collectallpaipu() {
     //alert("将开始自动收集牌谱基本数据！如果牌谱较多需要一定时间。1000牌谱收集耗时约1分钟。");
     let TYPES = {0: 'ALL', 1: 'FRIEND', 2: 'RANK', 4: 'MATCH', 100: 'COLLECT'};
@@ -282,7 +275,8 @@ function collectallpaipu() {
                                 count ++ ;
                             //alert("已自动收集牌谱基本数据！牌谱个数：" + count);
                             //callback && callback();
-                            //return result;
+                            retCollectallpaipu =+ 1;
+                            return result;
                         }
                     }
                 });
@@ -309,45 +303,63 @@ function savegamedata(userid, gamedata){
     pywebview.api.savegamedataJson(gamedatatxt, jsonFormat).then( 
         function(response) { 
             console.log(JSON.stringify(response))
-            alert(response.message + "文件已生成，收集牌谱个数：" + count);
-        } 
+            alert(response.message + "\n\n文件已生成，收集牌谱个数：" + count);
+        }
     )
 }
 
-collectallpaipu();
-alert("已自动收集牌谱基本数据！牌谱个数：" + Object.keys(uiscript.UI_PaiPu.record_map).length);
-
-setUserID(GameMgr.Inst.account_id);
-let resList = [];
-for (let id in uiscript.UI_PaiPu.record_map) {
-    resList.push(uiscript.UI_PaiPu.record_map[id]);
-    //console.log(JSON.stringify(uiscript.UI_PaiPu.record_map[id]));
+function setUserID(id){
+    UserID = id;
 }
-analyzeGameRecord(resList);
-alert("已格式化牌谱个数：" + Object.keys(paipugamedata).length);
 
-savegamedata(GameMgr.Inst.account_id, paipugamedata)
+function getAccountID(){
+    if (GameMgr == undefined || GameMgr.Inst == undefined || GameMgr.Inst.account_id == -1) {
+        getAccountID();
+        console.log("ddd:" + ddd)
+    }
+    else setUserID(GameMgr.Inst.account_id);
+}
 
-/*
-setTimeout( ()=>{
-    //console.log(JSON.stringify(uiscript.UI_PaiPu.record_map));
-    setUserID(GameMgr.Inst.account_id);
-    let resList = [];
-    for (let id in uiscript.UI_PaiPu.record_map) {
-        resList.push(uiscript.UI_PaiPu.record_map[id]);
-        //console.log(JSON.stringify(uiscript.UI_PaiPu.record_map[id]));
+const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+
+async function mainLoop() {
+    let ddd = 0
+    while (true) {
+        getAccountID();
+        ddd += 1;
+        console.log('ddd:'+ddd+' userid:'+UserID)
+        await sleep(1000);
+        if (UserID != -1)
+            break;
     }
 
-    analyzeGameRecord(resList);
-    //console.log(UserID)
-    //console.log(getAccountID())
-    //console.log(JSON.stringify(paipugamedata));
-}, 5000);
+    ddd = 0;
+    while (true) {
+        if (ddd == 0) {
+            collectallpaipu();
+        }
+        ddd += 1;
+        console.log('ddd:'+ddd+' retCollectallpaipu:'+retCollectallpaipu)
 
-setTimeout( ()=>{
-   savegamedata(GameMgr.Inst.account_id, paipugamedata)
-}, 8000);
-*/
+        await sleep(5000);
+        if (retCollectallpaipu > 0)
+            break;
+    }
+
+    alert("已自动收集牌谱基本数据！牌谱个数：" + Object.keys(uiscript.UI_PaiPu.record_map).length);
+
+    let resTmplist = [];
+    for (let id in uiscript.UI_PaiPu.record_map) {
+        resTmplist.push(uiscript.UI_PaiPu.record_map[id]);
+        //console.log(JSON.stringify(uiscript.UI_PaiPu.record_map[id]));
+    }
+    analyzeGameRecord(resTmplist);
+    alert("已格式化牌谱个数：" + Object.keys(paipugamedata).length);
+    
+    savegamedata(GameMgr.Inst.account_id, paipugamedata)
+}
+
+mainLoop()
 
 /*
 var InjectOverNode = document.createElement('p');

@@ -10,6 +10,7 @@ todo:
 html 好看的表 简单CSS 横着
 白色背景换成彩色
 整理一下 资源文件 现在文件多了 乱了
+网页读取csv 筛选 展示
 """
 MJSoulID = 0
 MJSoulName = ""
@@ -60,9 +61,13 @@ sortedCountList = []
 
 def LoadData():
     if not path.exists("gamedata.json"):
-        return
-    with open("gamedata.json",'r',encoding='utf-8') as load_f:
-        newload_dict = json.load(load_f)
+        return -1
+    try:
+        with open("gamedata.json",'r',encoding='utf-8') as load_f:
+            newload_dict = json.load(load_f)
+    except:
+        print("gamedata.json文件读取出错 请检查文件数据格式")
+        return -1
 
     global sortedCountList
     count_list = []
@@ -403,6 +408,7 @@ def graphicCSV():
     #graphicDeltapt()
     graphicTrends()
     graphicHistory()
+    plt.close()
     return recentGameN
 
 def main():
