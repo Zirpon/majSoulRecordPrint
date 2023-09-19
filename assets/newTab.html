@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="./css/index.css" />
+	</head>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+			outline: none;
+			box-sizing: border-box;
+		}
+		body{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 100vh;
+			background: linear-gradient(-135deg,#c850c0,#4158d0);
+		}
+		.wrapper{
+			width: 450px;
+			background-color: #fff;
+			padding: 30px;
+			box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+		}
+		.wrapper .input-data{
+			width: 100%;
+			height: 40px;
+			position: relative;
+		}
+		.wrapper .input-data input{
+			width: 100%;
+			height: 100%;
+			border: none;
+			border-bottom: 2px solid silver;
+			font-size: 17px;
+		}
+		.input-data input:focus ~ label,
+		.input-data input:valid ~ label{
+			transform: translateY(-20px);
+			font-size: 15px;
+			color: #4158D0;
+		}
+		.wrapper .input-data label{
+			position: absolute;
+			bottom: 10px;
+			left: 0;
+			color: grey;
+			pointer-events: none;
+			transition: all 0.3s ease;
+		}
+		.wrapper .input-data .underline{
+			position: absolute;
+			bottom: 0px;
+			height: 2px;
+			width: 100%;
+		}
+		.input-data .underline:before{
+			position: absolute;
+			content: "";
+			height: 100%;
+			width: 100%;
+			background: #4158D0;
+			transform: scaleX(0);
+			transition:transform 0.3s ease;
+		}
+		
+		.input-data input:focus ~ .underline:before,
+		.input-data input:valid ~ .underline:before{
+			transform: scaleX(1);
+		}
+	</style>
+	<body>
+		<div id="app"></div>
+		<script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+		<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+		<!-- Babel Script -->
+		<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+		<script type="text/babel", data-type="module">
+			function MyInput() {
+				const [text, setText] = React.useState('cn.bing.com');
+				function handleChange(e) {
+            	    setText(e.target.value);
+            	}
+				function handleEnter(e){
+					//e.nativeEvent获取原生的事件对像
+					if(e.nativeEvent.keyCode === 13) {
+						console.log(text)
+						pywebview.api.load_url(text).then((response) => {
+							if (response == true) 
+								console.log("页面加载成功!")
+						})
+					}
+				}
+				return (<input value={text} 
+				onChange = {handleChange}
+				onKeyPress = {handleEnter}/>);
+			}
+
+			function HomePage(){
+				return (
+					<div className="wrapper">
+						<div className="input-data">
+						<MyInput />
+						<div className="underline"></div>
+						<label>Name</label>
+						</div>
+					</div>
+				)
+			}
+			
+			const app = document.getElementById('app');
+			ReactDOM.render(<HomePage />, app);
+			//<input type="text" required="" />
+			</script>
+	</body>
+</html>
