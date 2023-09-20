@@ -1,1 +1,1 @@
-python majSoulRecordTransformer.py
+python ./src/majSoulRecordTransformer.py

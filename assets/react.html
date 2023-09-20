@@ -394,7 +394,42 @@
         function AppFruit() {
             return <FilterableProductTable products={PRODUCTS} />;
         }
-
+        
+        function useTime() {
+            const [time, setTime] = React.useState(() => new Date());
+            React.useEffect(() => {
+                const id = setInterval(() => {
+                    setTime(new Date());
+                }, 1000);
+                return () => clearInterval(id);
+            }, []);
+            return time;
+        }
+        function Clock({ color, time }) {
+            return (
+                <h1 style={{ color: color }}>
+                {time}
+                </h1>
+            );
+        }
+        function ColorClock() {
+            const time = useTime();
+            const [color, setColor] = React.useState('lightcoral');
+            return (
+                <div>
+                <p>
+                    选择一个颜色:{' '}
+                    <select value={color} onChange={e => setColor(e.target.value)}>
+                    <option value="lightcoral">浅珊瑚色</option>
+                    <option value="midnightblue">午夜蓝</option>
+                    <option value="rebeccapurple">丽贝卡紫</option>
+                    </select>
+                </p>
+                <Clock color={color} time={time.toLocaleTimeString()} />
+                </div>
+            );
+        }
+    
         function HomePage() {
             const names = ['Mike', 'Grace', 'Margaret'];
             const [likes, setLikes] = React.useState(0);
@@ -427,17 +462,16 @@
                 {MyCheckbox()}
                 <Form />
                 <br/><br/>
-                
+                {ColorClock()}
                 <br/><br/>
                 {AppFruit()}
                 <br/><br/><br/><br/>
-
+                {Game()}
                 <br/><br/><br/><br/>
                 </div>
             );
         }
-    </script>
-    <script>
+
         const app = document.getElementById('app');
         ReactDOM.render(<HomePage />, app);
     </script>

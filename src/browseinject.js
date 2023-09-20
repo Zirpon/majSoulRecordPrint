@@ -27,10 +27,19 @@ const roomname2num = {
 }
 
 var UserID = -1;
+var UserName = null
 var paipugamedata = {};
 var paipugamedata0 = {};
 
-async function analyzeGameRecord(record_list){
+function setUserID(id){
+    UserID = id;
+}
+
+function setUserName(name){
+    UserName = name;
+}
+
+function analyzeGameRecord(record_list){
     // collect errors and report once
     let target_gamedata = null;
     if (UserID == 0) target_gamedata = paipugamedata0;
@@ -141,6 +150,14 @@ async function analyzeGameRecord(record_list){
             let pdata = gamedata.playerdata[pos];
             pdata.id = acc.account_id;
             pdata.name = acc.nickname;
+            //console.log(acc.nickname, UserID, UserName, JSON.stringify(acc))
+
+            //顺便设置 用户名
+            if (acc.nickname && !UserName && acc.account_id == UserID) {
+                setUserName(acc.nickname)
+                //console.log(acc.nickname, UserID, UserName)
+            }
+                
             let idstr = String(acc.level.id);
             pdata.rank = parseInt(idstr[2]) * 3 + parseInt(idstr[4]) - 3;
             pdata.pt = acc.level.score;
@@ -270,9 +287,10 @@ function collectallpaipu() {
                                 m[item.uuid] = item
                             });
                             let count = 0;
-                            for (let i in uiscript.UI_PaiPu.record_map)
+                            for (let i in uiscript.UI_PaiPu.record_map) {
                                 //console.log(JSON.stringify(uiscript.UI_PaiPu.record_map[i]));
                                 count ++ ;
+                            }
                             //alert("已自动收集牌谱基本数据！牌谱个数：" + count);
                             //callback && callback();
                             retCollectallpaipu =+ 1;
@@ -285,7 +303,7 @@ function collectallpaipu() {
 }
 
 function savegamedata(userid, gamedata){
-    let gamedatatxt = 'gamedata.json';
+    let gamedatatxt = './data/'+UserName+'-'+UserID+'-gamedata.json';
     const gamedatamMaxCount =  Object.keys(gamedata).length;
     let jsonFormat = '[';
     let count = 0;
@@ -306,10 +324,6 @@ function savegamedata(userid, gamedata){
             alert(response.message + "\n\n文件已生成，收集牌谱个数：" + count);
         }
     )
-}
-
-function setUserID(id){
-    UserID = id;
 }
 
 function getAccountID(){
@@ -348,12 +362,36 @@ async function mainLoop() {
 
     alert("已自动收集牌谱基本数据！牌谱个数：" + Object.keys(uiscript.UI_PaiPu.record_map).length);
 
-    let resTmplist = [];
-    for (let id in uiscript.UI_PaiPu.record_map) {
-        resTmplist.push(uiscript.UI_PaiPu.record_map[id]);
-        //console.log(JSON.stringify(uiscript.UI_PaiPu.record_map[id]));
+        
+    //因为Loop是异步执行函数的 每调用一个函数 如果依赖函数结果的话 就设置一个定时器吧
+    //await sleep(5000);
+    ddd = 0;
+    while (true) {
+        let resTmplist = [];
+
+        if (ddd == 0) {
+            for (let id in uiscript.UI_PaiPu.record_map) {
+                resTmplist.push(uiscript.UI_PaiPu.record_map[id]);
+                //console.log(JSON.stringify(uiscript.UI_PaiPu.record_map[id]));
+            }
+        }
+
+        analyzeGameRecord(resTmplist)
+        ddd += 1;
+        console.log('ddd:'+ddd+' analyzeGameRecord:UserName='+UserName, UserID)
+
+        await sleep(5000);
+        if (UserName)
+            break;
     }
-    analyzeGameRecord(resTmplist);
+
+    pywebview.api.setIdName(UserID, UserName).then(
+        (response) => {
+            console.log(JSON.stringify(response));
+            alert(`用户 （${UserID}, ${UserName}） setting.json文件已保存\n路径：${response.path}`);
+        }
+    )
+
     alert("已格式化牌谱个数：" + Object.keys(paipugamedata).length);
     
     savegamedata(GameMgr.Inst.account_id, paipugamedata)
@@ -362,6 +400,11 @@ async function mainLoop() {
 mainLoop()
 
 /*
+    new Promise((resolve, reject) => {
+
+    }).then(()=>{
+
+    })
 var InjectOverNode = document.createElement('p');
 InjectOverNode.innerHTML = '脚本加载完成，点击隐藏';
 InjectOverNode.setAttribute('style', 'color: #2D2;z-index: 999;position: absolute;left: 0px;top: 0px;font-weight: bold;');

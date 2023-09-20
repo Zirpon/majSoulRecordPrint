@@ -7,9 +7,9 @@ class MenuApi():
     MajSoulWindowTitle = 'MajSoul'
     ReactWindowsTitle = 'React'
 
-    record_url = './assets/record.html'
+    record_url = '../assets/record.html'
     majSoul_url = 'https://game.maj-soul.com/1/'
-    react_url = './assets/react.html'
+    react_url = '../assets/react.html'
 
     def __init__(self):
         pass
@@ -25,6 +25,7 @@ class MenuApi():
         active_window = webview.active_window()
         active_window.set_title(MenuApi.RecordWindowTitle)
         active_window.load_url(MenuApi.record_url)
+        #active_window.evaluate_js(r"window.dispatchEvent(new CustomEvent('pywebviewready')")
 
     @staticmethod
     def view_majsoul():
@@ -36,13 +37,9 @@ class MenuApi():
     def click_me():
         active_window = webview.active_window()
         if active_window.title == MenuApi.MajSoulWindowTitle:
-            with open('./assets/browseinject.js','r',encoding='utf-8') as f:
+            with open('./src/browseinject.js','r',encoding='utf-8') as f:
                 content = f.read()
-                active_window.evaluate_js(
-                    content + 
-                    r"""
-                    """
-                )
+                active_window.evaluate_js(content)
             f.close()
         else:
             active_window.title == MenuApi.RecordWindowTitle
@@ -56,11 +53,12 @@ class MenuApi():
     def on_top():
         active_window = webview.active_window()
         active_window.on_top = not active_window.on_top
+        """
         if active_window.on_top:
-            active_window.evaluate_js(r"""alert("已置顶");""")
+            active_window.evaluate_js("alert("已置顶");")
         else:
-            active_window.evaluate_js(r"""alert("已取消置顶");""")
-
+            active_window.evaluate_js("alert("已取消置顶");")
+        """
     @staticmethod
     def newWindow():
         with open('./assets/newTab.html','r',encoding='utf-8') as f:
@@ -89,10 +87,18 @@ class MenuApi():
             [
                 wm.MenuAction('获取牌谱数据', click_me),
                 wm.MenuSeparator(),
-                wm.MenuAction('File Dialog', open_file_dialog),
             ],
         ),
         wm.MenuAction('新窗口', newWindow),
-        wm.MenuAction('置顶', on_top),
-        wm.Menu('about', [wm.MenuAction('v0.2', do_nothing)]),
+        wm.Menu(
+            '设置',
+            [
+                #wm.MenuAction('置顶', on_top),
+                wm.MenuSeparator(),
+                wm.MenuAction('File Dialog', open_file_dialog),
+                wm.MenuSeparator(),
+                wm.Menu('about', [wm.MenuAction('v0.2', do_nothing)]),
+
+            ],
+        ),
     ]

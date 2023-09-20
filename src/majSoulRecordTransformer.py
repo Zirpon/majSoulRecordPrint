@@ -4,25 +4,22 @@ import json
 import csv
 from os import path
 
-"""
-todo:
-换一下app 那个猫猫图片
-html 好看的表 简单CSS 横着
-白色背景换成彩色
-整理一下 资源文件 现在文件多了 乱了
-网页读取csv 筛选 展示
-"""
 MJSoulID = 0
 MJSoulName = ""
-settingDict = {"MJSoulID": 15707046, "MJSoulName": "九宫格烈火精灵"}
+filenamePrefix = ""
 
-"""
-with open("setting.json",'rw',encoding='utf-8') as load_f:
-    settingDict = json.load(load_f)
+def initprofile():
+    global MJSoulID
+    global MJSoulName
+    global filenamePrefix
+    if path.exists("./setting.json"):
+        with open("./setting.json",'r+',encoding='utf-8') as load_f:
+            settingDict = json.load(load_f)
+            MJSoulID = settingDict['MJSoulID']
+            MJSoulName = settingDict['MJSoulName']
+            filenamePrefix = "%s-%d-" % (MJSoulName,MJSoulID)
+        load_f.close()
 
-MJSoulID = settingDict['MJSoulID']
-MJSoulName = settingDict['MJSoulName']
-"""
 
 #图表显示最近N场的数据
 recentGameN=30
@@ -60,13 +57,15 @@ RankPoint = [20,80,200,
 sortedCountList = []
 
 def LoadData():
-    if not path.exists("gamedata.json"):
+    dd = "./data/%sgamedata.json" % (filenamePrefix)
+    if not path.exists(dd):
         return -1
     try:
-        with open("gamedata.json",'r',encoding='utf-8') as load_f:
+        with open("./data/%sgamedata.json" % (filenamePrefix),'r',encoding='utf-8') as load_f:
             newload_dict = json.load(load_f)
+        load_f.close()
     except:
-        print("gamedata.json文件读取出错 请检查文件数据格式")
+        print("./data/gamedata.json文件读取出错 请检查文件数据格式")
         return -1
 
     global sortedCountList
@@ -118,7 +117,7 @@ def LoadData():
     """
 
 def printCountList():
-    with open("Gridrecord.csv", 'w', newline='', encoding='utf-8') as f:
+    with open("./data/%sGridrecord.csv" % (filenamePrefix), 'w', newline='', encoding='utf-8') as f:
         for gamedata in sortedCountList:
             """
             #获取当前时间
@@ -146,7 +145,7 @@ def printCountList():
                     f.writelines("\t")
             f.writelines(endtime+'\n')
 
-    with open("gameRecord.json", "w", encoding='utf-8') as f:
+    with open("./data/%sgameRecord.json" % filenamePrefix, "w", encoding='utf-8') as f:
         # json.dump(dict_, f)  # 写为一行
         json.dump(sortedCountList, f, indent=2, sort_keys=False, ensure_ascii=False)  # 写为多行
     return sortedCountList
@@ -154,7 +153,7 @@ def printCountList():
 #个人战绩
 def printCSV():
     individualCSV = [["uuid","endtime","id","name","顺位","finalpoint","pt","deltapt","Curpt","rank","rankTitle"]]
-    jsonFileName = "%s-%d.json" % (MJSoulName,MJSoulID)
+    jsonFileName = "./data/%s-%d.json" % (MJSoulName,MJSoulID)
     individualData = []
 
     for gamedata in sortedCountList:
@@ -180,7 +179,7 @@ def printCSV():
         for gamedata in individualData:
             f.writelines(str(gamedata)+'\n')
     """
-    csvFileName = "%s-%d.csv" % (MJSoulName,MJSoulID)
+    csvFileName = "./data/%s-%d.csv" % (MJSoulName,MJSoulID)
     with open(csvFileName, 'w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerows(individualCSV)
@@ -197,7 +196,7 @@ matplotlib_use('agg')
 import matplotlib.pyplot as plt
 
 def graphicCSV():
-    csvFileName = "%s-%d.csv" % (MJSoulName,MJSoulID)
+    csvFileName = "./data/%s-%d.csv" % (MJSoulName,MJSoulID)
     #df = pd_read_csv(csvFileName)
     #print(recentGameN)
     df = {}
@@ -328,7 +327,7 @@ def graphicCSV():
         fig.tight_layout()
         plt.title('対戦記録')
         plt.figlegend(['顺位', 'finalpoint', 'deltapt'])
-        plt.savefig("MajSoulTrends.png")        
+        plt.savefig("./data/%sMajSoulTrends.png" % (filenamePrefix))        
         #plt.show()
 
     def graphicHistory():
@@ -400,7 +399,7 @@ def graphicCSV():
         
         plt.title('対戦記録')
         plt.figlegend(['Curpt', 'ptPeak','rank'])
-        plt.savefig("MajSoulHistory.png")
+        plt.savefig("./data/%sMajSoulHistory.png" % (filenamePrefix))
         #plt.show()
     
     #graphicPlacing()
@@ -417,8 +416,10 @@ def main():
     #print(sys)
     global MJSoulID
     global MJSoulName
-    MJSoulID = settingDict['MJSoulID']
-    MJSoulName = settingDict['MJSoulName']
+    global filenamePrefix
+    
+    initprofile()
+
     if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
         print('running in a PyInstaller bundle')
         LoadData()

@@ -5,24 +5,37 @@ import json
 
 class RecordApi:
     def __init__(self):
-        if path.exists("setting.json"):
-            with open("setting.json",'r+',encoding='utf-8') as load_f:
-                transformer.settingDict = json.load(load_f)
-                transformer.MJSoulID = transformer.settingDict['MJSoulID']
-                transformer.MJSoulName = transformer.settingDict['MJSoulName']
-            load_f.close()
-            transformer.LoadData()
+        transformer.initprofile()
+        transformer.LoadData()
+        #pass
 
-    def setIdName(self, id, name, n):
+    def setIdName(self, id, name, n = 40):
         transformer.MJSoulID = int(id)
         transformer.MJSoulName = name
         transformer.recentGameN = int(n)
-        transformer.settingDict["MJSoulID"] = int(id)
-        transformer.settingDict["MJSoulName"] = name
-        with open("setting.json",'w',encoding='utf-8') as load_f:
-            json.dump(transformer.settingDict, load_f, indent=2, sort_keys=False, ensure_ascii=False)  # 写为多行
 
-        response = {'message': 'Hello {0} {1} {2}!'.format(int(id), name, n)}
+        settingDict={}
+        settingDict["MJSoulID"] = int(id)
+        settingDict["MJSoulName"] = name
+        with open("./setting.json",'w',encoding='utf-8') as load_f:
+            json.dump(settingDict, load_f, indent=2, sort_keys=False, ensure_ascii=False)  # 写为多行
+        load_f.close()
+
+        response = {'message': 'Hello {0} {1} {2}!'.format(int(id), name, n), 'path':path.abspath("./setting.json")}
+        return response
+    
+    def getIdName(self):
+        if not path.exists("./setting.json"):
+            return -1
+        try:
+            with open("./setting.json",'r',encoding='utf-8') as load_f:
+                newload_dict = json.load(load_f)
+                return {'id': newload_dict['MJSoulID'], 'name':newload_dict['MJSoulName'], 'err':0}
+        except:
+            print("./data/gamedata.json文件读取出错 请检查文件数据格式")
+            return {'err':-1}
+
+    
         return response
     
     def loadData(self):

@@ -40,15 +40,16 @@ GOTO START
 pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview scipy matplotlib pyinstaller --trusted-host mirrors.aliyun.com 
 pipenv graph
 
-Pyinstaller -F .\PrintApp.py ^
+Pyinstaller -F .\src\PrintApp.py ^
     --log-level=WARN --nowindowed --noconfirm --noconsole ^
     --exclude-module pyinstaller ^
-    --add-data ".\assets\index.html;assets" ^
-    --add-data ".\assets\test.html;assets" ^
+    --add-data ".\assets\record.html;assets" ^
+    --add-data ".\assets\react.html;assets" ^
+    --add-data ".\assets\newTab.html;assets" ^
     --add-data ".\assets\logo.jpg;assets" ^
     --add-data ".\assets\loading.jpg;assets" ^
     --add-data ".\assets\styles.css;assets" ^
-    --add-data ".\assets\browseinject.js;assets" ^
+    --add-data ".\src\browseinject.js;assets" ^
     --upx-dir "D:\Program Files\upx-4.1.0-win64" ^
     --splash ".\assets\loading.jpg" ^
     --distpath .\pack\dist\ --workpath .\pack\build\ ^
