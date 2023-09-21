@@ -25,3 +25,4 @@ Windows: [![Build status](https://ci.appveyor.com/api/projects/status/fyirnuhsun
 该项目使用或曾经使用了这些项目的资源，感谢他们。
 
 [雀魂牌谱分析工具](https://github.com/zyr17/MajsoulPaipuAnalyzer)
+[pywebview](https://github.com/r0x0r/pywebview/)
