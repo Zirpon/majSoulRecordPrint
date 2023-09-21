@@ -1,31 +1,38 @@
 import webview
 import webview.menu as wm
 from recordApi import RecordApi
+import time
+from os import path
 
 class MenuApi():
     RecordWindowTitle = 'Record'
     MajSoulWindowTitle = 'MajSoul'
     ReactWindowsTitle = 'React'
 
-    record_url = '../assets/record.html'
+    record_url = './assets/record.html'
     majSoul_url = 'https://game.maj-soul.com/1/'
-    react_url = '../assets/react.html'
+    react_url = './assets/react.html'
 
     def __init__(self):
         pass
+
+    # 搞不懂 VSCODE调试启动需要../assets/xxx才能加载url
+    # 打包加载 就./assets/xxx
+    def formatUrl(url):
+        return path.abspath(url)
     
     @staticmethod
     def view_react():
         active_window = webview.active_window()
         active_window.set_title(MenuApi.ReactWindowsTitle)
-        active_window.load_url(MenuApi.react_url)
+        active_window.load_url(MenuApi.formatUrl(MenuApi.react_url))
     
     @staticmethod
     def view_record():
         active_window = webview.active_window()
         active_window.set_title(MenuApi.RecordWindowTitle)
-        active_window.load_url(MenuApi.record_url)
-        #active_window.evaluate_js(r"window.dispatchEvent(new CustomEvent('pywebviewready')")
+        active_window.load_url(MenuApi.formatUrl(MenuApi.record_url))
+        active_window.resize(1024, 1268)
 
     @staticmethod
     def view_majsoul():
@@ -61,11 +68,16 @@ class MenuApi():
         """
     @staticmethod
     def newWindow():
+        newTab = webview.create_window("New Tab", js_api=RecordApi(),
+            url=MenuApi.formatUrl("../assets/newTab.html"),
+            text_select=True, zoomable=True, draggable=True)
+
+        """
         with open('./assets/newTab.html','r',encoding='utf-8') as f:
             content = f.read()
             webview.create_window(MenuApi.MajSoulWindowTitle, html=content, js_api=RecordApi())
         f.close()
-
+        """
     @staticmethod
     def open_file_dialog():
         active_window = webview.active_window()

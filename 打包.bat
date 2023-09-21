@@ -47,9 +47,15 @@ Pyinstaller -F .\src\PrintApp.py ^
     --add-data ".\assets\react.html;assets" ^
     --add-data ".\assets\newTab.html;assets" ^
     --add-data ".\assets\logo.jpg;assets" ^
+    --add-data ".\assets\bg1.jpg;assets" ^
+    --add-data ".\assets\bg2.jpg;assets" ^
+    --add-data ".\assets\bg4.png;assets" ^
+    --add-data ".\assets\bg5.jpg;assets" ^
+    --add-data ".\assets\favicon.ico;assets" ^
     --add-data ".\assets\loading.jpg;assets" ^
     --add-data ".\assets\styles.css;assets" ^
-    --add-data ".\src\browseinject.js;assets" ^
+    --add-data ".\assets\slider.js;assets" ^
+    --add-data ".\src\browseinject.js;src" ^
     --upx-dir "D:\Program Files\upx-4.1.0-win64" ^
     --splash ".\assets\loading.jpg" ^
     --distpath .\pack\dist\ --workpath .\pack\build\ ^

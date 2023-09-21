@@ -2,6 +2,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <style>
         body {
             font: 30px 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -40,6 +41,7 @@
         }
     </style>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://at.alicdn.com/t/c/font_3881267_wfv3iyzbijg.css">
 </head>
 <body>
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
@@ -48,17 +50,24 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@kunukn/react-collapse/dist/Collapse.umd.css"/>
     <script src="https://unpkg.com/@kunukn/react-collapse/dist/Collapse.umd.js"></script>
-    <section class="logo">
+    <!--section class="logo">
         <img src="bg1.jpg" alt="maumaumau">
+    </section-->
+    <!--轮播图 https://blog.csdn.net/m0_71734538/article/details/129100213 -->
+    <section>
+        <span class="left iconfont icon-anniu_jiantouxiangzuo"></span>
+        <img src="./bg1.jpg" alt="" id="img">
+        <span class="right iconfont icon-anniu-jiantouxiangyou"></span>
+        <sliderp></sliderp>
     </section>
+    <script src="./slider.js"></script>
 
     <h1>雀魂战绩 JS API Example</h1>
     <p id='pywebview-status'><i>pywebview</i> is not ready</p>
+    <label id='majSoulID'><i>雀魂ID:</i> </label><br/>
+    <label id='majSoulName'><i>雀魂Name:</i> </label><br/>
 
-    <label id='majSoulID'><i>雀魂ID:</i></label><br/>
-    <label id='majSoulName'><i>雀魂Name:</i></label><br/>
-
-    <label for="nGame_input">查询场数:</label>
+    <label for="nGame_input"><i>查询场数:</i> </label>
     <input id="majSoulGameN" value=60 onChange="setGameN()" style.width=10px
         type="text" placeholder="put a number here" autocomplete="on"><br/>
     
@@ -112,41 +121,66 @@
         }
 
         /////雀魂战绩操作按钮///////////////////////////////////////////////////////////////
-        function loadData() {
-            pywebview.api.loadData().then(showResponse)
+        function loadData(nclick) {
+            pywebview.api.loadData(nclick).then(showResponse)
         }
 
-        function printCountList() {
-            var btn = document.getElementById('printCountList')
-            pywebview.api.printCountList().then(showResponse)
+        function printCountList(nclick) {
+            pywebview.api.printCountList(nclick).then(showResponse)
         }
 
-        function printCSV() {
-            pywebview.api.printCSV().then(showResponse)
+        function printCSV(nclick) {
+            pywebview.api.printCSV(nclick).then(showResponse)
         }
         
-        function GraphicCSV() {
+        function graphicCSV(nclick) {
             var majSoulGameN = document.getElementById('majSoulGameN').value;
-            pywebview.api.graphicCSV(majSoulGameN).then(showResponse)
+            showResponse({message:"请稍候..."})
+            document.getElementById('loader').style.display = 'flex'
+            pywebview.api.graphicCSV(nclick, majSoulGameN).then((response)=>{
+                showResponse(response)
+                document.getElementById('loader').style.display = 'none'}
+            )
         }
 
-        function CButton({btName,btFunc}) {
+        function resetFlag(nclick) {
+            pywebview.api.resetFlag(nclick).then(showResponse)
+        }
+
+        function CButton({btName, btFunc, tmp=null}) {
             const [n, setn] = React.useState(0);
             function handleClick() {
-                btFunc();
-                setn(n + 1);
+                setn(n+1);
+                if (btName === "reset") {
+                    //setIntResetflag(tmp+1);
+                    btFunc();
+                    resetFlag(n)
+                }
+                else
+                    btFunc(n+1);
             }
+            
+            React.useEffect(() => {
+                    setn(0);
+                    console.log(btName, tmp, n)
+                }, [tmp]
+            );
+
             return(<button type="checkbox" onClick={handleClick}>
-                {btName}:({n})</button>)
+                    {btName}:({n})</button>)
         }
 
-        function CButtonPage() {
+        function CButtonPage() {      
+            const [IntResetflag, setIntResetflag] = React.useState(0);     
             return(
                 <div>
-                <CButton btName="加载数据" btFunc={loadData} />
-                <CButton btName="打印全部战绩数据" btFunc={printCountList} />
-                <CButton btName="打印我的CSV战绩" btFunc={printCSV} />
-                <CButton btName="战绩数据可视化图表" btFunc={GraphicCSV} />
+                <CButton btName="加载数据" btFunc={loadData} tmp={IntResetflag}/>
+                <CButton btName="打印全部战绩数据" btFunc={printCountList} tmp={IntResetflag} />
+                <CButton btName="打印我的CSV战绩" btFunc={printCSV} tmp={IntResetflag} />
+                <CButton btName="战绩数据可视化图表" btFunc={graphicCSV} tmp={IntResetflag} />
+                <CButton btName="reset" btFunc={()=>{
+                        setIntResetflag(IntResetflag+1);
+                    }} tmp={IntResetflag} />
                 </div>
             )
         }
@@ -206,11 +240,13 @@
             return(
                 <div style={{display:"block"}}>
                     <div className={'column1'}>
-                    {/*<span>动画时长500毫秒/折叠后高度40px:</span>*/}
+                    {/*<span>动画时长500毫秒/折叠后高度40px:</span> style={{display:"none"}} */}
                     <button onClick={collapseA} style={{width:"100%"}}>折叠/展开</button>
                     <WCollapse transition={`500ms`} collapseHeight={collapseHeight} isOpen={isOpenA}>
                         <div className={'collapseA'}>
                             <div id="WCollapse-innerText"></div>
+                            {/*js style 设置格式*/}
+                            <div id="loader" className="loader" style={{display:'none'}}></div>
                         </div>
                     </WCollapse>
                     </div>
@@ -221,10 +257,9 @@
         const ddiv2 = document.getElementById("response-container");
         ReactDOM.render(<WCollapseInst />, ddiv2);
         //ReactDOM.render(<MCollapse collapsed={false}/>, ddiv3);
-
     </script>
     <div id="response-container" style="display:block"></div>
-    <!--div id="ddddd" style="display:block"></div-->
+    <!--div id="ddddd" HTML stype设置格式 style="display:block"></div-->
     <script>
     </script>
 </body>

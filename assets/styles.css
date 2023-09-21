@@ -2,8 +2,10 @@
     width: 300px;
 }
 
-.logo { text-align: center; max-width: 300px; margin: 30px auto 0 auto; } .logo img { width: 300px; opacity: 0.9 }
+.logo { text-align: center; max-width: 1600px; margin: 100px auto 0 auto; } 
+.logo img { width: 500px; opacity: 0.9 }
 
+/*一般好看的按钮样式*/
 button {
 	font-size: 100%;
 	padding: 0.5rem;
@@ -34,7 +36,7 @@ button {
 
 }
 
-/*
+/*好看的按钮样式
 button {
 	border: 0.5rem outset pink;
 	outline: 0.5rem solid khaki;
@@ -49,6 +51,7 @@ button {
   }
   */
 
+/*好看的输入样式*/
 input{
 	border: 0;
 	outline: 0;
@@ -67,3 +70,127 @@ input{
 	background-image: linear-gradient(dodgerblue,dodgerblue)
   }
 
+/*加载转圈动画*/
+.loader {
+  font-size: 10px;
+  margin: 50px auto;
+  text-indent: -9999em;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: #ffffff;
+  background: -moz-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: -webkit-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: -o-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: -ms-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+  position: relative;
+  -webkit-animation: load3 1.4s infinite linear;
+  animation: load3 1.4s infinite linear;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
+.loader:before {
+  width: 50%;
+  height: 50%;
+  background: #ffffff;
+  border-radius: 100% 0 0 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: '';
+}
+.loader:after {
+  background: #333;
+  width: 75%;
+  height: 75%;
+  border-radius: 50%;
+  content: '';
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+@-webkit-keyframes load3 {
+  0% {
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg);
+  }
+  100% {
+	-webkit-transform: rotate(360deg);
+	transform: rotate(360deg);
+  }
+}
+@keyframes load3 {
+  0% {
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg);
+  }
+  100% {
+	-webkit-transform: rotate(360deg);
+	transform: rotate(360deg);
+  }
+}
+
+
+/*图片轮播*/
+section {
+	position: relative;
+	height: 500px;
+	width: 780px;
+	border: 1px solid;
+	margin: 100px auto;
+}
+
+#img {
+	height: 100%;
+	width: 100%;
+	background-size: 100% 100%;
+}
+
+sliderp {
+	position: absolute;
+	left: 50%;
+	bottom: 0px;
+	transform: translate(-50%, -50%);
+}
+
+circlenode {
+	height: 15px;
+	width: 15px;
+	background-color: gray;
+	border-radius: 50%;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+circlenode:nth-child(1) {
+	background-color: white;
+}
+
+circlenode:nth-child(4) {
+	margin-right: 0;
+}
+
+.left,
+.right {
+	color: rgba(255, 255, 255, 0.7);
+	font-size: 50px;
+	font-weight: bolder;
+	position: absolute;
+	top: 50%;
+	font-weight: 500;
+}
+
+.left {
+	left: 0px;
+	transform: translate(15%, -50%);
+}
+
+.right {
+	right: 0px;
+	transform: translate(-15%, -50%);
+}

@@ -7,7 +7,7 @@
 
 ## 界面
 
-![界面](界面.png)
+![界面](interface.gif)
 ![近期战绩表](./MajSoulTrends.png)
 ![全期战绩表](./MajSoulHistory.png)
 

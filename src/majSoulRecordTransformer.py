@@ -20,7 +20,6 @@ def initprofile():
             filenamePrefix = "%s-%d-" % (MJSoulName,MJSoulID)
         load_f.close()
 
-
 #图表显示最近N场的数据
 recentGameN=30
 RankTitle = ['初心1', '初心2','初心3',
@@ -107,7 +106,7 @@ def LoadData():
     #print(count_list)
     #逆序时间排序
     sortedCountList = sorted(count_list, key = lambda i: i['endtime'],reverse=True)
-    return count_list, sortedCountList
+    return sortedCountList
 
     # 将提取的数据写入到新的文件中
     # 由于.write操作写入的是str类型数据,需要对count_list进行强制转换

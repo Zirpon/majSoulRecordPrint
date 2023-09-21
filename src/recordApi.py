@@ -7,6 +7,12 @@ class RecordApi:
     def __init__(self):
         transformer.initprofile()
         transformer.LoadData()
+        # 接口函数执行标识
+        self.funcFlag = 0
+        self.loadDataReturn = []
+        self.printCountListReturn = []
+        self.printCSVReturn = []
+        self.graphicCSVReturn = 0
         #pass
 
     def setIdName(self, id, name, n = 40):
@@ -35,39 +41,59 @@ class RecordApi:
             print("./data/gamedata.json文件读取出错 请检查文件数据格式")
             return {'err':-1}
 
-    
-        return response
-    
-    def loadData(self):
-        count_list, sortedCountList = transformer.LoadData()
-        #print(self.count_list, self.sortedCountList)
-        #print(transformer.MJSoulName, transformer.MJSoulID)
-        response = {'message': 'loadData \n\n\n<p>{0}<p>\n\n\n\n\n<p>{1}<p><p><p>'.
-                    format(count_list, sortedCountList)}
+    def resetFlag(self, nclick):
+        self.funcFlag = 0
+        response = {'message': 'resetFlag 点击次数：{0}\n 执行次序：{1}\n\n'.
+            format(nclick, self.funcFlag)}        
         return response
 
-    def printCountList(self):
-        transformer.LoadData()
-        sortedCountList = transformer.printCountList()
-        response = {'message': 'printCountList \n\n\n<p>{0}<p>\n\n\n\n\n<p><p><p><p>'.
-                    format(sortedCountList)}
+    def breaking(self, n):
+        if self.funcFlag >= n:
+            return
+        while True:
+            if self.funcFlag < 1:
+                self.loadDataReturn = transformer.LoadData()
+                self.funcFlag += 1
+                if self.funcFlag == n:break
+            elif self.funcFlag < 2:
+                self.printCountListReturn = transformer.printCountList()
+                self.funcFlag += 1
+                if self.funcFlag == n:break                    
+            elif self.funcFlag < 3:
+                self.printCSVReturn = transformer.printCSV()
+                self.funcFlag += 1
+                if self.funcFlag == n:break
+            elif self.funcFlag < 4: 
+                self.graphicCSVReturn = transformer.graphicCSV()
+                self.funcFlag += 1
+                if self.funcFlag == n:break
+        return
+ 
+    # 筛选 时间倒序
+    def loadData(self, nclick):
+        self.breaking(1)
+        response = {'message': 'loadData 执行次序：{0} 点击次数：{1}\n筛选天梯战绩数据(比赛场数据没有计入)：\n\n{2}\n'.
+            format(self.funcFlag, nclick, "\n".join([str(i) for i in self.loadDataReturn]))}        
+        return response
+
+    # 格式化输出某些数据 比如 时间 名次
+    def printCountList(self, nclick):
+        self.breaking(2)
+        response = {'message': 'printCountList 执行次序：{0} 点击次数：{1}\n场次视角战绩数据(比赛场数据没有计入)：\n\n{2}\n'.
+            format(self.funcFlag, nclick, "\n".join([str(i) for i in self.printCountListReturn]))}
         return response       
 
-    def printCSV(self):
-        transformer.LoadData()
-        transformer.printCountList()
-        csvFileName = transformer.printCSV()
-        response = {'message': 'printCSV \n\n\n<p>{0}<p>\n\n\n\n\n<p><p><p><p>'.
-                    format(csvFileName)}
+    def printCSV(self, nclick):
+        self.breaking(3)
+        response = {'message': 'printCSV 执行次序：{0} 点击次数：{1}\n个人视角战绩数据(比赛场数据没有计入)：\n\n{2}\n'.
+            format(self.funcFlag, nclick, "\n".join([str(i) for i in self.printCSVReturn]))}
         return response
 
-    def graphicCSV(self, n):
+    def graphicCSV(self, nclick, n):
         transformer.recentGameN = int(n)
-        transformer.LoadData()
-        transformer.printCountList()
-        transformer.printCSV()
-        nn = transformer.graphicCSV()
-        response = {'message': 'graphicCSV \n\n\n<p>战绩图表已生成 {0}<p>\n\n\n\n\n<p><p><p><p>'.format(nn)}
+        self.breaking(4)
+        response = {'message': 'graphicCSV 执行次序：{0} 点击次数：{1}\n战绩数据图表已生成\n\n记录场次：{2}\n'.
+                    format(self.funcFlag, nclick, self.graphicCSVReturn)}
         return response
 
     def savegamedataJson(self, filename, content):
