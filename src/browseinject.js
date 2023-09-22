@@ -388,7 +388,7 @@ async function mainLoop() {
     pywebview.api.setIdName(UserID, UserName).then(
         (response) => {
             console.log(JSON.stringify(response));
-            alert(`用户 （${UserID}, ${UserName}） setting.json文件已保存\n路径：${response.path}`);
+            alert(`用户 （${UserID}, ${UserName}） \n setting.json文件已保存\n 路径：${response.path}`);
         }
     )
 

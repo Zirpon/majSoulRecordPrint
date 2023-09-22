@@ -1,8 +1,16 @@
 import webview
 import webview.menu as wm
-from recordApi import RecordApi
+from appJS import RecordApi
 import time
 from os import path
+import GLOBALS
+import appUtils
+
+g_newtab_url = GLOBALS.get_value('NEWTAB_URL')
+g_newtab_path = appUtils.formatUrl(g_newtab_url)
+
+g_script_url = GLOBALS.get_value('INJECT_SCRIPT')
+g_script_path = appUtils.formatUrl(g_script_url)
 
 class MenuApi():
     RecordWindowTitle = 'Record'
@@ -15,23 +23,18 @@ class MenuApi():
 
     def __init__(self):
         pass
-
-    # 搞不懂 VSCODE调试启动需要../assets/xxx才能加载url
-    # 打包加载 就./assets/xxx
-    def formatUrl(url):
-        return path.abspath(url)
     
     @staticmethod
     def view_react():
         active_window = webview.active_window()
         active_window.set_title(MenuApi.ReactWindowsTitle)
-        active_window.load_url(MenuApi.formatUrl(MenuApi.react_url))
+        active_window.load_url(appUtils.formatUrl(MenuApi.react_url))
     
     @staticmethod
     def view_record():
         active_window = webview.active_window()
         active_window.set_title(MenuApi.RecordWindowTitle)
-        active_window.load_url(MenuApi.formatUrl(MenuApi.record_url))
+        active_window.load_url(appUtils.formatUrl(MenuApi.record_url))
         active_window.resize(1024, 1268)
 
     @staticmethod
@@ -44,7 +47,7 @@ class MenuApi():
     def click_me():
         active_window = webview.active_window()
         if active_window.title == MenuApi.MajSoulWindowTitle:
-            with open('./src/browseinject.js','r',encoding='utf-8') as f:
+            with open(g_script_path,'r',encoding='utf-8') as f:
                 content = f.read()
                 active_window.evaluate_js(content)
             f.close()
@@ -69,7 +72,7 @@ class MenuApi():
     @staticmethod
     def newWindow():
         newTab = webview.create_window("New Tab", js_api=RecordApi(),
-            url=MenuApi.formatUrl("../assets/newTab.html"),
+            url=appUtils.formatUrl(g_newtab_path),
             text_select=True, zoomable=True, draggable=True)
 
         """

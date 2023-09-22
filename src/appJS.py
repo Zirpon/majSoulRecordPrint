@@ -1,8 +1,11 @@
 import webview
 import majSoulRecordTransformer as transformer
-from os import path
+import os
 import json
+import GLOBALS
+import appUtils
 
+g_configfile = GLOBALS.get_value('CONFIG_FILE')
 class RecordApi:
     def __init__(self):
         transformer.initprofile()
@@ -23,22 +26,24 @@ class RecordApi:
         settingDict={}
         settingDict["MJSoulID"] = int(id)
         settingDict["MJSoulName"] = name
-        with open("./setting.json",'w',encoding='utf-8') as load_f:
+        
+        os.makedirs(os.path.dirname(g_configfile), exist_ok=True)
+        with open(g_configfile,'w',encoding='utf-8') as load_f:
             json.dump(settingDict, load_f, indent=2, sort_keys=False, ensure_ascii=False)  # 写为多行
         load_f.close()
 
-        response = {'message': 'Hello {0} {1} {2}!'.format(int(id), name, n), 'path':path.abspath("./setting.json")}
+        response = {'message': 'Hello {0} {1} {2}!'.format(int(id), name, n), 'path':os.path.abspath(g_configfile)}
         return response
     
     def getIdName(self):
-        if not path.exists("./setting.json"):
+        if not os.path.exists(g_configfile):
             return -1
         try:
-            with open("./setting.json",'r',encoding='utf-8') as load_f:
+            with open(g_configfile,'r',encoding='utf-8') as load_f:
                 newload_dict = json.load(load_f)
                 return {'id': newload_dict['MJSoulID'], 'name':newload_dict['MJSoulName'], 'err':0}
         except:
-            print("./data/gamedata.json文件读取出错 请检查文件数据格式")
+            print(g_configfile+"文件读取出错 请检查文件数据格式")
             return {'err':-1}
 
     def resetFlag(self, nclick):
@@ -98,10 +103,11 @@ class RecordApi:
 
     def savegamedataJson(self, filename, content):
         #print(content)
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(content)
         f.close()
-        return {'message': path.abspath(filename)}
+        return {'message': os.path.abspath(filename)}
     
     def load_url(self, url):
         print(url)

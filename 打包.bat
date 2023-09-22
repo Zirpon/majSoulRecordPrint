@@ -40,8 +40,11 @@ GOTO START
 pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview scipy matplotlib pyinstaller --trusted-host mirrors.aliyun.com 
 pipenv graph
 
-Pyinstaller -F .\src\PrintApp.py ^
-    --log-level=WARN --nowindowed --noconfirm --noconsole ^
+Pyinstaller -F .\src\APP.py ^
+    --log-level=WARN ^
+    --nowindowed ^
+    --noconfirm ^
+    --noconsole ^
     --exclude-module pyinstaller ^
     --add-data ".\assets\record.html;assets" ^
     --add-data ".\assets\react.html;assets" ^
@@ -63,6 +66,7 @@ Pyinstaller -F .\src\PrintApp.py ^
 
 copy /Y ".\pack\dist\PrintApp.exe" "."
 copy /Y ".\pack\dist\PrintApp.exe" ".."
+copy /Y ".\pack\dist\PrintApp.exe" "C:\\test\\"
 
 ::pipenv uninstall --all
 ::pipenv --rm

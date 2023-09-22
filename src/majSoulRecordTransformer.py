@@ -2,18 +2,22 @@
 import time
 import json
 import csv
-from os import path
+import os
+import GLOBALS
+import appUtils
 
 MJSoulID = 0
 MJSoulName = ""
 filenamePrefix = ""
 
+g_configfile = GLOBALS.get_value('CONFIG_FILE')
+
 def initprofile():
     global MJSoulID
     global MJSoulName
     global filenamePrefix
-    if path.exists("./setting.json"):
-        with open("./setting.json",'r+',encoding='utf-8') as load_f:
+    if os.path.exists(g_configfile):
+        with open(g_configfile,'r+',encoding='utf-8') as load_f:
             settingDict = json.load(load_f)
             MJSoulID = settingDict['MJSoulID']
             MJSoulName = settingDict['MJSoulName']
@@ -56,16 +60,18 @@ RankPoint = [20,80,200,
 sortedCountList = []
 
 def LoadData():
-    dd = "./data/%sgamedata.json" % (filenamePrefix)
-    if not path.exists(dd):
-        return -1
+    data_source = "./data/%sgamedata.json" % (filenamePrefix)
+    dd = os.path.dirname(data_source)
+    os.makedirs(os.path.dirname(data_source), exist_ok=True)
+    if not os.path.exists(data_source):
+        return [-1]
     try:
-        with open("./data/%sgamedata.json" % (filenamePrefix),'r',encoding='utf-8') as load_f:
+        with open(data_source,'r',encoding='utf-8') as load_f:
             newload_dict = json.load(load_f)
         load_f.close()
     except:
-        print("./data/gamedata.json文件读取出错 请检查文件数据格式")
-        return -1
+        print(data_source+"文件读取出错 请检查文件数据格式")
+        return [-1]
 
     global sortedCountList
     count_list = []
@@ -116,7 +122,9 @@ def LoadData():
     """
 
 def printCountList():
-    with open("./data/%sGridrecord.csv" % (filenamePrefix), 'w', newline='', encoding='utf-8') as f:
+    gridcsv = "./data/%sGridrecord.csv" % (filenamePrefix)
+    os.makedirs(os.path.dirname(gridcsv), exist_ok=True)
+    with open(gridcsv, 'w', newline='', encoding='utf-8') as f:
         for gamedata in sortedCountList:
             """
             #获取当前时间
@@ -153,6 +161,7 @@ def printCountList():
 def printCSV():
     individualCSV = [["uuid","endtime","id","name","顺位","finalpoint","pt","deltapt","Curpt","rank","rankTitle"]]
     jsonFileName = "./data/%s-%d.json" % (MJSoulName,MJSoulID)
+    os.makedirs(os.path.dirname(jsonFileName), exist_ok=True)
     individualData = []
 
     for gamedata in sortedCountList:
@@ -179,6 +188,7 @@ def printCSV():
             f.writelines(str(gamedata)+'\n')
     """
     csvFileName = "./data/%s-%d.csv" % (MJSoulName,MJSoulID)
+    os.makedirs(os.path.dirname(csvFileName), exist_ok=True)
     with open(csvFileName, 'w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         writer.writerows(individualCSV)
