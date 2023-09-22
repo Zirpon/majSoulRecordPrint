@@ -1,6 +1,13 @@
 # majSoulRecordPrint
  雀魂战绩数据可视化
 
+## ⭐ Stargazers
+
+Many thanks to the kind individuals who leave a star.
+Your support is much appreciated!
+[![Stargazers for Zirpon}](https://reporoster.com/stars/Zirpon/majSoulRecordPrint)](https://github.com/Zirpon/majSoulRecordPrint/stargazers)
+
+
 ## 使用方法
 
 - [ ] 运行 - 登录 - 获取牌谱
@@ -26,3 +33,8 @@ Windows: [![Build status](https://ci.appveyor.com/api/projects/status/fyirnuhsun
 
 [雀魂牌谱分析工具](https://github.com/zyr17/MajsoulPaipuAnalyzer)
 [pywebview](https://github.com/r0x0r/pywebview/)
+
+## 贡献者
+<a href="https://github.com/Zirpon/majSoulRecordPrint/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Zirpon/majSoulRecordPrint" />
+</a>
