@@ -15,8 +15,8 @@ Your support is much appreciated!
 ## 界面
 
 ![界面](interface.gif)
-![近期战绩表](./doc/MajSoulTrends.png)
-![全期战绩表](./doc/MajSoulHistory.png)
+![近期战绩表](./doc/九宫格烈火精灵-15707046-MajSoulTrends.png)
+![全期战绩表](./doc/九宫格烈火精灵-15707046-MajSoulHistory.png)
 
 ## 开发者调试环境
 
