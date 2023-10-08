@@ -50,6 +50,19 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@kunukn/react-collapse/dist/Collapse.umd.css"/>
     <script src="https://unpkg.com/@kunukn/react-collapse/dist/Collapse.umd.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/player/player.min.css" rel="stylesheet">
+
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/react-bootstrap@2.8.0/dist/react-bootstrap.min.js"></script>
+    -->
+
+    <script src="https://cdn.jsdelivr.net/npm/react-bootstrap-table-2@2.10.7/lib/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-bootstrap-table-next@4.0.3/dist/react-bootstrap-table-next.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@murasoftware/react-bootstrap-table2-filter@1.4.5/lib/index.min.js"></script>
+
     <!--section class="logo">
         <img src="bg1.jpg" alt="maumaumau">
     </section-->
@@ -71,7 +84,9 @@
     <input id="majSoulGameN" value=60 onChange="setGameN()" style.width=10px
         type="text" placeholder="put a number here" autocomplete="on"><br/>
     
+    <div id="appfff" style="display:block"></div>
     <div id="buttons"></div>
+
     <script type="text/babel">
         window.addEventListener('pywebviewready', async function() {
             var container = document.getElementById('pywebview-status')
@@ -122,7 +137,12 @@
 
         /////雀魂战绩操作按钮///////////////////////////////////////////////////////////////
         function loadData(nclick) {
-            pywebview.api.loadData(nclick).then(showResponse)
+            pywebview.api.loadData(nclick).then(
+                (response)=>{
+                    var csv = Papa.unparse(response.data);
+                    showResponse(csv)
+                }
+            )
         }
 
         function printCountList(nclick) {
@@ -260,7 +280,5 @@
     </script>
     <div id="response-container" style="display:block"></div>
     <!--div id="ddddd" HTML stype设置格式 style="display:block"></div-->
-    <script>
-    </script>
 </body>
 </html>

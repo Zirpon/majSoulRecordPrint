@@ -195,7 +195,8 @@ def printCSV():
         #endtime字符串排序
         gameHistory = sorted(individualData, key = lambda i: i[1],reverse=False)
         writer.writerows(gameHistory)
-    return individualData
+    individualCSV.extend(individualData)
+    return individualCSV
 
 from scipy.optimize import curve_fit
 from scipy.signal import find_peaks

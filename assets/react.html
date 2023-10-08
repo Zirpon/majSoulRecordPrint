@@ -1,21 +1,168 @@
 <!DOCTYPE html>
 <html>
   <body>
+    <div id="app2" style="display:block"></div>
+    </br>
+    </br>
     <div id="app"></div>
-    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <!--
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>    
+    "react-dates/lib/css/_datepicker.css" : "https://cdnjs.cloudflare.com/ajax/libs/react-dates/21.8.0/css/_datepicker.min.css",
+    -->
+
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <!-- Babel Script -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.9"></script>
-    <script type="importmap">
-    {
-        "imports": {
-            "react": "https://esm.sh/react?dev",
-            "react-dom/client": "https://esm.sh/react-dom/client?dev"
-        }
-    }
+    <!--打字动态库-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.16/typed.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/player/player.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/@mui/material@latest/umd/material-ui.development.js"></script>
+    <script src="https://unpkg.com/react-table@7.7.0/dist/react-table.development.js"></script>
+
+    <script type="text/babel" >
+    //https://github.com/TanStack/table/discussions/3501
+    function App() {
+  const data = React.useMemo(
+    () => [
+      {
+        name: '蒋铁柱',
+        address: '北京市海淀区西三环中路19号',
+        date: '2022-07-01',
+        order: '1596694478675759682'
+      },
+      {
+        name: '陈成功',
+        address: '湖北武汉武昌区天子家园',
+        date: '2022-06-27',
+        order: '1448752212249399810'
+      },
+      {
+        name: '宋阿美',
+        address: '湖北武汉武昌区天子家园',
+        date: '2022-06-21',
+        order: '1171859737495400477'
+      },
+      {
+        name: '张小乐',
+        address: '北京市海淀区北航南门',
+        date: '2022-06-30',
+        order: '1096242976523544343'
+      },
+      {
+        name: '马国庆',
+        address: '北京市海淀区花园桥东南',
+        date: '2022-06-12',
+        order: '1344783976877111376'
+      },
+      {
+        name: '小果',
+        address: '广州天河机场西侧停车场',
+        date: '2022-06-07',
+        order: '1505069508845600364'
+      }
+    ],
+    []
+  )
+
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: '订单编号',
+        accessor: 'order',
+        sortType: 'basic'
+      },
+      {
+        Header: '姓名',
+        accessor: 'name',
+        disableSortBy: true,
+        disableFilters: true
+      },
+      {
+        Header: '收货地址',
+        accessor: 'address'
+      },
+      {
+        Header: '下单日期',
+        accessor: 'date'
+      }
+    ],
+    []
+  )
+
+  return (
+    <div  style={{ padding: '20px' }}>
+      <h1>React Table Demo ——</h1>
+      <Table columns={columns} data={data}></Table>
+    </div>
+  )
+}
+
+    function Table({ columns, data }) {
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = window.ReactTable.useTable({
+    columns,
+    data,
+    initialState: {
+    sortBy: [
+      {
+        id: 'order',
+        desc: true
+      }
+    ]
+  }
+  },
+  window.ReactTable.useSortBy)
+  
+
+
+
+  return (
+    <table {...getTableProps()}>
+      <thead>
+        {headerGroups.map((headerGroup) => (
+          <tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map((column) => (
+              <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                {column.render('Header')}
+                <span>
+                {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                </span>
+                </th>
+            ))}
+          </tr>
+        ))}
+      </thead>
+      <tbody {...getTableBodyProps()}>
+        {rows.map((row, i) => {
+          prepareRow(row)
+          return (
+            <tr {...row.getRowProps()}>
+              {row.cells.map((cell) => {
+                return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+              })}
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
+  )
+}
+    
+    const app2 = document.getElementById('app2');
+    ReactDOM.render(<App />, app2);
     </script>
-    <script type="text/babel", data-type="module">        
+
+    <script type="text/babel" >
         function Header(props) {
             console.log(props) // { title: "Hello React" }
             return <h1>Develop. Preview. Ship.  </h1>;
@@ -462,7 +609,7 @@
                 {MyCheckbox()}
                 <Form />
                 <br/><br/>
-                {ColorClock()}
+                {/*ColorClock()*/}
                 <br/><br/>
                 {AppFruit()}
                 <br/><br/><br/><br/>

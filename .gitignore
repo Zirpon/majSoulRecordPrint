@@ -16,3 +16,7 @@ load_html.py
 MajSoulHistory.png
 dd.json
 .vscode/launch.json
+webpack-demo/node_modules/
+gistfile1.md
+.vscode/
+webpack-demo/dist/

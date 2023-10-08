@@ -1,12 +1,12 @@
 //cfg.desktop.matchmode
 let modeid2room = {
-    0:'',
-    1:'铜之间', 2:'铜之间', 3:'铜之间', 17:'铜之间', 18:'铜之间', // dou
-    4:'银之间', 5:'银之间', 6:'银之间', 19:'银之间', 20:'银之间', // gin
-    7:'金之间', 8:'金之间', 9:'金之间', 21:'金之间', 22:'金之间', // kin
-    10:'玉之间', 11:'玉之间', 12:'玉之间', 23:'玉之间', 24:'玉之间', // gyoku 
+    0: '',
+    1: '铜之间', 2: '铜之间', 3: '铜之间', 17: '铜之间', 18: '铜之间', // dou
+    4: '银之间', 5: '银之间', 6: '银之间', 19: '银之间', 20: '银之间', // gin
+    7: '金之间', 8: '金之间', 9: '金之间', 21: '金之间', 22: '金之间', // kin
+    10: '玉之间', 11: '玉之间', 12: '玉之间', 23: '玉之间', 24: '玉之间', // gyoku 
     //13:'乱斗之间', 14:'乱斗之间', // furu
-    15:'王座间', 16:'王座间', 25:'王座间', 26:'王座间', // ouza
+    15: '王座间', 16: '王座间', 25: '王座间', 26: '王座间', // ouza
     // 33:'宝牌狂热', // kyounetu
     // 40:'修罗之战', // syura
     // 41:'赤羽之战', // chuanma
@@ -31,29 +31,29 @@ var UserName = null
 var paipugamedata = {};
 var paipugamedata0 = {};
 
-function setUserID(id){
+function setUserID(id) {
     UserID = id;
 }
 
-function setUserName(name){
+function setUserName(name) {
     UserName = name;
 }
 
-function analyzeGameRecord(record_list){
+function analyzeGameRecord(record_list) {
     // collect errors and report once
     let target_gamedata = null;
     if (UserID == 0) target_gamedata = paipugamedata0;
     else target_gamedata = paipugamedata;
     let errors = [];
-    function reporterrors(data){
+    function reporterrors(data) {
         errors.push(data);
     }
-    for (let i = 0; i < record_list.length; i ++ ){
+    for (let i = 0; i < record_list.length; i++) {
         let record = record_list[i];
         // TODO: 对于超过1000个的，当前获取不到元数据的牌谱，需要更新。可以升级元数据牌谱版本号然后对其更新
         //if (target_gamedata[record.uuid] != undefined)
-            //已有该数据，不继续分析。以后可以考虑数据的生成版本
-            //continue;
+        //已有该数据，不继续分析。以后可以考虑数据的生成版本
+        //continue;
         target_gamedata[record.uuid] = null;
         //console.log(record.uuid);
         let gamedata = {
@@ -67,10 +67,10 @@ function analyzeGameRecord(record_list){
             roomdata: {}
         };
         //对于旧式数据的载入
-        if (record.config.mode.extendinfo != undefined && record.config.mode.extendinfo.length > 0){
+        if (record.config.mode.extendinfo != undefined && record.config.mode.extendinfo.length > 0) {
             gamedata.roomdata = JSON.parse(record.config.mode.extendinfo);
         }
-        if (record.config.mode.detail_rule != undefined){
+        if (record.config.mode.detail_rule != undefined) {
             //console.log(record.constructor.name, JSON.stringify(record.config.mode.detail_rule), record.config.mode.detail_rule);
             gamedata.roomdata = record.constructor.name == 'Object' ? record.config.mode.detail_rule : record.config.mode.detail_rule.toJSON();
         }
@@ -90,61 +90,61 @@ function analyzeGameRecord(record_list){
         if (gamedata.roomdata.room == undefined) gamedata.roomdata.room = 100;
         //把食断改为布尔值
         gamedata.roomdata.shiduan = gamedata.roomdata.shiduan == 1;
-        if (record.config.category == 1){
+        if (record.config.category == 1) {
             //友人场
             gamedata.roomdata.room = roomname2num['友人场'];
         }
-        else if (record.config.category == 2){
+        else if (record.config.category == 2) {
             //段位场
             let roomname = modeid2room[record.config.meta.mode_id];
             if (roomname) gamedata.roomdata.room = roomname2num[roomname];
             // console.log(record.config.meta.mode_id, gamedata.roomdata.room);
             // if (!gamedata.roomdata.room) console.log(record.config.meta.mode_id, roomname);
-            if (!roomname){
-                reporterrors({ message: '未知房间编号' + record.config.meta.mode_id, data: record});
+            if (!roomname) {
+                reporterrors({ message: '未知房间编号' + record.config.meta.mode_id, data: record });
             }
-            if (gamedata.roomdata.room == 101){
+            if (gamedata.roomdata.room == 101) {
                 //古役场
             }
-            else if (gamedata.roomdata.room == 102){
+            else if (gamedata.roomdata.room == 102) {
                 //修罗模式
             }
-            else if (gamedata.roomdata.room == 103){
+            else if (gamedata.roomdata.room == 103) {
                 //宝牌狂热
             }
-            else if (gamedata.roomdata.room == 104){
+            else if (gamedata.roomdata.room == 104) {
                 //川麻
             }
-            else if (roomname && !gamedata.roomdata.room){
+            else if (roomname && !gamedata.roomdata.room) {
                 //查到了房间名字，但是不认识
             }
         }
-        else if (record.config.category == 4){
+        else if (record.config.category == 4) {
             //比赛场
             gamedata.roomdata.room = roomname2num['比赛场'];
             gamedata.roomdata.contest_id = record.config.meta.contest_uid;
         }
-        else{
-            reporterrors({ message: '未知牌谱类别编号' + record.config.category, data: record});
+        else {
+            reporterrors({ message: '未知牌谱类别编号' + record.config.category, data: record });
         }
         gamedata.roomdata.player = record.config.mode.mode > 10 ? 3 : 4;
         let roundtype = record.config.mode.mode % 10;
         gamedata.roomdata.round = roundtype == 1 ? 4 : roundtype == 2 ? 8 : 1;
-        if (record.config.mode.mode >= 20 || roundtype > 4){
-            reporterrors({message: '未知房间模式编号' + record.config.mode.mode, data: record});
+        if (record.config.mode.mode >= 20 || roundtype > 4) {
+            reporterrors({ message: '未知房间模式编号' + record.config.mode.mode, data: record });
         }
-        for (let i = 0; i < gamedata.roomdata.player; i ++ )
+        for (let i = 0; i < gamedata.roomdata.player; i++)
             gamedata.playerdata.push({
                 id: 0,
                 name: '电脑',
                 rank: 1,
                 pt: 0
             });
-        if (gamedata.roomdata.player != gamedata.playerdata.length || 
-            gamedata.roomdata.player != record.result.players.length){
-                reporterrors({message: '玩家数目相关条目不统一', data: data});
+        if (gamedata.roomdata.player != gamedata.playerdata.length ||
+            gamedata.roomdata.player != record.result.players.length) {
+            reporterrors({ message: '玩家数目相关条目不统一', data: data });
         }
-        for (let i = 0; i < record.accounts.length; i ++ ){
+        for (let i = 0; i < record.accounts.length; i++) {
             let acc = record.accounts[i];
             let pos = acc.seat;
             let pdata = gamedata.playerdata[pos];
@@ -157,12 +157,12 @@ function analyzeGameRecord(record_list){
                 setUserName(acc.nickname)
                 //console.log(acc.nickname, UserID, UserName)
             }
-                
+
             let idstr = String(acc.level.id);
             pdata.rank = parseInt(idstr[2]) * 3 + parseInt(idstr[4]) - 3;
             pdata.pt = acc.level.score;
         }
-        for (let i = 0; i < gamedata.roomdata.player; i ++ ){
+        for (let i = 0; i < gamedata.roomdata.player; i++) {
             let point = record.result.players[i];
             let pos = point.seat;
             let pdata = gamedata.playerdata[pos];
@@ -173,11 +173,11 @@ function analyzeGameRecord(record_list){
         target_gamedata[gamedata.uuid] = gamedata;
         //console.log(JSON.stringify(gamedata));
     }
-    if (errors.length) reporterrors({message: '牌谱元数据分析错误', data: errors});
+    if (errors.length) reporterrors({ message: '牌谱元数据分析错误', data: errors });
 }
 
 var cantgetIDstr = '获取信息错误！无法获取用户ID，请确认已经进入大厅。或者尝试刷新页面。';
-function showcantgetIDmsg(){
+function showcantgetIDmsg() {
     /*
     dialog.showMessageBox({
         type: 'error',
@@ -196,53 +196,53 @@ function isspecialrule(roomdata) {
         || roomdata.huansanzhang //换三张
         || roomdata.jiuchao_mode //鸠巢
         || roomdata.reveal_discard //暗夜之战
-    ;
+        ;
     const basicrule = {
-        "dora_count":3,
-        "shiduan":true,
-        "can_jifei":true,
-        "tianbian_value":0,  // TODO what's mean of tianbian
-        "liqibang_value":1000,
-        "changbang_value":300,
-        "noting_fafu_1":1000,
-        "noting_fafu_2":1500,
-        "noting_fafu_3":3000,
-        "have_liujumanguan":true,
-        "have_qieshangmanguan":false,
-        "have_biao_dora":true,
-        "have_gang_biao_dora":true,
-        "ming_dora_immediately_open":false,
-        "have_li_dora":true,
-        "have_gang_li_dora":true,
-        "have_sifenglianda":true,
-        "have_sigangsanle":true,
-        "have_sijializhi":true,
-        "have_jiuzhongjiupai":true,
-        "have_sanjiahele":false,
-        "have_toutiao":false,
-        "have_helelianzhuang":true,
-        "have_helezhongju":true,
-        "have_tingpailianzhuang":true,
-        "have_tingpaizhongju":true,
-        "have_yifa":true,
-        "have_nanruxiru":true,
-        "disable_multi_yukaman":false,
-        "disable_leijiyiman":false,
-        "fanfu":1,
+        "dora_count": 3,
+        "shiduan": true,
+        "can_jifei": true,
+        "tianbian_value": 0,  // TODO what's mean of tianbian
+        "liqibang_value": 1000,
+        "changbang_value": 300,
+        "noting_fafu_1": 1000,
+        "noting_fafu_2": 1500,
+        "noting_fafu_3": 3000,
+        "have_liujumanguan": true,
+        "have_qieshangmanguan": false,
+        "have_biao_dora": true,
+        "have_gang_biao_dora": true,
+        "ming_dora_immediately_open": false,
+        "have_li_dora": true,
+        "have_gang_li_dora": true,
+        "have_sifenglianda": true,
+        "have_sigangsanle": true,
+        "have_sijializhi": true,
+        "have_jiuzhongjiupai": true,
+        "have_sanjiahele": false,
+        "have_toutiao": false,
+        "have_helelianzhuang": true,
+        "have_helezhongju": true,
+        "have_tingpailianzhuang": true,
+        "have_tingpaizhongju": true,
+        "have_yifa": true,
+        "have_nanruxiru": true,
+        "disable_multi_yukaman": false,
+        "disable_leijiyiman": false,
+        "fanfu": 1,
     }
     const basickey = [
-        "player", "round", "init_point", "fandian", "time_fixed", 
+        "player", "round", "init_point", "fandian", "time_fixed",
         "time_add", "room", "contest_id", "has_ai", "bianjietishi",
         "ai_level"
     ]
     let isbasicrule = true;
-    for (let i in basicrule){
+    for (let i in basicrule) {
         if (!((roomdata[i] == undefined) || roomdata[i] == basicrule[i]))
             //console.log(i, roomdata[i], basicrule[i]);
-        isbasicrule = isbasicrule && ((roomdata[i] == undefined) || roomdata[i] == basicrule[i]);
+            isbasicrule = isbasicrule && ((roomdata[i] == undefined) || roomdata[i] == basicrule[i]);
     }
     for (let i in roomdata)
-        if (false && basicrule[i] == undefined && !basickey.includes(i) && roomdata[i]){
+        if (false && basicrule[i] == undefined && !basickey.includes(i) && roomdata[i]) {
             // TODO 存在不是基本规则或是基本参数的内容，当做特殊规则。没调试好先disable
             //console.log(i, roomdata[i]);
             isspecialrule = true;
@@ -257,76 +257,76 @@ function iserrorpaipu(gamedata) {
         || gamedata.roomdata.room == undefined //无房间号
         || gamedata.roomdata.room > 100 //房间号>100是活动场
         || isspecialrule(gamedata.roomdata) //包含特殊规则
-    ;
+        ;
 }
 
 let retCollectallpaipu = -1
 function collectallpaipu() {
     //alert("将开始自动收集牌谱基本数据！如果牌谱较多需要一定时间。1000牌谱收集耗时约1分钟。");
-    let TYPES = {0: 'ALL', 1: 'FRIEND', 2: 'RANK', 4: 'MATCH', 100: 'COLLECT'};
+    let TYPES = { 0: 'ALL', 1: 'FRIEND', 2: 'RANK', 4: 'MATCH', 100: 'COLLECT' };
     let types = []
     for (let i in TYPES) types.push(i);
-    const get_more = function (result,start,types=[0],count=30) {
+    const get_more = function (result, start, types = [0], count = 30) {
         let type = types[0];
         app.NetAgent.sendReq2Lobby("Lobby", "fetchGameRecordList", {
-                    start,
-                    count,
-                    type
-                },
-                function(n, {record_list}) {
-                    //console.log(start,record_list, types);
-                    m = uiscript.UI_PaiPu.record_map;
-                    if(record_list.length>0 && !m[record_list[0].uuid]){
-                        get_more(result.concat(record_list),start+count,types)
-                    }else{
-                        types = types.slice(1);
-                        //console.log(types);
-                        if (types.length) get_more(result.concat(record_list),0,types);
-                        else{
-                            result.forEach((item)=>{
-                                m[item.uuid] = item
-                            });
-                            let count = 0;
-                            for (let i in uiscript.UI_PaiPu.record_map) {
-                                //console.log(JSON.stringify(uiscript.UI_PaiPu.record_map[i]));
-                                count ++ ;
-                            }
-                            //alert("已自动收集牌谱基本数据！牌谱个数：" + count);
-                            //callback && callback();
-                            retCollectallpaipu =+ 1;
-                            return result;
+            start,
+            count,
+            type
+        },
+            function (n, { record_list }) {
+                //console.log(start,record_list, types);
+                m = uiscript.UI_PaiPu.record_map;
+                if (record_list.length > 0 && !m[record_list[0].uuid]) {
+                    get_more(result.concat(record_list), start + count, types)
+                } else {
+                    types = types.slice(1);
+                    //console.log(types);
+                    if (types.length) get_more(result.concat(record_list), 0, types);
+                    else {
+                        result.forEach((item) => {
+                            m[item.uuid] = item
+                        });
+                        let count = 0;
+                        for (let i in uiscript.UI_PaiPu.record_map) {
+                            //console.log(JSON.stringify(uiscript.UI_PaiPu.record_map[i]));
+                            count++;
                         }
+                        //alert("已自动收集牌谱基本数据！牌谱个数：" + count);
+                        //callback && callback();
+                        retCollectallpaipu = + 1;
+                        return result;
                     }
-                });
+                }
+            });
     }
     get_more([], 0, types);
 }
 
-function savegamedata(userid, gamedata){
-    let gamedatatxt = './data/'+UserName+'-'+UserID+'-gamedata.json';
-    const gamedatamMaxCount =  Object.keys(gamedata).length;
+function savegamedata(userid, gamedata) {
+    let gamedatatxt = './data/' + UserName + '-' + UserID + '-gamedata.json';
+    const gamedatamMaxCount = Object.keys(gamedata).length;
     let jsonFormat = '[';
     let count = 0;
     for (let id in gamedata) {
-        count ++;
+        count++;
         if (count < gamedatamMaxCount) {
             jsonFormat = jsonFormat + JSON.stringify(gamedata[id]) + ',\n';
         } else {
             jsonFormat = jsonFormat + JSON.stringify(gamedata[id]) + ']';
         }
     }
-    var blob = new Blob([jsonFormat], {type: "text/plain;charset=utf-8"});
+    var blob = new Blob([jsonFormat], { type: "text/plain;charset=utf-8" });
     //console.log(gamedatatxt);
     //saveAs(blob, gamedatatxt);
-    pywebview.api.savegamedataJson(gamedatatxt, jsonFormat).then( 
-        function(response) { 
+    pywebview.api.savegamedataJson(gamedatatxt, jsonFormat).then(
+        function (response) {
             console.log(JSON.stringify(response))
             alert(response.message + "\n\n文件已生成，收集牌谱个数：" + count);
         }
     )
 }
 
-function getAccountID(){
+function getAccountID() {
     if (GameMgr == undefined || GameMgr.Inst == undefined || GameMgr.Inst.account_id == -1) {
         getAccountID();
         console.log("ddd:" + ddd)
@@ -341,7 +341,7 @@ async function mainLoop() {
     while (true) {
         getAccountID();
         ddd += 1;
-        console.log('ddd:'+ddd+' userid:'+UserID)
+        console.log('ddd:' + ddd + ' userid:' + UserID)
         await sleep(1000);
         if (UserID != -1)
             break;
@@ -353,7 +353,7 @@ async function mainLoop() {
             collectallpaipu();
         }
         ddd += 1;
-        console.log('ddd:'+ddd+' retCollectallpaipu:'+retCollectallpaipu)
+        console.log('ddd:' + ddd + ' retCollectallpaipu:' + retCollectallpaipu)
 
         await sleep(5000);
         if (retCollectallpaipu > 0)
@@ -362,7 +362,7 @@ async function mainLoop() {
 
     alert("已自动收集牌谱基本数据！牌谱个数：" + Object.keys(uiscript.UI_PaiPu.record_map).length);
 
-        
+
     //因为Loop是异步执行函数的 每调用一个函数 如果依赖函数结果的话 就设置一个定时器吧
     //await sleep(5000);
     ddd = 0;
@@ -378,7 +378,7 @@ async function mainLoop() {
 
         analyzeGameRecord(resTmplist)
         ddd += 1;
-        console.log('ddd:'+ddd+' analyzeGameRecord:UserName='+UserName, UserID)
+        console.log('ddd:' + ddd + ' analyzeGameRecord:UserName=' + UserName, UserID)
 
         await sleep(5000);
         if (UserName)
@@ -393,7 +393,7 @@ async function mainLoop() {
     )
 
     alert("已格式化牌谱个数：" + Object.keys(paipugamedata).length);
-    
+
     savegamedata(GameMgr.Inst.account_id, paipugamedata)
 }
 
