@@ -1,5 +1,5 @@
 # majSoulRecordPrint
- 雀魂战绩数据可视化
+  雀魂战绩数据可视化
 
 ## ⭐ Stargazers
 
@@ -14,7 +14,10 @@ Your support is much appreciated!
 
 ## :key: 界面
 
-![界面](interface.gif)
+![界面](./doc/interface.gif)
+![界面1](./doc/界面1.png)
+![界面2](./doc/界面2.png)
+![界面3](./doc/界面3.png)
 ![近期战绩表](./doc/九宫格烈火精灵-15707046-MajSoulTrends.png)
 ![全期战绩表](./doc/九宫格烈火精灵-15707046-MajSoulHistory.png)
 
@@ -22,7 +25,12 @@ Your support is much appreciated!
 
 Windows: [![Build status](https://ci.appveyor.com/api/projects/status/fyirnuhsunq73brc?svg=true)](https://ci.appveyor.com/project/zyr17/majsoulpaipuanalyzer)
 
-- [ ] 环境: windows python3 pipenv Pyinstaller
+- [ ] 使用 python matplotlib scipy csv 生成战绩图表文件
+- [ ] 使用 pywebview evaluate_js 开发应用
+- [ ] 使用 pipenv Pyinstaller 打包
+- [ ] 使用 react webpack 打包静态操作页面
+- [ ] 使用 @mui recharts @kunukn/react-collapse 绘制页面战绩图表 
+- [ ] 使用 carousel 绘制轮播图 papaparse 解释战绩数据
 
 ## :closed_book: 免责声明
 该工具为个人制作，未对雀魂代码逻辑进行改动，但是为了获取牌谱数据使用了极少量前端代码的API，包括**获取用户牌谱列表**。所有相关操作代码均在[browseinject.js](assets/browseinject.js)中，工具不会代替用户执行任何其他交互性操作。请自行判断使用该工具的风险。如果使用该工具或（不存在的）该工具的衍生物产生的一切后果作者均不会承担任何责任。
