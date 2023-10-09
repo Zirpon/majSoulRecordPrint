@@ -3,76 +3,34 @@
 <head lang="en">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <style>
-        body {
-            font: 30px 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            color: #fcd409;
-            /*
-            min-width: 230px;
-            max-width: 550px;
-            line-height: 1.4em;   
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            margin: 0 auto;
-            font-weight: 300;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh; 
-            */
-            background: linear-gradient(-135deg,#c850c0,#4158d0);
-        }   
-        #response-container {
-            display: none;
-            padding: 3rem;
-            margin: 3rem 5rem;
-            font-size: 120%;
-            border: 5px dashed #ccc;
-        }
-
-        label {
-            margin-left: 0.3rem;
-            margin-right: 0.3rem;
-
-            word-break: break-all;
-            text-decoration: line-through;
-            /***display: block;
-            text-decoration: line-through;***/
-        }
-    </style>
-    <link rel="stylesheet" href="./src/style.css">
-    <link rel="stylesheet" href="https://at.alicdn.com/t/c/font_3881267_wfv3iyzbijg.css">
 </head>
 <body>
-    <!--section class="logo">
-        <img src="bg1.jpg" alt="maumaumau">
-    </section-->
-    <!--轮播图 https://blog.csdn.net/m0_71734538/article/details/129100213 -->
-    <section>
-        <span class="left iconfont icon-anniu_jiantouxiangzuo"></span>
-        <img src="./src/assets/images/bg1.jpg" alt="" id="img">
-        <span class="right iconfont icon-anniu-jiantouxiangyou"></span>
-        <sliderp></sliderp>
+    <section id="demo-carousel"
+        style="justify-content:center;align-items:center;text-align:center">
     </section>
-    <script src="./src/slider.js"></script>
-    
-    <link href="favicon.ico" rel="shortcut icon">
 
     <h1>雀魂战绩 JS API Example</h1>
     <p id='pywebview-status'><i>pywebview</i> is not ready</p>
-    <label id='majSoulID'><i>雀魂ID:</i> </label><br/>
-    <label id='majSoulName'><i>雀魂Name:</i> </label><br/>
+    <div>
+        <div  style="display:block;float:left">
+            <label id='majSoulID'><i>雀魂ID:</i> </label><br/>
+            <label id='majSoulName'><i>雀魂Name:</i> </label><br/>
+            <label for="nGame_input"><i>查询场数:</i> </label>
+            <input id="majSoulGameN" value=60 onChange="setGameN()" style.width=10px
+                type="text" placeholder="put a number here" autocomplete="on"><br/>
+        </div>
+        <div id="pywebview-response-container" style="display:flex;float:right;" >
+            <div id="py-ret-con-innerText"></div>
+            <div id="loader" style="display:none;"></div>
+        </div>
+    </div>
 
-    <label for="nGame_input"><i>查询场数:</i> </label>
-    <input id="majSoulGameN" value=60 onChange="setGameN()" style.width=10px
-        type="text" placeholder="put a number here" autocomplete="on"><br/>
-    
-    <div id="appfff" style="display:block"></div>
+    <br/><br/><br/><br/><br/><br/>
     <div id="buttons"></div>
+    <br/><br/>
     <div id="myChart" style="display:block" style.height=2000px></div>
     <div id="response-container" style="display:block"></div>
-    <!--div id="ddddd" HTML stype设置格式 style="display:block"></div-->
-    <script src="./dist/dist.js"></script>
+    <!--div id="ddddd" HTML stype设置格式 style="display:block"> style="position:absolute" </div-->
     <script>
         function setGameN() {
             var majSoulGameN = document.getElementById('majSoulGameN').value;

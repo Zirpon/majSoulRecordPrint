@@ -77,7 +77,7 @@ class RecordApi:
     # 筛选 时间倒序
     def loadData(self, nclick):
         self.breaking(1)
-        response = {'message': 'loadData 执行次序：{0} 点击次数：{1}\n筛选天梯战绩数据(比赛场数据没有计入)：\n\n{2}\n'.
+        response = {'message': 'loadData 执行次序：{0} 点击次数：{1}\n筛选天梯战绩数据(比赛场数据没有计入)'.
             format(self.funcFlag, nclick, "\n".join([str(i) for i in self.loadDataReturn])),
             'data':self.loadDataReturn}        
         return response
@@ -85,14 +85,14 @@ class RecordApi:
     # 格式化输出某些数据 比如 时间 名次
     def printCountList(self, nclick):
         self.breaking(2)
-        response = {'message': 'printCountList 执行次序：{0} 点击次数：{1}\n场次视角战绩数据(比赛场数据没有计入)：\n\n{2}\n'.
+        response = {'message': 'printCountList 执行次序：{0} 点击次数：{1}\n场次视角战绩数据(比赛场数据没有计入)'.
             format(self.funcFlag, nclick, "\n".join([str(i) for i in self.printCountListReturn])),
             'data':self.printCountListReturn}
         return response
 
     def printCSV(self, nclick):
         self.breaking(3)
-        response = {'message': 'printCSV 执行次序：{0} 点击次数：{1}\n个人视角战绩数据(比赛场数据没有计入)：\n\n{2}\n'.
+        response = {'message': 'printCSV 执行次序：{0} 点击次数：{1}\n个人视角战绩数据(比赛场数据没有计入)'.
             format(self.funcFlag, nclick, "\n".join([str(i) for i in self.printCSVReturn])),
             'data':self.printCSVReturn[0], 'strdata':self.printCSVReturn[1:], 'total':self.printCSVReturn}
         return response
@@ -100,7 +100,7 @@ class RecordApi:
     def graphicCSV(self, nclick, n):
         transformer.recentGameN = int(n)
         self.breaking(4)
-        response = {'message': 'graphicCSV 执行次序：{0} 点击次数：{1}\n战绩数据图表已生成\n\n记录场次：{2}\n'.
+        response = {'message': 'graphicCSV 执行次序：{0} 点击次数：{1}\n战绩数据图表已生成\n记录场次：{2}'.
                     format(self.funcFlag, nclick, self.graphicCSVReturn)}
         return response
 

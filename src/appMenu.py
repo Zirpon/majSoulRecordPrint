@@ -17,7 +17,7 @@ class MenuApi():
     MajSoulWindowTitle = 'MajSoul'
     ReactWindowsTitle = 'React'
 
-    record_url = './webpack-demo/index.html'
+    record_url = './webpack-demo/dist/index.html'
     majSoul_url = 'https://game.maj-soul.com/1/'
     react_url = './assets/react.html'
 
@@ -62,12 +62,15 @@ class MenuApi():
     @staticmethod
     def on_top():
         active_window = webview.active_window()
-        active_window.on_top = not active_window.on_top
-        if active_window.on_top:
-            active_window.evaluate_js("""alert("已置顶");""")
+        if active_window is not None:
+            active_window.on_top = not (active_window.on_top)
+            if active_window.on_top:
+                active_window.evaluate_js("""alert("已置顶");""")
+            else:
+                active_window.evaluate_js("""alert("已取消置顶");""")
         else:
-            active_window.evaluate_js("""alert("已取消置顶");""")
-        
+            pass
+            
     @staticmethod
     def newWindow():
         newTab = webview.create_window("New Tab", js_api=RecordApi(),
@@ -107,8 +110,8 @@ class MenuApi():
         wm.Menu(
             '设置',
             [
-                wm.MenuAction('置顶', on_top),
-                wm.MenuSeparator(),
+                #wm.MenuAction('置顶', on_top),
+                #wm.MenuSeparator(),
                 #wm.MenuAction('File Dialog', open_file_dialog),
                 wm.MenuSeparator(),
                 wm.Menu('about', [wm.MenuAction('v0.2', do_nothing)]),

@@ -1,0 +1,367 @@
+.logo {
+	width: 300px;
+}
+
+.logo {
+	text-align: center;
+	max-width: 1600px;
+	margin: 100px auto 0 auto;
+}
+
+.logo img {
+	width: 500px;
+	opacity: 0.9
+}
+
+/*一般好看的按钮样式*/
+button {
+	font-size: 100%;
+	padding: 0.5rem;
+	margin: 0.3rem;
+	text-transform: uppercase;
+	font: gba(10, 240, 22, 0.89);
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	font-family: inherit;
+	font-weight: inherit;
+	color: rgb(28, 5, 83);
+	-webkit-appearance: none;
+	appearance: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-variant: small-caps;
+	font-size: 18px;
+	margin: 3px;
+	padding: 5px 7px;
+	text-decoration: none;
+	/*
+	*/
+	border-radius: 3px;
+	border: 3px solid;
+	background-color: rgba(101, 151, 103, 0.89);
+
+}
+
+/*好看的按钮样式
+button {
+	border: 0.5rem outset pink;
+	outline: 0.5rem solid khaki;
+	box-shadow: 0 0 0 2rem skyblue;
+	border-radius: 12px;
+	font: bold 1rem sans-serif;
+	margin: 2rem;
+	color:inherit;
+	padding: 1.5rem;
+	outline-offset: 0.5rem;
+	
+  }
+  */
+
+/*好看的输入样式*/
+input {
+	border: 0;
+	outline: 0;
+	text-decoration: 2px solid underline;
+	text-underline-offset: 5px;
+	height: 60px;
+	line-height: 2;
+	background: linear-gradient(currentColor, currentColor) center bottom 6px no-repeat;
+	background-size: 5rem 4px;
+	font-size: 1.5rem;
+	text-align: center;
+}
+
+input:focus {
+	text-decoration-color: dodgerblue;
+	background-image: linear-gradient(dodgerblue, dodgerblue)
+}
+
+/*加载转圈动画*/
+.loader {
+	font-size: 10px;
+	margin: 50px auto;
+	text-indent: -9999em;
+	width: 3rem;
+	height: 3rem;
+	border-radius: 50%;
+	background: #ffffff;
+	background: -moz-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+	background: -webkit-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+	background: -o-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+	background: -ms-linear-gradient(left, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+	background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 42%);
+	position: relative;
+	-webkit-animation: load3 1.4s infinite linear;
+	animation: load3 1.4s infinite linear;
+	-webkit-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	transform: translateZ(0);
+}
+
+.loader:before {
+	width: 50%;
+	height: 50%;
+	background: #ffffff;
+	border-radius: 100% 0 0 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	content: '';
+}
+
+.loader:after {
+	background: #333;
+	width: 75%;
+	height: 75%;
+	border-radius: 50%;
+	content: '';
+	margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+@-webkit-keyframes load3 {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes load3 {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+
+/*-------------图片轮播----------*/
+section {
+	position: relative;
+	height: 650px;
+	width: 850px;
+	/*border: 1px solid;*/
+	margin: 100px auto;
+}
+
+/*------------default-------------------------------*/
+body {
+	font: 30px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	color: #fcd409;
+	/*
+	min-width: 230px;
+	max-width: 550px;
+	line-height: 1.4em;   
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	margin: 0 auto;
+	font-weight: 300;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh; 
+	*/
+	background: linear-gradient(-135deg, #c850c0, #4158d0);
+}
+
+#response-container {
+	display: none;
+	padding: 3rem;
+	margin: 3rem 5rem;
+	font-size: 120%;
+	border: 5px dashed #ccc;
+}
+
+#pywebview-response-container {
+	display: none;
+	margin: 3rem 5rem;
+	padding: 3rem;
+	border: 5px dashed #ccc;
+}
+
+label {
+	margin-left: 0.3rem;
+	margin-right: 0.3rem;
+
+	word-break: break-all;
+	text-decoration: line-through;
+	/***display: block;
+	text-decoration: line-through;***/
+}
+
+/*-------------https://at.alicdn.com/t/c/font_3881267_wfv3iyzbijg.css-------------------------------*/
+@font-face {
+	font-family: "iconfont";
+	/* Project id 3881267 */
+	src: url('//at.alicdn.com/t/c/font_3881267_wfv3iyzbijg.woff2?t=1676647537955') format('woff2'),
+		url('//at.alicdn.com/t/c/font_3881267_wfv3iyzbijg.woff?t=1676647537955') format('woff'),
+		url('//at.alicdn.com/t/c/font_3881267_wfv3iyzbijg.ttf?t=1676647537955') format('truetype');
+}
+
+.iconfont {
+	font-family: "iconfont" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-anniu_jiantouxiangzuo:before {
+	content: "\e6e6";
+}
+
+.icon-anniu-jiantouxiangyou:before {
+	content: "\e6ec";
+}
+
+.icon-anniu_jiantouxiangzuo_o:before {
+	content: "\eb89";
+}
+
+.icon-anniu-jiantouxiangyou_o:before {
+	content: "\eb8c";
+}
+
+.icon-liebiaomoshi_kuai:before {
+	content: "\ec7e";
+}
+
+.icon-yonghu:before {
+	content: "\e604";
+}
+
+.icon-gouwuchefill:before {
+	content: "\e73c";
+}
+
+.icon-xin:before {
+	content: "\e8c0";
+}
+
+.icon-wenhao:before {
+	content: "\eae2";
+}
+
+.icon-24gl-phoneLoudspeaker:before {
+	content: "\e94f";
+}
+
+.icon-touxiang:before {
+	content: "\e60f";
+}
+
+.icon-mogui:before {
+	content: "\e603";
+}
+
+.icon-yinlianglabashengyin:before {
+	content: "\e7b5";
+}
+
+.icon-hot:before {
+	content: "\e677";
+}
+
+.icon-github:before {
+	content: "\e602";
+}
+
+.icon-taiji:before {
+	content: "\e653";
+}
+
+.icon-yanjing:before {
+	content: "\e629";
+}
+
+.icon-jiangbei:before {
+	content: "\e6aa";
+}
+
+.icon-youxi:before {
+	content: "\e618";
+}
+
+.icon-24gf-building2:before {
+	content: "\e838";
+}
+
+.icon-teshuyixueyujunshiyixueke:before {
+	content: "\e66f";
+}
+
+.icon-gufengwujianzhongguofengzhujian_huaban_huaban_huaban:before {
+	content: "\e632";
+}
+
+.icon-gufengwujianzhongguofenggudaibingqijiangujian_huaban_huaban:before {
+	content: "\e634";
+}
+
+.icon-luoxuan2:before {
+	content: "\e651";
+}
+
+.icon-xingqiu:before {
+	content: "\e65c";
+}
+
+.icon-long:before {
+	content: "\f3f7";
+}
+
+.icon-biaoqianlan_zhichang:before {
+	content: "\e7ba";
+}
+
+.icon-shouji:before {
+	content: "\e601";
+}
+
+.icon-shubiao:before {
+	content: "\e623";
+}
+
+.icon-fenlei1:before {
+	content: "\e669";
+}
+
+.icon-shu:before {
+	content: "\e60e";
+}
+
+.icon-sousuo:before {
+	content: "\e622";
+}
+
+.icon-31sousuo:before {
+	content: "\e600";
+}
+
+.icon-liwu:before {
+	content: "\e63e";
+}
+
+/*------https://v4.mui.com/zh/getting-started/installation/#roboto-font--------------*/
+@font-face {
+	font-family: 'MyFont';
+	src: url('./font.woff2') format('woff2'),
+		url('./font.woff') format('woff');
+	font-weight: 600;
+	font-style: normal;
+}

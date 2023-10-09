@@ -5,6 +5,12 @@ import Papa from 'papaparse'
 import CollapsibleTable from './loaddataForm'
 import EnhancedTable from './recordForm'
 import Cchart from './recordCharts'
+import './assets/styles.css'
+import DemoCarousel from './carousel'
+
+const carouselContainer = document.getElementById("demo-carousel");
+const roottom = createRoot(carouselContainer);
+roottom.render(<DemoCarousel />);
 
 window.addEventListener('pywebviewready', async function () {
     var container = document.getElementById('pywebview-status')
@@ -52,7 +58,7 @@ function get_cookies() {
 function loadData(nclick) {
     pywebview.api.loadData(nclick).then(
         (response) => {
-            //showResponse({ message: response.data })
+            showResponse(response)
             getWCollapseRoot().render(<CollapsibleTable rows={response.data} />);
         }
     )
@@ -62,7 +68,7 @@ function printCountList(nclick) {
     pywebview.api.printCountList(nclick).then(
         (response) => {
             //console.log(response)
-            //showResponse(response)
+            showResponse(response)
             getWCollapseRoot().render(<CollapsibleTable rows={response.data} />);
         }
     )
@@ -82,7 +88,7 @@ function printCSV(nclick) {
             })
             //console.log(jsondata)
 
-            //showResponse(response)
+            showResponse(response)
             getWCollapseRoot().render(<EnhancedTable rows={jsondata.data} />);
             csvChart(jsondata.data)
         }
@@ -106,13 +112,14 @@ function getmyChartRoot(){
 
 function graphicCSV(nclick) {
     var majSoulGameN = document.getElementById('majSoulGameN').value;
-    showResponse({ message: "请稍候..." })
-    document.getElementById('loader').style.display = 'flex'
+    showResponse({ message: "请稍候..." });
+    const loader = document.getElementById('loader')
+    loader.classList.add('loader');
+    loader.style.display = 'flex';
     pywebview.api.graphicCSV(nclick, majSoulGameN).then((response) => {
-        showResponse(response)
-        document.getElementById('loader').style.display = 'none'
-    }
-    )
+        showResponse(response);
+        document.getElementById('loader').style.display = 'none';
+    })
 }
 
 function resetFlag(nclick) {
@@ -146,10 +153,10 @@ function CButtonPage() {
     const [IntResetflag, setIntResetflag] = React.useState(0);
     return (
         <div>
-            <CButton btName="加载数据" btFunc={loadData} tmp={IntResetflag} />
-            <CButton btName="打印全部战绩数据" btFunc={printCountList} tmp={IntResetflag} />
-            <CButton btName="打印我的CSV战绩" btFunc={printCSV} tmp={IntResetflag} />
-            <CButton btName="战绩数据可视化图表" btFunc={graphicCSV} tmp={IntResetflag} />
+            <CButton btName="加载数据" btFunc={loadData} tmp={IntResetflag} /><br/>
+            <CButton btName="打印全部战绩数据" btFunc={printCountList} tmp={IntResetflag} /><br/>
+            <CButton btName="打印我的CSV战绩" btFunc={printCSV} tmp={IntResetflag} /><br/>
+            <CButton btName="战绩数据可视化图表" btFunc={graphicCSV} tmp={IntResetflag} /><br/>
             <CButton btName="reset" btFunc={() => {
                 setIntResetflag(IntResetflag + 1);
             }} tmp={IntResetflag} />
@@ -162,11 +169,7 @@ root1.render(<CButtonPage />);
 
 ////操作结果显示提示框///////////////////////////////////////////////////////////////
 function showResponse(response) {
-    if (G_WCollapseContainerRoot != null) {
-        G_WCollapseContainerRoot.unmount();
-        G_WCollapseContainerRoot = null;
-    }
-    const container = document.getElementById("WCollapse-innerText");
+    const container = document.getElementById("py-ret-con-innerText");
     container.innerText = response.message
 }
 
@@ -233,7 +236,6 @@ function WCollapseInst() {
                     <div className={'collapseA'}>
                         <div id="WCollapse-innerText"></div>
                         {/*js style 设置格式*/}
-                        <div id="loader" className="loader" style={{ display: 'none' }}></div>
                     </div>
                 </WCollapse>
             </div>
@@ -244,5 +246,3 @@ const ddiv2 = document.getElementById("response-container");
 const root2 = createRoot(ddiv2);
 root2.render(<WCollapseInst />);
 //root2.render(<MCollapse collapsed={false}/>);
-
-import './recordCharts'

@@ -35,6 +35,16 @@ GOTO START
 ::rm Pipfile.lock
 ::rm Pipfile
 
+    --add-data ".\assets\record.html;assets" ^
+    --add-data ".\assets\logo.jpg;assets" ^
+    --add-data ".\assets\bg1.jpg;assets" ^
+    --add-data ".\assets\bg2.jpg;assets" ^
+    --add-data ".\assets\bg4.png;assets" ^
+    --add-data ".\assets\bg5.jpg;assets" ^
+    --add-data ".\assets\loading.jpg;assets" ^
+    --add-data ".\assets\styles.css;assets" ^
+    --add-data ".\assets\slider.js;assets" ^
+    --add-data ".\assets\favicon.ico;assets" ^
 
 :START
 pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview scipy matplotlib pyinstaller --trusted-host mirrors.aliyun.com 
@@ -46,18 +56,9 @@ Pyinstaller -F .\src\APP.py ^
     --noconfirm ^
     --noconsole ^
     --exclude-module pyinstaller ^
-    --add-data ".\assets\record.html;assets" ^
     --add-data ".\assets\react.html;assets" ^
     --add-data ".\assets\newTab.html;assets" ^
-    --add-data ".\assets\logo.jpg;assets" ^
-    --add-data ".\assets\bg1.jpg;assets" ^
-    --add-data ".\assets\bg2.jpg;assets" ^
-    --add-data ".\assets\bg4.png;assets" ^
-    --add-data ".\assets\bg5.jpg;assets" ^
-    --add-data ".\assets\favicon.ico;assets" ^
-    --add-data ".\assets\loading.jpg;assets" ^
-    --add-data ".\assets\styles.css;assets" ^
-    --add-data ".\assets\slider.js;assets" ^
+    --add-data ".\webpack-demo\dist\;./webpack-demo/dist/" ^
     --add-data ".\src\browseinject.js;src" ^
     --upx-dir "D:\Program Files\upx-4.1.0-win64" ^
     --splash ".\assets\loading.jpg" ^

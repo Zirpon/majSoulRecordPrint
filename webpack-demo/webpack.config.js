@@ -18,13 +18,28 @@ module.exports = {
         minimizer: [new TerserPlugin()],
     },
     devServer: {
+        client:{
+            overlay: false,
+        },
         static: "./dist",
     },
     plugins: [
         //自动生成目标html文件
-        //new HtmlWebpackPlugin({
-        //    title: "blog test",
-        //}),
+        new HtmlWebpackPlugin({
+            title: "blog test",
+            template: path.resolve(__dirname, "index.html"),
+            inject: "body",
+            favicon: "favicon.ico",
+            // 通过minify属性可以压缩html文件
+            minify:false
+            /*{
+                // 移除空格
+                collapseWhitespace:true,
+                // 移出注释
+                removeComments:true,
+            },*/
+
+        }),
         //分析文件大小插件
         //new BundleAnalyzerPlugin(),
     ],
@@ -47,6 +62,10 @@ module.exports = {
                         presets: ['@babel/preset-env', '@babel/preset-react'],
                     },
                 }
+            },
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/resource',
             },
         ]
     }

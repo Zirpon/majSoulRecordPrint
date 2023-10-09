@@ -94,7 +94,6 @@ export default function Cchart(props) {
                     <Line yAxisId="2" type="monotone" dataKey="finalpoint" stroke="#2196f3" strokeWidth={2} strokeDasharray="4 1 2" animationDuration={300} />
                 </LineChart>
             </ResponsiveContainer>
-
             <ResponsiveContainer width="100%" height={400}>
                 <LineChart width={800} height={300} data={data}
                     margin={{ top: 5, right: 30, left: 60, bottom: 5 }}>
