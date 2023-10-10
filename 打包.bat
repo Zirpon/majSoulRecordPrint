@@ -47,6 +47,7 @@ GOTO START
     --add-data ".\assets\favicon.ico;assets" ^
 
 :START
+
 pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview scipy matplotlib pyinstaller --trusted-host mirrors.aliyun.com 
 pipenv graph
 
