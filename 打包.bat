@@ -61,7 +61,7 @@ Pyinstaller -F .\src\APP.py ^
     --add-data ".\webpack-demo\dist\;./webpack-demo/dist/" ^
     --add-data ".\src\browseinject.js;src" ^
     --upx-dir "D:\Program Files\upx-4.1.0-win64" ^
-    --splash ".\assets\loading.jpg" ^
+    --splash ".\webpack-demo\src\assets\images\loading.jpg" ^
     --distpath .\pack\dist\ --workpath .\pack\build\ ^
     -i .\majsoul.ico -n PrintApp --clean
 

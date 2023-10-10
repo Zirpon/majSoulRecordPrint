@@ -104,7 +104,7 @@ export default function Cchart(props) {
                         tick={{ stroke: '#76ff03', strokeWidth: 0}} interval={0} orientation="right" minTickGap={10}
                         tickFormatter={formatRank} type="number" allowDecimals={false} />
                     <YAxis yAxisId="2" type="number" allowDataOverflow
-                        domain={['dataMin', 'dataMax+500']} tick={{ stroke: '#2196f3', strokeWidth: 1 }} />
+                        domain={['dataMin-30', 'dataMax+500']} tick={{ stroke: '#2196f3', strokeWidth: 1 }} />
                     <Tooltip />
                     <Legend />
                     <Line yAxisId="1" type="linear" dataKey="rank" dot={false} stroke="#ff9800" strokeWidth={5} animationDuration={300} />
