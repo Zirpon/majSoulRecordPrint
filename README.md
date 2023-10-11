@@ -46,3 +46,7 @@ Windows: [![Build status](https://ci.appveyor.com/api/projects/status/fyirnuhsun
 <a href="https://github.com/Zirpon/majSoulRecordPrint/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Zirpon/majSoulRecordPrint" />
 </a>
+
+## 开发心路历程
+
+[心得](./doc/心得.md)
