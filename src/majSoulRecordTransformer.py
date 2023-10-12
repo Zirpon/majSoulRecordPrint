@@ -198,14 +198,16 @@ def printCSV():
     individualCSV.extend(individualData)
     return individualCSV
 
-from scipy.optimize import curve_fit
-from scipy.signal import find_peaks
-from scipy.signal import peak_prominences, peak_widths
-from matplotlib import use as matplotlib_use
-matplotlib_use('agg')
-import matplotlib.pyplot as plt
-
 def graphicCSV():
+    return recentGameN
+"""
+    from scipy.optimize import curve_fit
+    from scipy.signal import find_peaks
+    from scipy.signal import peak_prominences, peak_widths
+    from matplotlib import use as matplotlib_use
+    matplotlib_use('agg')
+    import matplotlib.pyplot as plt
+
     csvFileName = "./data/%s-%d.csv" % (MJSoulName,MJSoulID)
     #df = pd_read_csv(csvFileName)
     #print(recentGameN)
@@ -419,6 +421,7 @@ def graphicCSV():
     graphicHistory()
     plt.close()
     return recentGameN
+"""
 
 def main():
     #https://pyinstaller.org/en/stable/runtime-information.html
