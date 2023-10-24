@@ -109,7 +109,7 @@ def LoadData():
             and count_dict["playerdata"][i]['pt'] == 0 \
             and count_dict["playerdata"][i]['id'] == 0 \
             and count_dict["playerdata"][i]['deltapt'] == 0 \
-            or count_dict['roomdata']['room'] == 0 or count_dict['roomdata']['room'] == 100: #比赛场:休闲普通场等 不计入
+            or count_dict['roomdata']['room'] == "友人场" or count_dict['roomdata']['room'] == "比赛场": #比赛场:休闲普通场等 不计入
                 noCountFlag += 1
         #count_dict["roomdata"] = gamedata['roomdata']
         if noCountFlag == 0:
