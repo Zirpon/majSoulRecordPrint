@@ -26,5 +26,5 @@ from appJS import  RecordApi
 from appMenu import MenuApi
 if __name__ == '__main__':
     majWindow = webview.create_window(MenuApi.MajSoulWindowTitle, MenuApi.majSoul_url, js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
-    #recordWindow = webview.create_window(MenuApi.RecordWindowTitle, MenuApi.record_url, js_api=RecordApi())
+    #recordWindow = webview.create_window(MenuApi.RecordWindowTitle, "https://www.baidu.com", js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
     webview.start(private_mode=False, menu=MenuApi().menu_items, debug=DEBUG)

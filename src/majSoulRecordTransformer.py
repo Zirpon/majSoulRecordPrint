@@ -91,6 +91,12 @@ def LoadData():
         count_dict["uuid"] = gamedata['uuid']
         #count_dict["version"] = gamedata['version']
         count_dict["playerdata"] = sorted(gamedata['playerdata'], key = lambda i: i['finalpoint'],reverse=True)
+
+        # 东风场	
+        gamedata['roomdata']['round'] = roundMode[gamedata['roomdata']['round']]
+        # 银之间
+        gamedata['roomdata']['room'] = roomMode[gamedata['roomdata']['room']]
+
         count_dict["roomdata"] = gamedata['roomdata']
 
         # 人机局不计入
@@ -137,8 +143,8 @@ def printCountList():
             #gamedata['starttime'] = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(gamedata['starttime']))
             endtime = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(gamedata['endtime']))
             f.writelines(gamedata['uuid']+'\t')
-            f.writelines(roundMode[gamedata['roomdata']['round']]+'\t')
-            f.writelines(roomMode[gamedata['roomdata']['room']]+'\n')
+            f.writelines(gamedata['roomdata']['round']+'\t')
+            f.writelines(gamedata['roomdata']['room']+'\n')
 
             for playerdata in gamedata["playerdata"]:
                 playerdata["rankTitle"] = RankTitle[playerdata["rank"]-1]

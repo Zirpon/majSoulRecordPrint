@@ -9,8 +9,11 @@ npm install --safe-dev terser-webpack-plugin
 npm install --safe-dev webpack-dev-server 
 npm install --safe-dev webpack-bundle-analyzer
 
+// 编译js 生成 index.html
 npx webpack
+// 生成服务器 运行调试
 npm run start
+
 :START
 
 npx webpack
