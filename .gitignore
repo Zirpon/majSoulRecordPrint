@@ -23,3 +23,6 @@ webpack-demo/dist/
 majsoulJS/dist/
 majsoulJS/node_modules/
 majsoulJS/
+.DS_Store
+mac-pack/build/
+mac-pack/dist/

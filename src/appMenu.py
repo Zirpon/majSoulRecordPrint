@@ -104,13 +104,13 @@ class MenuApi():
             [
                 wm.MenuAction('获取牌谱数据', click_me),
                 wm.MenuSeparator(),
+                wm.MenuAction('新窗口', newWindow),
             ],
         ),
-        wm.MenuAction('新窗口', newWindow),
         wm.Menu(
             '设置',
             [
-                #wm.MenuAction('置顶', on_top),
+                wm.MenuAction('置顶', on_top),
                 #wm.MenuSeparator(),
                 #wm.MenuAction('File Dialog', open_file_dialog),
                 wm.MenuSeparator(),

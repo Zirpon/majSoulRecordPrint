@@ -43,7 +43,7 @@ class RecordApi:
                 newload_dict = json.load(load_f)
                 return {'id': newload_dict['MJSoulID'], 'name':newload_dict['MJSoulName'], 'err':0}
         except:
-            print(g_configfile+"文件读取出错 请检查文件数据格式")
+            #print(g_configfile+"文件读取出错 请检查文件数据格式")
             return {'err':-1}
 
     def resetFlag(self, nclick):
@@ -113,7 +113,7 @@ class RecordApi:
         return {'message': os.path.abspath(filename)}
     
     def load_url(self, url):
-        print(url)
+        #print(url)
         webview.active_window().load_url('https://'+url)
         return True
 

@@ -70,7 +70,7 @@ def LoadData():
             newload_dict = json.load(load_f)
         load_f.close()
     except:
-        print(data_source+"文件读取出错 请检查文件数据格式")
+        #print(data_source+"文件读取出错 请检查文件数据格式")
         return [-1]
 
     global sortedCountList
@@ -440,14 +440,14 @@ def main():
     initprofile()
 
     if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-        print('running in a PyInstaller bundle')
+        #print('running in a PyInstaller bundle')
         LoadData()
         printCountList()
         printCSV()
         graphicCSV()
     else:
-        print('running in a normal Python process')
-        print(sys.argv)
+        #print('running in a normal Python process')
+        #print(sys.argv)
         if len(sys.argv) > 1 and (sys.argv[1] == "-g" or sys.argv[1] == '--graphic'):
             if sys.argv[2].isdecimal():
                 global recentGameN
