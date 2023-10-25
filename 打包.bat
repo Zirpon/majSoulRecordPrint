@@ -45,6 +45,9 @@ GOTO START
     --add-data ".\assets\styles.css;assets" ^
     --add-data ".\assets\slider.js;assets" ^
     --add-data ".\assets\favicon.ico;assets" ^
+        --exclude-module pyinstaller ^
+    --upx-dir "D:\Program Files\upx-4.1.0-win64" ^
+
 pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview scipy matplotlib pyinstaller --trusted-host mirrors.aliyun.com 
 
 :START
@@ -57,12 +60,10 @@ Pyinstaller -F .\src\APP.py ^
     --nowindowed ^
     --noconfirm ^
     --noconsole ^
-    --exclude-module pyinstaller ^
     --add-data ".\assets\react.html;assets" ^
     --add-data ".\assets\newTab.html;assets" ^
     --add-data ".\webpack-demo\dist\;./webpack-demo/dist/" ^
     --add-data ".\src\browseinject.js;src" ^
-    --upx-dir "D:\Program Files\upx-4.1.0-win64" ^
     --splash ".\webpack-demo\src\assets\images\loading.jpg" ^
     --distpath .\pack\dist\ --workpath .\pack\build\ ^
     -i .\majsoul.ico -n PrintApp --clean

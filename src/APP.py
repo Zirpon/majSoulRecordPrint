@@ -11,7 +11,7 @@ if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
         #print('当前系统为 Linux')
         pass
     elif sys.platform.startswith('win'):
-        import LOADING
+        import LOADINGS
         #print('当前系统为 Windows')
         pass
     elif sys.platform.startswith('darwin'):
