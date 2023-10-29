@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <div id="app2" style="display:block"></div>
-    </br>
-    </br>
-    <div id="app"></div>
-    <!--
+
+<body>
+  <div id="app2" style="display:block"></div>
+  </br>
+  </br>
+  <div id="app"></div>
+  <!--
     <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
@@ -13,728 +14,729 @@
     "react-dates/lib/css/_datepicker.css" : "https://cdnjs.cloudflare.com/ajax/libs/react-dates/21.8.0/css/_datepicker.min.css",
     -->
 
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-    <!-- Babel Script -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <!--打字动态库-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.16/typed.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/player/player.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/@mui/material@latest/umd/material-ui.development.js"></script>
-    <script src="https://unpkg.com/react-table@7.7.0/dist/react-table.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <!-- Babel Script -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!--打字动态库-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.16/typed.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/player/player.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/@mui/material@latest/umd/material-ui.development.js"></script>
+  <script src="https://unpkg.com/react-table@7.7.0/dist/react-table.development.js"></script>
 
-    <script type="text/babel" >
+  <script type="text/babel">
     //https://github.com/TanStack/table/discussions/3501
     function App() {
-  const data = React.useMemo(
-    () => [
-      {
-        name: '蒋铁柱',
-        address: '北京市海淀区西三环中路19号',
-        date: '2022-07-01',
-        order: '1596694478675759682'
-      },
-      {
-        name: '陈成功',
-        address: '湖北武汉武昌区天子家园',
-        date: '2022-06-27',
-        order: '1448752212249399810'
-      },
-      {
-        name: '宋阿美',
-        address: '湖北武汉武昌区天子家园',
-        date: '2022-06-21',
-        order: '1171859737495400477'
-      },
-      {
-        name: '张小乐',
-        address: '北京市海淀区北航南门',
-        date: '2022-06-30',
-        order: '1096242976523544343'
-      },
-      {
-        name: '马国庆',
-        address: '北京市海淀区花园桥东南',
-        date: '2022-06-12',
-        order: '1344783976877111376'
-      },
-      {
-        name: '小果',
-        address: '广州天河机场西侧停车场',
-        date: '2022-06-07',
-        order: '1505069508845600364'
-      }
-    ],
-    []
-  )
+      const data = React.useMemo(
+        () => [
+          {
+            name: '蒋铁柱',
+            address: '北京市海淀区西三环中路19号',
+            date: '2022-07-01',
+            order: '1596694478675759682'
+          },
+          {
+            name: '陈成功',
+            address: '湖北武汉武昌区天子家园',
+            date: '2022-06-27',
+            order: '1448752212249399810'
+          },
+          {
+            name: '宋阿美',
+            address: '湖北武汉武昌区天子家园',
+            date: '2022-06-21',
+            order: '1171859737495400477'
+          },
+          {
+            name: '张小乐',
+            address: '北京市海淀区北航南门',
+            date: '2022-06-30',
+            order: '1096242976523544343'
+          },
+          {
+            name: '马国庆',
+            address: '北京市海淀区花园桥东南',
+            date: '2022-06-12',
+            order: '1344783976877111376'
+          },
+          {
+            name: '小果',
+            address: '广州天河机场西侧停车场',
+            date: '2022-06-07',
+            order: '1505069508845600364'
+          }
+        ],
+        []
+      )
 
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: '订单编号',
-        accessor: 'order',
-        sortType: 'basic'
-      },
-      {
-        Header: '姓名',
-        accessor: 'name',
-        disableSortBy: true,
-        disableFilters: true
-      },
-      {
-        Header: '收货地址',
-        accessor: 'address'
-      },
-      {
-        Header: '下单日期',
-        accessor: 'date'
-      }
-    ],
-    []
-  )
+      const columns = React.useMemo(
+        () => [
+          {
+            Header: '订单编号',
+            accessor: 'order',
+            sortType: 'basic'
+          },
+          {
+            Header: '姓名',
+            accessor: 'name',
+            disableSortBy: true,
+            disableFilters: true
+          },
+          {
+            Header: '收货地址',
+            accessor: 'address'
+          },
+          {
+            Header: '下单日期',
+            accessor: 'date'
+          }
+        ],
+        []
+      )
 
-  return (
-    <div  style={{ padding: '20px' }}>
-      <h1>React Table Demo ——</h1>
-      <Table columns={columns} data={data}></Table>
-    </div>
-  )
-}
+      return (
+        <div style={{ padding: '20px' }}>
+          <h1>React Table Demo ——</h1>
+          <Table columns={columns} data={data}></Table>
+        </div>
+      )
+    }
 
     function Table({ columns, data }) {
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = window.ReactTable.useTable({
-    columns,
-    data,
-    initialState: {
-    sortBy: [
-      {
-        id: 'order',
-        desc: true
-      }
-    ]
-  }
-  },
-  window.ReactTable.useSortBy)
-  
+      const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+      } = window.ReactTable.useTable({
+        columns,
+        data,
+        initialState: {
+          sortBy: [
+            {
+              id: 'order',
+              desc: true
+            }
+          ]
+        }
+      },
+        window.ReactTable.useSortBy)
 
 
 
-  return (
-    <table {...getTableProps()}>
-      <thead>
-        {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column) => (
-              <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                {column.render('Header')}
-                <span>
-                {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                </span>
-                </th>
+
+      return (
+        <table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render('Header')}
+                    <span>
+                      {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                    </span>
+                  </th>
+                ))}
+              </tr>
             ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row, i) => {
-          prepareRow(row)
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map((cell) => {
-                return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-              })}
-            </tr>
-          )
-        })}
-      </tbody>
-    </table>
-  )
-}
-    
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row, i) => {
+              prepareRow(row)
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  })}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      )
+    }
+
     const app2 = document.getElementById('app2');
     ReactDOM.render(<App />, app2);
-    </script>
+  </script>
 
-    <script type="text/babel" >
-        function Header(props) {
-            console.log(props) // { title: "Hello React" }
-            return <h1>Develop. Preview. Ship.  </h1>;
-        }
+  <script type="text/babel">
+    function Header(props) {
+      console.log(props) // { title: "Hello React" }
+      return <h1>Develop. Preview. Ship.  </h1>;
+    }
 
-        {/*
+    {/*
             输出对象属性 { props.title }
             模板字符串 {`Hello ${title}`}
             函数返回值 { getTitle() }
             三元表达式 { title ? title : "Hello" }
         */}
 
-        function Header2({ title }) {
-            console.log(title) // "Hello React"
-            return <h1>{title ? title : 'Hello React!'}</h1>
+    function Header2({ title }) {
+      console.log(title) // "Hello React"
+      return <h1>{title ? title : 'Hello React!'}</h1>
+    }
+
+    function ShoppingList(products) {
+      const listItems = products.map(product =>
+        <li
+          key={product.id}
+          style={{
+            color: product.isFruit ? 'magenta' : 'green'
+          }}
+        >
+          {product.title}
+        </li>
+      );
+
+      return (
+        <ul>{listItems}</ul>
+      );
+    }
+
+    const user = {
+      name: 'Hedy Lamarr',
+      imageUrl: 'https://www.pythonpool.com/wp-content/uploads/2021/05/tuple-768x432.png',
+      imageSize: 90,
+    };
+
+    function Profile() {
+      return (
+        <>
+          <h1>{user.name}</h1>
+          <img
+            className="avatar"
+            src={user.imageUrl}
+            alt={'Photo of ' + user.name}
+            style={{
+              width: user.imageSize,
+              height: user.imageSize
+            }}
+          />
+        </>
+      );
+    }
+
+    function Item({ name, isPacked }) {
+      return (
+        <li className="item">
+          {name} {isPacked && '✔'}
+        </li>
+      );
+    }
+
+    function PackingList() {
+      return (
+        <section>
+          <h1>Sally Ride's Packing List</h1>
+          <ul>
+            <Item
+              isPacked={true}
+              name="Space suit"
+            />
+            <Item
+              isPacked={true}
+              name="Helmet with a golden leaf"
+            />
+            <Item
+              isPacked={false}
+              name="Photo of Tam"
+            />
+          </ul>
+        </section>
+      );
+    }
+
+    function MyInput() {
+      const [text, setText] = React.useState('hello');
+
+      function handleChange(e) {
+        setText(e.target.value);
+      }
+
+      return (
+        <>
+          <input value={text} onChange={handleChange} />
+          <p>You typed: {text}</p>
+          <button onClick={() => setText('hello')}>
+            Reset
+          </button>
+          <br />
+        </>
+      );
+    }
+
+    function MyCheckbox() {
+      const [liked, setLiked] = React.useState(true);
+
+      function handleChange(e) {
+        console.log({ liked })
+        setLiked(e.target.checked);
+      }
+      return (
+        <>
+          <label>
+            <input
+              type="checkbox"
+              checked={liked}
+              onChange={handleChange}
+            />
+            I liked this
+          </label>
+          <p>You {liked ? 'liked' : 'did not like'} this.</p>
+        </>
+      );
+    }
+
+    function Form() {
+      const [name, setName] = React.useState('Taylor');
+      const [age, setAge] = React.useState(42);
+
+      return (
+        <>
+          <input
+            value={name}
+            onChange={e => setName(e.target.value)}
+          />
+          <button onClick={() => setAge(age + 1)}>
+            Increment age
+          </button>
+          <p>Hello, {name}. You are {age}.</p>
+        </>
+      );
+    }
+
+    function Square({ value, onSquareClick }) {
+      return (
+        <button className="square" onClick={onSquareClick}>
+          {value}
+        </button>
+      );
+    }
+
+    function Board({ xIsNext, squares, onPlay }) {
+      function handleClick(i) {
+        if (calculateWinner(squares) || squares[i]) {
+          return;
         }
-
-        function ShoppingList(products) {
-            const listItems = products.map(product =>
-                <li
-                key = {product.id}
-                style = {{
-                    color: product.isFruit ? 'magenta' : 'green'
-                }}
-                >
-                    {product.title}
-                </li>
-            );
-
-            return (
-                <ul>{listItems}</ul>
-            );
+        const nextSquares = squares.slice();
+        if (xIsNext) {
+          nextSquares[i] = 'X';
+        } else {
+          nextSquares[i] = 'O';
         }
+        onPlay(nextSquares);
+      }
 
-        const user = {
-            name: 'Hedy Lamarr',
-            imageUrl: 'https://www.pythonpool.com/wp-content/uploads/2021/05/tuple-768x432.png',
-            imageSize: 90,
-        };
+      const winner = calculateWinner(squares);
+      let status;
+      if (winner) {
+        status = 'Winner: ' + winner;
+      } else {
+        status = 'Next player: ' + (xIsNext ? 'X' : 'O');
+      }
 
-        function Profile() {
-            return (
-                <>
-                    <h1>{user.name}</h1>
-                    <img
-                        className="avatar"
-                        src={user.imageUrl}
-                        alt={'Photo of ' + user.name}
-                        style={{
-                        width: user.imageSize,
-                        height: user.imageSize
-                        }}
-                    />
-                </>
-            );
+      return (
+        <>
+          <div className="status">{status}</div>
+          <div className="board-row">
+            <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
+            <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
+            <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
+          </div>
+          <div className="board-row">
+            <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
+            <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
+            <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
+          </div>
+          <div className="board-row">
+            <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
+            <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
+            <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
+          </div>
+        </>
+      );
+    }
+
+    function Game() {
+      const [history, setHistory] = React.useState([Array(9).fill(null)]);
+      const [currentMove, setCurrentMove] = React.useState(0);
+      const xIsNext = currentMove % 2 === 0;
+      const currentSquares = history[currentMove];
+
+      function handlePlay(nextSquares) {
+        const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
+        setHistory(nextHistory);
+        setCurrentMove(nextHistory.length - 1);
+      }
+
+      function jumpTo(nextMove) {
+        setCurrentMove(nextMove);
+      }
+
+      const moves = history.map((squares, move) => {
+        let description;
+        if (move > 0) {
+          description = 'Go to move #' + move;
+        } else {
+          description = 'Go to game start';
         }
+        return (
+          <li key={move}>
+            <button onClick={() => jumpTo(move)}>{description}</button>
+          </li>
+        );
+      });
 
-        function Item({ name, isPacked }) {
-            return (
-                <li className="item">
-                {name} {isPacked && '✔'}
-                </li>
-            );
+      return (
+        <div className="game">
+          <div className="game-board">
+            <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+          </div>
+          <div className="game-info">
+            <ol>{moves}</ol>
+          </div>
+        </div>
+      );
+    }
+
+    function calculateWinner(squares) {
+      const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+      ];
+      for (let i = 0; i < lines.length; i++) {
+        const [a, b, c] = lines[i];
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+          return squares[a];
         }
+      }
+      return null;
+    }
 
-        function PackingList() {
-            return (
-                <section>
-                <h1>Sally Ride's Packing List</h1>
-                <ul>
-                    <Item 
-                    isPacked={true} 
-                    name="Space suit" 
-                    />
-                    <Item 
-                    isPacked={true} 
-                    name="Helmet with a golden leaf" 
-                    />
-                    <Item 
-                    isPacked={false} 
-                    name="Photo of Tam" 
-                    />
-                </ul>
-                </section>
-            );
+    function FilterableProductTable({ products }) {
+      const [filterText, setFilterText] = React.useState('');
+      const [inStockOnly, setInStockOnly] = React.useState(false);
+
+      return (
+        <div>
+          <SearchBar
+            filterText={filterText}
+            inStockOnly={inStockOnly}
+            onFilterTextChange={setFilterText}
+            onInStockOnlyChange={setInStockOnly} />
+          <ProductTable
+            products={products}
+            filterText={filterText}
+            inStockOnly={inStockOnly} />
+        </div>
+      );
+    }
+
+    function ProductCategoryRow({ category }) {
+      return (
+        <tr>
+          <th colSpan="2">
+            {category}
+          </th>
+        </tr>
+      );
+    }
+
+    function ProductRow({ product }) {
+      const name = product.stocked ? product.name :
+        <span style={{ color: 'red' }}>
+          {product.name}
+        </span>;
+
+      return (
+        <tr>
+          <td>{name}</td>
+          <td>{product.price}</td>
+        </tr>
+      );
+    }
+
+    function ProductTable({ products, filterText, inStockOnly }) {
+      const rows = [];
+      let lastCategory = null;
+
+      products.forEach((product) => {
+        if (product.name.toLowerCase().indexOf(filterText.toLowerCase()) === -1) {
+          return;
         }
+        if (inStockOnly && !product.stocked) {
+          return;
+        }
+        if (product.category !== lastCategory) {
+          rows.push(
+            <ProductCategoryRow
+              category={product.category}
+              key={product.category} />
+          );
+        }
+        rows.push(
+          <ProductRow
+            product={product}
+            key={product.name} />
+        );
+        lastCategory = product.category;
+      });
 
-        function MyInput() {
-            const [text, setText] = React.useState('hello');
+      return (
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </table>
+      );
+    }
 
-            function handleChange(e) {
-                setText(e.target.value);
+    function SearchBar({
+      filterText,
+      inStockOnly,
+      onFilterTextChange,
+      onInStockOnlyChange
+    }) {
+      return (
+        <form>
+          <input
+            type="text"
+            value={filterText} placeholder="Search..."
+            onChange={(e) => onFilterTextChange(e.target.value)} />
+          <label>
+            <input
+              type="checkbox"
+              checked={inStockOnly}
+              onChange={(e) => onInStockOnlyChange(e.target.checked)} />
+            {' '}
+            Only show products in stock
+          </label>
+        </form>
+      );
+    }
+
+    const PRODUCTS = [
+      { category: "Fruits", price: "$1", stocked: true, name: "Apple" },
+      { category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit" },
+      { category: "Fruits", price: "$2", stocked: false, name: "Passionfruit" },
+      { category: "Vegetables", price: "$2", stocked: true, name: "Spinach" },
+      { category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin" },
+      { category: "Vegetables", price: "$1", stocked: true, name: "Peas" }
+    ];
+
+    function AppFruit() {
+      return <FilterableProductTable products={PRODUCTS} />;
+    }
+
+    function useTime() {
+      const [time, setTime] = React.useState(() => new Date());
+      React.useEffect(() => {
+        const id = setInterval(() => {
+          setTime(new Date());
+        }, 1000);
+        return () => clearInterval(id);
+      }, []);
+      return time;
+    }
+    function Clock({ color, time }) {
+      return (
+        <h1 style={{ color: color }}>
+          {time}
+        </h1>
+      );
+    }
+    function ColorClock() {
+      const time = useTime();
+      const [color, setColor] = React.useState('midnightblue');
+      return (
+        <div>
+          <p>
+            选择一个颜色:{' '}
+            <select value={color} onChange={e => setColor(e.target.value)}>
+              <option value="lightcoral">浅珊瑚色</option>
+              <option value="midnightblue">午夜蓝</option>
+              <option value="rebeccapurple">丽贝卡紫</option>
+            </select>
+          </p>
+          <Clock color={color} time={time.toLocaleTimeString()} />
+        </div>
+      );
+    }
+
+    function HomePage() {
+      const names = ['Mike', 'Grace', 'Margaret'];
+      const [likes, setLikes] = React.useState(0);
+      const products = [
+        { title: 'Cabbage', isFruit: false, id: 1 },
+        { title: 'Garlic', isFruit: false, id: 2 },
+        { title: 'Apple', isFruit: true, id: 3 },
+      ];
+
+      function handleClick() {
+        setLikes(likes + 1 + 10);
+      }
+
+      return (
+        <div>
+          {/* 嵌套的 Header 组件 */}
+          <Header title="Hello JavaScript!" />
+          <Header2 title="Hello React" />
+          <ul>
+            {
+              names.map((name) => (<li key={name}> {name} </li>))
             }
+          </ul>
+          {ShoppingList(products)}
+          <button onClick={handleClick}>Likes ({likes})</button>
+          <Profile />
+          {PackingList()}
+          {MyInput()}
+          <br />
+          {MyCheckbox()}
+          <Form />
+          <br /><br />
+          {/*ColorClock()*/}
+          <br /><br />
+          {AppFruit()}
+          <br /><br /><br /><br />
+          {Game()}
+          <br /><br /><br /><br />
+        </div>
+      );
+    }
 
-            return (
-                <>
-                    <input value={text} onChange={handleChange} />
-                    <p>You typed: {text}</p>
-                    <button onClick={() => setText('hello')}>
-                        Reset
-                    </button>
-                    <br/>
-                </>
-            );
-        }
-
-        function MyCheckbox() {
-            const [liked, setLiked] = React.useState(true);
-
-            function handleChange(e) {
-                console.log({liked})
-                setLiked(e.target.checked);
-            }
-            return (
-                <>
-                <label>
-                    <input
-                    type="checkbox"
-                    checked={liked}
-                    onChange={handleChange}
-                    />
-                    I liked this
-                </label>
-                <p>You {liked ? 'liked' : 'did not like'} this.</p>
-                </>
-            );
-        }
-
-        function Form() {
-            const [name, setName] = React.useState('Taylor');
-            const [age, setAge] = React.useState(42);
-
-            return (
-                <>
-                <input
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                />
-                <button onClick={() => setAge(age + 1)}>
-                    Increment age
-                </button>
-                <p>Hello, {name}. You are {age}.</p>
-                </>
-            );
-        }
-
-        function Square({ value, onSquareClick }) {
-            return (
-                <button className="square" onClick={onSquareClick}>
-                {value}
-                </button>
-            );
-        }
-
-        function Board({ xIsNext, squares, onPlay }) {
-            function handleClick(i) {
-                if (calculateWinner(squares) || squares[i]) {
-                    return;
-                }
-                const nextSquares = squares.slice();
-                if (xIsNext) {
-                    nextSquares[i] = 'X';
-                } else {
-                    nextSquares[i] = 'O';
-                }
-                onPlay(nextSquares);
-            }
-
-            const winner = calculateWinner(squares);
-            let status;
-            if (winner) {
-                status = 'Winner: ' + winner;
-            } else {
-                status = 'Next player: ' + (xIsNext ? 'X' : 'O');
-            }
-
-            return (
-                <>
-                <div className="status">{status}</div>
-                <div className="board-row">
-                    <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
-                    <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
-                    <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
-                </div>
-                <div className="board-row">
-                    <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
-                    <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
-                    <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
-                </div>
-                <div className="board-row">
-                    <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
-                    <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
-                    <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
-                </div>
-                </>
-            );
-        }
-
-        function Game() {
-            const [history, setHistory] = React.useState([Array(9).fill(null)]);
-            const [currentMove, setCurrentMove] = React.useState(0);
-            const xIsNext = currentMove % 2 === 0;
-            const currentSquares = history[currentMove];
-
-            function handlePlay(nextSquares) {
-                const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
-                setHistory(nextHistory);
-                setCurrentMove(nextHistory.length - 1);
-            }
-
-            function jumpTo(nextMove) {
-                setCurrentMove(nextMove);
-            }
-
-            const moves = history.map((squares, move) => {
-                let description;
-                if (move > 0) {
-                description = 'Go to move #' + move;
-                } else {
-                description = 'Go to game start';
-                }
-                return (
-                <li key={move}>
-                    <button onClick={() => jumpTo(move)}>{description}</button>
-                </li>
-                );
-            });
-
-            return (
-                <div className="game">
-                <div className="game-board">
-                    <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
-                </div>
-                <div className="game-info">
-                    <ol>{moves}</ol>
-                </div>
-                </div>
-            );
-        }
-
-        function calculateWinner(squares) {
-            const lines = [
-                [0, 1, 2],
-                [3, 4, 5],
-                [6, 7, 8],
-                [0, 3, 6],
-                [1, 4, 7],
-                [2, 5, 8],
-                [0, 4, 8],
-                [2, 4, 6],
-            ];
-            for (let i = 0; i < lines.length; i++) {
-                const [a, b, c] = lines[i];
-                if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-                return squares[a];
-                }
-            }
-            return null;
-        }
-
-        function FilterableProductTable({ products }) {
-            const [filterText, setFilterText] = React.useState('');
-            const [inStockOnly, setInStockOnly] = React.useState(false);
-
-            return (
-                <div>
-                <SearchBar
-                    filterText={filterText} 
-                    inStockOnly={inStockOnly} 
-                    onFilterTextChange={setFilterText} 
-                    onInStockOnlyChange={setInStockOnly} />
-                <ProductTable 
-                    products={products} 
-                    filterText={filterText}
-                    inStockOnly={inStockOnly} />
-                </div>
-            );
-        }
-
-        function ProductCategoryRow({ category }) {
-            return (
-                <tr>
-                <th colSpan="2">
-                    {category}
-                </th>
-                </tr>
-            );
-        }
-
-        function ProductRow({ product }) {
-            const name = product.stocked ? product.name :
-                <span style={{ color: 'red' }}>
-                {product.name}
-                </span>;
-
-            return (
-                <tr>
-                <td>{name}</td>
-                <td>{product.price}</td>
-                </tr>
-            );
-        }
-
-        function ProductTable({ products, filterText, inStockOnly }) {
-            const rows = [];
-            let lastCategory = null;
-
-            products.forEach((product) => {
-                if ( product.name.toLowerCase().indexOf(filterText.toLowerCase()) === -1 ) {
-                    return;
-                }
-                if (inStockOnly && !product.stocked) {
-                    return;
-                }
-                if (product.category !== lastCategory) {
-                    rows.push( 
-                        <ProductCategoryRow 
-                        category={product.category} 
-                        key={product.category} />
-                    );
-                }
-                rows.push(
-                <ProductRow
-                    product={product}
-                    key={product.name} />
-                );
-                lastCategory = product.category;
-            });
-
-            return (
-                <table>
-                <thead>
-                    <tr>
-                    <th>Name</th>
-                    <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>{rows}</tbody>
-                </table>
-            );
-        }
-
-        function SearchBar({
-            filterText,
-            inStockOnly,
-            onFilterTextChange,
-            onInStockOnlyChange
-            }) {
-            return (
-                <form>
-                <input 
-                    type="text" 
-                    value={filterText} placeholder="Search..." 
-                    onChange={(e) => onFilterTextChange(e.target.value)} />
-                <label>
-                    <input 
-                    type="checkbox" 
-                    checked={inStockOnly} 
-                    onChange={(e) => onInStockOnlyChange(e.target.checked)} />
-                    {' '}
-                    Only show products in stock
-                </label>
-                </form>
-            );
-        }
-
-        const PRODUCTS = [
-            {category: "Fruits", price: "$1", stocked: true, name: "Apple"},
-            {category: "Fruits", price: "$1", stocked: true, name: "Dragonfruit"},
-            {category: "Fruits", price: "$2", stocked: false, name: "Passionfruit"},
-            {category: "Vegetables", price: "$2", stocked: true, name: "Spinach"},
-            {category: "Vegetables", price: "$4", stocked: false, name: "Pumpkin"},
-            {category: "Vegetables", price: "$1", stocked: true, name: "Peas"}
-        ];
-
-        function AppFruit() {
-            return <FilterableProductTable products={PRODUCTS} />;
-        }
-        
-        function useTime() {
-            const [time, setTime] = React.useState(() => new Date());
-            React.useEffect(() => {
-                const id = setInterval(() => {
-                    setTime(new Date());
-                }, 1000);
-                return () => clearInterval(id);
-            }, []);
-            return time;
-        }
-        function Clock({ color, time }) {
-            return (
-                <h1 style={{ color: color }}>
-                {time}
-                </h1>
-            );
-        }
-        function ColorClock() {
-            const time = useTime();
-            const [color, setColor] = React.useState('midnightblue');
-            return (
-                <div>
-                <p>
-                    选择一个颜色:{' '}
-                    <select value={color} onChange={e => setColor(e.target.value)}>
-                    <option value="lightcoral">浅珊瑚色</option>
-                    <option value="midnightblue">午夜蓝</option>
-                    <option value="rebeccapurple">丽贝卡紫</option>
-                    </select>
-                </p>
-                <Clock color={color} time={time.toLocaleTimeString()} />
-                </div>
-            );
-        }
-    
-        function HomePage() {
-            const names = ['Mike', 'Grace', 'Margaret'];
-            const [likes, setLikes] = React.useState(0);
-            const products = [
-                { title: 'Cabbage', isFruit: false, id: 1 },
-                { title: 'Garlic', isFruit: false, id: 2 },
-                { title: 'Apple', isFruit: true, id: 3 },
-            ];
-
-            function handleClick() {
-                setLikes(likes + 1 + 10);
-            }
-
-            return (
-                <div>
-                {/* 嵌套的 Header 组件 */}
-                <Header title="Hello JavaScript!" />
-                <Header2 title="Hello React" />
-                <ul>
-                    {
-                        names.map((name) => (<li key={name}> {name} </li>))
-                    }
-                </ul>
-                {ShoppingList(products)}
-                <button onClick={handleClick}>Likes ({likes})</button>
-                <Profile />
-                {PackingList()}
-                {MyInput()}
-                <br/>
-                {MyCheckbox()}
-                <Form />
-                <br/><br/>
-                {/*ColorClock()*/}
-                <br/><br/>
-                {AppFruit()}
-                <br/><br/><br/><br/>
-                {Game()}
-                <br/><br/><br/><br/>
-                </div>
-            );
-        }
-
-        const app = document.getElementById('app');
-        ReactDOM.render(<HomePage />, app);
-    </script>
-  </body>
+    const app = document.getElementById('app');
+    ReactDOM.render(<HomePage />, app);
+  </script>
+</body>
 <style>
-    * {
-      box-sizing: border-box;
-    }
+  * {
+    box-sizing: border-box;
+  }
 
-    body {
-      font-family: sans-serif;
-      margin: 20px;
-      padding: 0;
-    }
-    
-    h1 {
-      margin-top: 0;
-      font-size: 22px;
-    }
-    
-    h2 {
-      margin-top: 0;
-      font-size: 20px;
-    }
-    
-    h3 {
-      margin-top: 0;
-      font-size: 18px;
-    }
-    
-    h4 {
-      margin-top: 0;
-      font-size: 16px;
-    }
-    
-    h5 {
-      margin-top: 0;
-      font-size: 14px;
-    }
-    
-    h6 {
-      margin-top: 0;
-      font-size: 12px;
-    }
-    
-    code {
-      font-size: 1.2em;
-    }
-    
-    ul {
-      padding-inline-start: 20px;
-    }
-    
-    * {
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: sans-serif;
-      margin: 20px;
-      padding: 0;
-    }
-    
-    .square {
-      background: #fff;
-      border: 1px solid #999;
-      float: left;
-      font-size: 24px;
-      font-weight: bold;
-      line-height: 34px;
-      height: 34px;
-      margin-right: -1px;
-      margin-top: -1px;
-      padding: 0;
-      text-align: center;
-      width: 34px;
-    }
-    
-    .board-row:after {
-      clear: both;
-      content: '';
-      display: table;
-    }
-    
-    .status {
-      margin-bottom: 10px;
-    }
-    .game {
-      display: flex;
-      flex-direction: row;
-    }
-    
-    .game-info {
-      margin-left: 20px;
-    }
+  body {
+    font-family: sans-serif;
+    margin: 20px;
+    padding: 0;
+  }
 
-    
-    :root {
-        color: rgba(255, 255, 255, 0.87);
-    }
+  h1 {
+    margin-top: 0;
+    font-size: 22px;
+  }
 
-    
-    input {
-        background-color: #592b08;
-        outline: 1px solid #AFECAB;
-        color:rgb(50, 230, 14);
-        caret-color:#ffa502;
-    }
+  h2 {
+    margin-top: 0;
+    font-size: 20px;
+  }
 
-    body {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        background: linear-gradient(-135deg,#c850c0,#4158d0);
-    }
+  h3 {
+    margin-top: 0;
+    font-size: 18px;
+  }
 
+  h4 {
+    margin-top: 0;
+    font-size: 16px;
+  }
+
+  h5 {
+    margin-top: 0;
+    font-size: 14px;
+  }
+
+  h6 {
+    margin-top: 0;
+    font-size: 12px;
+  }
+
+  code {
+    font-size: 1.2em;
+  }
+
+  ul {
+    padding-inline-start: 20px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: sans-serif;
+    margin: 20px;
+    padding: 0;
+  }
+
+  .square {
+    background: #fff;
+    border: 1px solid #999;
+    float: left;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 34px;
+    height: 34px;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    text-align: center;
+    width: 34px;
+  }
+
+  .board-row:after {
+    clear: both;
+    content: '';
+    display: table;
+  }
+
+  .status {
+    margin-bottom: 10px;
+  }
+
+  .game {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .game-info {
+    margin-left: 20px;
+  }
+
+
+  :root {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+
+  input {
+    background-color: #592b08;
+    outline: 1px solid #AFECAB;
+    color: rgb(50, 230, 14);
+    caret-color: #ffa502;
+  }
+
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(-135deg, #c850c0, #4158d0);
+  }
 </style>
+
 </html>

@@ -106,10 +106,8 @@ def LoadData():
             #count_dict["playerdata"][i]["rank"] = RankTitle[count_dict["playerdata"][i]["rank"]+1]
             if count_dict["playerdata"][i]['name'] == "电脑" \
             and count_dict["playerdata"][i]['rank'] == 1 \
-            and count_dict["playerdata"][i]['pt'] == 0 \
             and count_dict["playerdata"][i]['id'] == 0 \
-            and count_dict["playerdata"][i]['deltapt'] == 0 \
-            or count_dict['roomdata']['room'] == "友人场" or count_dict['roomdata']['room'] == "比赛场": #比赛场:休闲普通场等 不计入
+            or count_dict['roomdata']['room'] == "比赛场": #比赛场:休闲普通场等 不计入 or count_dict['roomdata']['room'] == "友人场"
                 noCountFlag += 1
         #count_dict["roomdata"] = gamedata['roomdata']
         if noCountFlag == 0:
@@ -171,6 +169,9 @@ def printCSV():
     individualData = []
 
     for gamedata in sortedCountList:
+        # 友人场不计入天梯战绩
+        if gamedata['roomdata']['room'] == "友人场":
+            continue
         for playerData in gamedata['playerdata']:
         #for i in range(len(playerDataSorted)):
             #playerData = playerDataSorted[i]

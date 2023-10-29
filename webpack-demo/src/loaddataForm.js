@@ -63,7 +63,7 @@ function Row(props) {
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1, }}>
-                            <Typography variant="h6" gutterBottom component="div" sx={{color: 'blue'}}>
+                            <Typography variant="h6" gutterBottom component="div" sx={{ color: 'blue' }}>
                                 <i style={{ color: "#0d47a1" }} >{row.roomdata.round}</i> <i style={{ color: "#004d40" }}>{row.roomdata.room}</i>
                             </Typography>
                             <Table size="small" aria-label="purchases">
@@ -80,7 +80,7 @@ function Row(props) {
                                                 align={headCell.numeric ? 'right' : "center"}
                                                 padding={headCell.disablePadding ? 'none' : 'normal'}
                                                 //sortDirection={orderBy === headCell.id ? order : false}
-                                                sx={{backgroundColor: '#1b5e20',}}
+                                                sx={{ backgroundColor: '#1b5e20', }}
                                             >
                                                 {headCell.label}
                                             </TableCell>
@@ -96,7 +96,7 @@ function Row(props) {
                                             <TableCell align="right" sx={{ color: 'blue', backgroundColor: '#18ffff', }}>{player.finalpoint}</TableCell>
                                             <TableCell align="right" sx={{ color: 'blue', backgroundColor: '#ffff00', }}>{player.pt}</TableCell>
                                             <TableCell align="right" sx={{ color: 'blue', backgroundColor: '#1de9b6', }}>{player.deltapt}</TableCell>
-                                            <TableCell align="right" sx={{ color: 'blue', backgroundColor: '#2196f3', }}>{player.pt+player.deltapt}</TableCell>
+                                            <TableCell align="right" sx={{ color: 'blue', backgroundColor: '#2196f3', }}>{player.pt + player.deltapt}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -118,6 +118,12 @@ Row.propTypes = {
 
 export default function CollapsibleTable(props) {
     const { rows } = props;
+    const [includeFriends, setIncludeFriends] = React.useState(true);
+    function handleIncludeFriends(e) {
+        /*console.log({ includeFriends })*/
+        setIncludeFriends(e.target.checked);
+    }
+
     /*
     rows.map((row) => {
         console.log(row);
@@ -125,23 +131,35 @@ export default function CollapsibleTable(props) {
         console.log(row.endtime);
         console.log(row.playerdata);
         console.log(row.roomdata);
-    })*/
+    })
+    */
     return (
-        <TableContainer component={Paper}>
-            <Table aria-label="collapsible table">
-                <TableHead>
-                    <TableRow sx={{ color: 'blue', backgroundColor: '#7e57c2', }}>
-                        <TableCell />
-                        <TableCell >牌谱ID</TableCell>
-                        <TableCell align="right">endtime</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <Row key={row.uuid} row={row} />
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <Box sx={{ width: '100%' }}>
+            <Paper sx={{ width: '100%', mb: 2 }}>
+                <Typography variant="h6" component="div" sx={{ backgroundColor: '#2196f3', color: 'blue', }}>
+                    <input type="checkbox" checked={includeFriends} onChange={handleIncludeFriends} />
+                    <i style={{ color: "#0d47a1" }} >加载友人场数据</i>
+                </Typography>
+                <TableContainer component={Paper}>
+                    <Table aria-label="collapsible table">
+                        <TableHead>
+                            <TableRow sx={{ color: 'blue', backgroundColor: '#7e57c2', }}>
+                                <TableCell />
+                                <TableCell >牌谱ID</TableCell>
+                                <TableCell align="right">endtime</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {rows.map((row) => {
+                                if (!includeFriends) {
+                                    if (row.roomdata.room === '友人场') return;
+                                }
+                                return <Row key={row.uuid} row={row} />
+                            })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Paper>
+        </Box>
     );
 }
