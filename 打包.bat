@@ -53,10 +53,10 @@ pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview scipy 
 
 :START
 
-pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview pyinstaller --trusted-host mirrors.aliyun.com 
+pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview pyinstaller Pillow --trusted-host mirrors.aliyun.com 
 pipenv graph
 
-Pyinstaller -F .\src\APP.py ^
+pipenv run Pyinstaller -F .\src\APP.py ^
     --log-level=WARN ^
     --noconfirm ^
     --noconsole ^
