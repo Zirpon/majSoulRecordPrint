@@ -35,7 +35,7 @@ class MenuApi():
         active_window = webview.active_window()
         active_window.set_title(MenuApi.RecordWindowTitle)
         active_window.load_url(appUtils.formatUrl(MenuApi.record_url))
-        active_window.resize(1250, 900)
+        active_window.resize(980, 850)
 
     @staticmethod
     def view_majsoul():
@@ -76,7 +76,7 @@ class MenuApi():
         newTab = webview.create_window("New Tab", js_api=RecordApi(),
             url=appUtils.formatUrl(g_newtab_path),
             text_select=True, zoomable=True, draggable=True)
-
+        return newTab
         """
         with open('./assets/newTab.html','r',encoding='utf-8') as f:
             content = f.read()

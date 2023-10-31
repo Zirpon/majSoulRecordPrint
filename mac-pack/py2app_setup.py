@@ -23,16 +23,17 @@ DATA_FILES = [
     ]
 
 OPTIONS = {
-    'argv_emulation': False,
     'strip': True,
-    'argv_emulation':True,
+    'argv_emulation': False,
     'iconfile': 'majsoul.icns', # uncomment to include an icon
-    'includes': ['WebKit', 'Foundation', 'webview', 'sys', 'os', 'json', 'time', 'csv'],
-    'excludes': ['pyi_splash'],
+    #'includes': ['webview', ] 
+    'excludes': ['pyi_splash',],
+#	'packages' : [],
     'plist': {
         'CFBundleName'   : 'majSoulRP',     # 应用名
         'CFBundleDisplayName': 'majSoulRP', # 应用显示名
-        'CFBundleVersion': '1.0.0',      # 应用版本号
+	    'CFBundleVersion': '1.0.0',      # 应用版本号
+	    'NSRequiresAquaSystemAppearance' : False,
         'CFBundleShortVersionString':'0.1.0',
         'CFBundleIdentifier' : 'majSoulRP', # 应用包名、唯一标识
         'NSHumanReadableCopyright': 'Copyright © 2021 SW Zirpon.Zhang. All rights reserved.', # 可读版权

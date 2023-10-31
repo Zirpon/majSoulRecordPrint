@@ -5,24 +5,33 @@ import GLOBALS
 
 GLOBALS._init()
 
-if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-    #print('running in a PyInstaller bundle')
-    if sys.platform.startswith('linux'):
-        #print('当前系统为 Linux')
-        pass
-    elif sys.platform.startswith('win'):
-        import LOADINGS
-        #print('当前系统为 Windows')
-        pass
-    elif sys.platform.startswith('darwin'):
-        #print('当前系统为 macOS')
-        pass
-    GLOBALS.set_value('DEBUG', False)
-    GLOBALS.set_value('BASE_PATH',sys._MEIPASS)
-else:
-    GLOBALS.set_value('DEBUG', True)
-    GLOBALS.set_value('BASE_PATH', os.path.abspath(os.curdir))
-    #os.path.dirname(sys.argv[0])
+if sys.platform.startswith('linux'):
+    #print('当前系统为 Linux')
+    pass
+elif sys.platform.startswith('win'):
+    import LOADINGS
+    # windows pyinstaller 打包标记
+    if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+        #print('running in a PyInstaller bundle')
+        GLOBALS.set_value('DEBUG', False)
+        GLOBALS.set_value('BASE_PATH',sys._MEIPASS)
+    else:
+        GLOBALS.set_value('DEBUG', True)
+        GLOBALS.set_value('BASE_PATH', os.path.abspath(os.curdir))
+        #os.path.dirname(sys.argv[0])
+    #print('当前系统为 Windows')
+    pass
+elif sys.platform.startswith('darwin'):
+    # mac py2app 打包标记
+    if len(sys._xoptions) > 0 and getattr(sys._xoptions, 'fronzen_modules', 'off'):
+        GLOBALS.set_value('DEBUG', True)
+        GLOBALS.set_value('BASE_PATH', os.path.abspath(os.curdir))
+    else:
+        #print('running in a py2app bundle')
+        GLOBALS.set_value('DEBUG', False)
+        GLOBALS.set_value('BASE_PATH', os.path.abspath(os.curdir))
+    #print('当前系统为 macOS')
+    pass
 
 GLOBALS.set_value('CONFIG_FILE', "./setting.json")
 GLOBALS.set_value('NEWTAB_URL', "./assets/newTab.html")
@@ -35,8 +44,13 @@ DEBUG = GLOBALS.get_value('DEBUG')
 from appJS import RecordApi
 from appMenu import MenuApi
 if __name__ == '__main__':
+    windowtmp = None
     if DEBUG:
-        recordWindow = webview.create_window(MenuApi.RecordWindowTitle, "https://www.baidu.com", js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
+        windowtmp = webview.create_window(MenuApi.RecordWindowTitle, "https://cn.bing.com/", js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
     else:
-        majWindow = webview.create_window(MenuApi.MajSoulWindowTitle, MenuApi.majSoul_url, js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
-    webview.start(private_mode=False, menu=MenuApi().menu_items, debug=DEBUG)
+        windowtmp = webview.create_window(MenuApi.MajSoulWindowTitle, MenuApi.majSoul_url, js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
+    def loadWindowUrl(window):
+        # mac webkit 加载第一个页面失败 这是研究出来暂时使用的办法
+        window.evaluate_js("alert('click me finished');")
+        window.load_url(window.original_url)
+    webview.start(loadWindowUrl, windowtmp, private_mode=False, menu=MenuApi().menu_items, debug=DEBUG)
