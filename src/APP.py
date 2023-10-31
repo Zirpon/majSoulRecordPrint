@@ -9,9 +9,9 @@ if sys.platform.startswith('linux'):
     #print('当前系统为 Linux')
     pass
 elif sys.platform.startswith('win'):
-    import LOADINGS
     # windows pyinstaller 打包标记
     if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+        import LOADINGS
         #print('running in a PyInstaller bundle')
         GLOBALS.set_value('DEBUG', False)
         GLOBALS.set_value('BASE_PATH',sys._MEIPASS)

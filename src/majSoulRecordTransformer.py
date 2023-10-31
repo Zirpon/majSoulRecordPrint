@@ -145,7 +145,10 @@ def printCountList():
             f.writelines(gamedata['roomdata']['room']+'\n')
 
             for playerdata in gamedata["playerdata"]:
-                playerdata["rankTitle"] = RankTitle[playerdata["rank"]-1]
+                rankIndex = playerdata["rank"]-1
+                if rankIndex > len(RankTitle):
+                    rankIndex = len(RankTitle)-1
+                playerdata["rankTitle"] = RankTitle[rankIndex]
                 f.writelines("%d位\t%s\t%s\t%d\t%d\t%d\t%d\t" % 
                              (playerdata['顺位'], playerdata['name'], playerdata['rankTitle'], 
                               playerdata['finalpoint'], playerdata['pt'], playerdata['deltapt'],
