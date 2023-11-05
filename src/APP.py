@@ -7,6 +7,7 @@ GLOBALS._init()
 
 if sys.platform.startswith('linux'):
     #print('当前系统为 Linux')
+    GLOBALS.set_value('PLATFORM', 'linux')
     pass
 elif sys.platform.startswith('win'):
     # windows pyinstaller 打包标记
@@ -15,11 +16,13 @@ elif sys.platform.startswith('win'):
         #print('running in a PyInstaller bundle')
         GLOBALS.set_value('DEBUG', False)
         GLOBALS.set_value('BASE_PATH',sys._MEIPASS)
+        print(sys._MEIPASS)
     else:
         GLOBALS.set_value('DEBUG', True)
         GLOBALS.set_value('BASE_PATH', os.path.abspath(os.curdir))
         #os.path.dirname(sys.argv[0])
     #print('当前系统为 Windows')
+    GLOBALS.set_value('PLATFORM', 'win')
     pass
 elif sys.platform.startswith('darwin'):
     # mac py2app 打包标记
@@ -31,6 +34,7 @@ elif sys.platform.startswith('darwin'):
         GLOBALS.set_value('DEBUG', False)
         GLOBALS.set_value('BASE_PATH', os.path.abspath(os.curdir))
     #print('当前系统为 macOS')
+    GLOBALS.set_value('PLATFORM', 'darwin')
     pass
 
 GLOBALS.set_value('CONFIG_FILE', "./setting.json")
@@ -51,6 +55,7 @@ if __name__ == '__main__':
         windowtmp = webview.create_window(MenuApi.MajSoulWindowTitle, MenuApi.majSoul_url, js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
     def loadWindowUrl(window):
         # mac webkit 加载第一个页面失败 这是研究出来暂时使用的办法
-        window.evaluate_js("alert('click me finished');")
-        window.load_url(window.original_url)
+        if GLOBALS.get_value('PLATFORM') == 'darwin':
+            window.evaluate_js("alert('click me finished');")
+            window.load_url(window.original_url)
     webview.start(loadWindowUrl, windowtmp, private_mode=False, menu=MenuApi().menu_items, debug=DEBUG)
