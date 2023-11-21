@@ -276,8 +276,17 @@ function collectallpaipu() {
             function (n, { record_list }) {
                 //console.log(start,record_list, types);
                 m = uiscript.UI_PaiPu.record_map;
-                if (record_list.length > 0 && !m[record_list[0].uuid]) {
-                    get_more(result.concat(record_list), start + count, types)
+                if (record_list.length > 0) {
+                    if (!m[record_list[0].uuid]) {
+                        get_more(result.concat(record_list), start + count, types)
+                    } else {
+                        for (let i = 0; i < record_list.length; i++) {
+                            if(!m[record_list[i].uuid]) {
+                                result.push(record_list[i])
+                            }
+                        }
+                        get_more(result, start + count, types)
+                    }
                 } else {
                     types = types.slice(1);
                     //console.log(types);
@@ -293,8 +302,8 @@ function collectallpaipu() {
                         }
                         //alert("已自动收集牌谱基本数据！牌谱个数：" + count);
                         //callback && callback();
-                        retCollectallpaipu = + 1;
-                        return result;
+                        retCollectallpaipu += 1;
+                        //return uiscript.UI_PaiPu.record_map;
                     }
                 }
             });
@@ -353,14 +362,14 @@ async function mainLoop() {
             collectallpaipu();
         }
         ddd += 1;
-        console.log('ddd:' + ddd + ' retCollectallpaipu:' + retCollectallpaipu)
+        console.log('ddd:' + ddd + ' retCollectallpaipu:' + retCollectallpaipu + ' 收集牌谱：' + Object.keys(uiscript.UI_PaiPu.record_map).length)
 
         await sleep(5000);
-        if (retCollectallpaipu > 0)
+        if (retCollectallpaipu >= 0)
             break;
     }
 
-    alert("已自动收集牌谱基本数据！牌谱个数：" + Object.keys(uiscript.UI_PaiPu.record_map).length);
+    //alert("已自动收集牌谱基本数据！牌谱个数：" + Object.keys(uiscript.UI_PaiPu.record_map).length);
 
 
     //因为Loop是异步执行函数的 每调用一个函数 如果依赖函数结果的话 就设置一个定时器吧
@@ -388,11 +397,11 @@ async function mainLoop() {
     pywebview.api.setIdName(UserID, UserName).then(
         (response) => {
             console.log(JSON.stringify(response));
-            alert(`用户 （${UserID}, ${UserName}） \n setting.json文件已保存\n 路径：${response.path}`);
+            //alert(`用户 （${UserID}, ${UserName}） \n setting.json文件已保存\n 路径：${response.path}`);
         }
     )
 
-    alert("已格式化牌谱个数：" + Object.keys(paipugamedata).length);
+    //alert("已格式化牌谱个数：" + Object.keys(paipugamedata).length);
 
     savegamedata(GameMgr.Inst.account_id, paipugamedata)
 }
