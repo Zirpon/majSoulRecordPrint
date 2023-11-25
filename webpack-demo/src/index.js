@@ -188,7 +188,7 @@ function CButtonPage() {
     return (
         <div>
             <MyInput /><br/><br/>
-            <CButton btName="加载数据" btFunc={loadData} tmp={IntResetflag} />
+            {/*<CButton btName="加载数据" btFunc={loadData} tmp={IntResetflag} />*/}
             <CButton btName="战绩表格" btFunc={printCountList} tmp={IntResetflag} />
             <CButton btName="战绩数据曲线图" btFunc={printCSV} tmp={IntResetflag} />
             {/*<CButton btName="战绩数据可视化图表" btFunc={graphicCSV} tmp={IntResetflag} />*/}
