@@ -32,6 +32,7 @@ window.addEventListener('pywebviewready', async function () {
     //const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
     //await sleep(1000);
     showCookies()
+
     if (localStorage.getItem('majSoulGameN'))
         document.getElementById('majSoulGameN').value = localStorage.getItem('majSoulGameN')
 })
@@ -78,13 +79,22 @@ function printCSV(nclick) {
     pywebview.api.printCSV(nclick).then(
         (response) => {
             //console.log(response.data)
+            //console.log(response.strdata)
             var csv = Papa.unparse({
                 "fields": response.data,
-                "data": response.strdata
+                "data": response.strdata,
             });
             var jsondata = Papa.parse(csv, {
                 header: true,
                 //complete: data => {console.log(data.data);}
+                transform: function (value, column) {
+                    //console.log(value, column);
+                    if (column === 'Curpt' || column === 'pt' ||
+                        column === 'finalpoint' || column === 'deltapt' ||
+                        column === 'rank' || column === '顺位')
+                        return parseInt(value);
+                    return value;
+                },
             })
             //console.log(jsondata)
 
@@ -95,13 +105,13 @@ function printCSV(nclick) {
     )
 }
 
-function csvChart(jsondata){
-    getmyChartRoot().render(<Cchart data={jsondata} n={document.getElementById('majSoulGameN').value}/>);
+function csvChart(jsondata) {
+    getmyChartRoot().render(<Cchart data={jsondata} n={document.getElementById('majSoulGameN').value} />);
     //dddddr.unmount();
 }
 
 var G_myChartRoot = null
-function getmyChartRoot(){
+function getmyChartRoot() {
     const myChartContainer = document.getElementById("myChart");
     if (G_myChartRoot == null) {
         G_myChartRoot = createRoot(myChartContainer);
@@ -112,10 +122,13 @@ function getmyChartRoot(){
 
 function graphicCSV(nclick) {
     var majSoulGameN = document.getElementById('majSoulGameN').value;
+
+    /*
     showResponse({ message: "请稍候..." });
     const loader = document.getElementById('loader')
     loader.classList.add('loader');
     loader.style.display = 'flex';
+    */
     pywebview.api.graphicCSV(nclick, majSoulGameN).then((response) => {
         showResponse(response);
         document.getElementById('loader').style.display = 'none';
@@ -149,14 +162,36 @@ function CButton({ btName, btFunc, tmp = null }) {
         {btName}:({n})</button>)
 }
 
+function MyInput() {
+    var defaultvalue = 40;
+    if (localStorage.getItem('majSoulGameN'))
+        defaultvalue = localStorage.getItem('majSoulGameN');
+
+    const [text, setText] = React.useState(defaultvalue);
+
+    function handleChange(e) {
+        setText(e.target.value);
+        localStorage.setItem('majSoulGameN', text);
+        printCSV(-1);
+    }
+
+    return (
+        <>
+            <label><i>查询场数:</i> </label>
+            <input id='majSoulGameN' value={text} onChange={handleChange} />
+        </>
+    );
+}
+
 function CButtonPage() {
     const [IntResetflag, setIntResetflag] = React.useState(0);
     return (
         <div>
-            <CButton btName="加载数据" btFunc={loadData} tmp={IntResetflag} /><br/>
-            <CButton btName="打印全部战绩数据" btFunc={printCountList} tmp={IntResetflag} /><br/>
-            <CButton btName="打印我的CSV战绩" btFunc={printCSV} tmp={IntResetflag} /><br/>
-            <CButton btName="战绩数据可视化图表" btFunc={graphicCSV} tmp={IntResetflag} /><br/>
+            <MyInput /><br/><br/>
+            <CButton btName="加载数据" btFunc={loadData} tmp={IntResetflag} />
+            <CButton btName="战绩表格" btFunc={printCountList} tmp={IntResetflag} />
+            <CButton btName="战绩数据曲线图" btFunc={printCSV} tmp={IntResetflag} />
+            {/*<CButton btName="战绩数据可视化图表" btFunc={graphicCSV} tmp={IntResetflag} />*/}
             <CButton btName="reset" btFunc={() => {
                 setIntResetflag(IntResetflag + 1);
             }} tmp={IntResetflag} />
@@ -169,8 +204,8 @@ root1.render(<CButtonPage />);
 
 ////操作结果显示提示框///////////////////////////////////////////////////////////////
 function showResponse(response) {
-    const container = document.getElementById("py-ret-con-innerText");
-    container.innerText = response.message
+    //const container = document.getElementById("py-ret-con-innerText");
+    //container.innerText = response.message
 }
 
 var G_WCollapseContainerRoot = null

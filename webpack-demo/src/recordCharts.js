@@ -80,18 +80,22 @@ export default function Cchart(props) {
                     <CartesianGrid strokeDasharray="3 3" />
 
                     <XAxis dataKey="endtime" hide={true} axisLine={false} reversed={true} />
-                    <YAxis yAxisId="1" domain={['dataMin-0.3', 'dataMax+0.3']} ticks={[1, 2, 3, 4]}
+                    <YAxis yAxisId="1" domain={['dataMin - 0.3', 'dataMax + 0.3']} ticks={[1, 2, 3, 4]}
                         tick={{ stroke: '#76ff03', strokeWidth: 1 }} interval={0} reversed={true} orientation="right"
                         tickFormatter={formatXAxis} type="number" allowDecimals={false} />
-                    <YAxis yAxisId="3" type="number" allowDataOverflow orientation="right"
-                        domain={['dataMin-200', 'dataMax+200']} tick={{ stroke: '#ff8a80', strokeWidth: 1 }} />
-                    <YAxis yAxisId="2" type="number" allowDataOverflow
-                        domain={['dataMin-65000', 'dataMax+65000']} tick={{ stroke: '#2196f3', strokeWidth: 1 }} />
+                    <YAxis yAxisId="2" type="number" allowDataOverflow={false}
+                        //domain={([dataMin, dataMax]) => { const absMax = Math.max(Math.abs(dataMin), Math.abs(dataMax)); return [-absMax, absMax]; }}
+                        //domain={['dataMin - 65000', 'dataMax + 65000']} 
+                        domain={['dataMin - 150', 'dataMax + 150']}
+                        tick={{ stroke: '#2196f3', strokeWidth: 1 }} />
+                    <YAxis yAxisId="3" type="number" allowDataOverflow={false} orientation="right"
+                        domain={['dataMin-20', 'dataMax+20']} tick={{ stroke: '#ff8a80', strokeWidth: 1 }} />
+
                     <Tooltip formatter={formatDeltaptToolTips} />
                     <Legend />
                     <Line yAxisId="1" type="linear" dataKey="顺位" stroke="#76ff03" strokeWidth={2} animationDuration={300} />
-                    <Line yAxisId="3" type="basic" dataKey="deltapt" stroke="#ff8a80" strokeWidth={2} animationDuration={300} strokeDasharray="4 1" />
                     <Line yAxisId="2" type="monotone" dataKey="finalpoint" stroke="#2196f3" strokeWidth={2} strokeDasharray="4 1 2" animationDuration={300} />
+                    <Line yAxisId="3" type="basic" dataKey="deltapt" stroke="#ff9800" strokeWidth={2} animationDuration={300} strokeDasharray="4 1" />
                 </LineChart>
             </ResponsiveContainer>
             <ResponsiveContainer width="100%" height={400}>
@@ -100,11 +104,11 @@ export default function Cchart(props) {
                     <CartesianGrid strokeDasharray="3 3" />
 
                     <XAxis dataKey="endtime" hide={true} axisLine={false} reversed={true} />
-                    <YAxis yAxisId="1" domain={['dataMin-0.3', 'dataMax+0.3']} ticks={range(1,17,1).slice(1)}
+                    <YAxis yAxisId="1" domain={['dataMin - 0.3', 'dataMax + 0.3']} ticks={range(1,17,1).slice(1)}
                         tick={{ stroke: '#76ff03', strokeWidth: 0}} interval={0} orientation="right" minTickGap={10}
                         tickFormatter={formatRank} type="number" allowDecimals={false} />
-                    <YAxis yAxisId="2" type="number" allowDataOverflow
-                        domain={['dataMin-150', 'dataMax+500']} tick={{ stroke: '#2196f3', strokeWidth: 1 }} />
+                    <YAxis yAxisId="2" type="number"
+                        domain={['dataMin - 150', 'dataMax + 150']} tick={{ stroke: '#2196f3', strokeWidth: 1 }} />
                     <Tooltip />
                     <Legend />
                     <Line yAxisId="1" type="linear" dataKey="rank" dot={false} stroke="#ff9800" strokeWidth={5} animationDuration={300} />
