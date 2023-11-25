@@ -166,7 +166,7 @@ def printCountList():
 
 #个人战绩
 def printCSV():
-    individualCSV = [["uuid","endtime","id","name","顺位","finalpoint","pt","deltapt","Curpt","rank","rankTitle"]]
+    individualCSV = [["uuid","endtime","id","name","顺位","finalpoint","pt","deltapt","Curpt","rank","rankTitle","roomType"]]
     jsonFileName = "./data/%s-%d.json" % (MJSoulName,MJSoulID)
     os.makedirs(os.path.dirname(jsonFileName), exist_ok=True)
     individualData = []
@@ -191,7 +191,8 @@ def printCSV():
                                 playerData['deltapt'],
                                 playerData['pt'] + playerData['deltapt'],
                                 playerData['rank'],
-                                playerData['rankTitle']])
+                                playerData['rankTitle'],
+                                gamedata['roomdata']['room']])
     """
     with open(jsonFileName, 'w', newline='', encoding='utf-8') as f:
         for gamedata in individualData:
