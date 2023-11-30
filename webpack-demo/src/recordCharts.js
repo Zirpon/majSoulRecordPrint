@@ -15,17 +15,18 @@ import {
     ResponsiveContainer,
 } from 'recharts';
 
-const RankTitle = ['初心1', '初心2', '初心3',
-    '雀士1', '雀士2', '雀士3',
-    '雀杰1', '雀杰2', '雀杰3',
-    '雀豪1', '雀豪2', '雀豪3',
-    '雀圣1', '雀圣2', '雀圣3',
+const RankTitle = ['初心⭐', '初心⭐⭐', '初心⭐⭐⭐',
+    '雀士⭐', '雀士⭐⭐', '雀士⭐⭐⭐',
+    '雀杰⭐', '雀杰⭐⭐', '雀杰⭐⭐⭐',
+    '雀豪⭐', '雀豪⭐⭐', '雀豪⭐⭐⭐',
+    '雀圣⭐', '雀圣⭐⭐', '雀圣⭐⭐⭐',
     '魂天']
 
 export default function Cchart(props) {
     const { data, n } = props;
     //console.log(data);
     var datatmp = data.slice(0, n);
+    var playerName = data[0].name
 
     const formatXAxis = (tickItem) => {
         if (tickItem == 1)
@@ -44,11 +45,14 @@ export default function Cchart(props) {
     }
 
     const formatDeltaptToolTips = (toolTipsItem, itemName, z) => {
-        if (itemName != "deltapt") return [toolTipsItem, itemName];
+        if (z.dataKey != "deltapt") return [toolTipsItem, itemName];
         //console.log(toolTipsItem, itemName,z)
-        var match = false;
+        var match = null;
+        var sumdeltapt = 0;
         for (let eleindex = 0; eleindex < datatmp.length; eleindex++) {
             const element = datatmp[eleindex];
+            if (element[z.dataKey])
+                sumdeltapt += element[z.dataKey];
 
             if (element.uuid === z.payload.uuid) {
                 match = eleindex;
@@ -57,19 +61,11 @@ export default function Cchart(props) {
             }
         }
 
-        if (match) {
-            var sumdeltapt = 0;
-            var newarr = datatmp.slice(0, match + 1);
-            //console.log(newarr.length)
-            for (var i = 0, len = newarr.length; i < len; i++) {
-                sumdeltapt += newarr[i].deltapt;
-                //console.log(newarr[i])
-            }
+        if (match != null) {
             var ret = JSON.stringify([parseInt(toolTipsItem), "近期上分Sum:" + sumdeltapt])
             //console.log([ret,itemName], newarr)
             return [ret, itemName]
-        }
-        else
+        } else
             return [toolTipsItem, itemName]
     }
 
@@ -161,16 +157,16 @@ export default function Cchart(props) {
 
         piechardata = {
             tong: [
-                { name: '铜之间+', value: sum_tong_up },
-                { name: '铜之间-', value: -sum_tong_down },
+                { name: '铜之间+分：', value: sum_tong_up },
+                { name: '铜之间-分：', value: -sum_tong_down },
             ],
             yin: [
-                { name: '银之间+', value: sum_yin_up },
-                { name: '银之间-', value: -sum_yin_down },
+                { name: '银之间+分：', value: sum_yin_up },
+                { name: '银之间-分：', value: -sum_yin_down },
             ],
             total: [
-                { name: '铜之间', value: sum_tong_up + sum_tong_down },
-                { name: '银之间', value: sum_yin_up + sum_yin_down },]
+                { name: '铜之间：', value: sum_tong_up + sum_tong_down },
+                { name: '银之间：', value: sum_yin_up + sum_yin_down },]
 
         };
         return piechardata;
@@ -224,43 +220,34 @@ export default function Cchart(props) {
     areachart_data_filter();
 
     const formatAreachartToolTips = (toolTipsItem, itemName, z) => {
-        if (itemName != "rank4deltapt_tong" && itemName != "rank4deltapt_yin" &&
-            itemName != "rank5deltapt_tong" && itemName != "rank5deltapt_yin" &&
-            itemName != "rank6deltapt_tong" && itemName != "rank6deltapt_yin")
+        if (z.dataKey != "rank4deltapt_tong" && z.dataKey != "rank4deltapt_yin" &&
+            z.dataKey != "rank5deltapt_tong" && z.dataKey != "rank5deltapt_yin" &&
+            z.dataKey != "rank6deltapt_tong" && z.dataKey != "rank6deltapt_yin")
             return [toolTipsItem, itemName];
         //console.log(toolTipsItem, itemName,z)
-        var match = false;
+        var match = null;
+        var sumdeltapt = 0;
+
         for (let eleindex = 0; eleindex < data.length; eleindex++) {
             const element = data[eleindex];
 
             if (element.uuid === z.payload.uuid) {
                 match = eleindex;
-                //console.log(element.uuid, z.payload.uuid)
-                break;
+            }
+
+            if (match != null && element[z.dataKey]) {
+                sumdeltapt += element[z.dataKey];
             }
         }
 
-        if (match) {
-            var sumdeltapt = 0;
-            var newarr = data.slice(match + 1);
-            //console.log(newarr.length)
-            for (var i = 0, len = newarr.length; i < len; i++) {
-                if (newarr[i][itemName]) {
-                    sumdeltapt += newarr[i][itemName];
-                }
-                //console.log(newarr[i])
-            }
-            var ret = JSON.stringify([parseInt(toolTipsItem), "Sum:" + sumdeltapt])
-            //console.log([ret,itemName], newarr)
-            return [ret, itemName]
-        }
-        else
-            return [toolTipsItem, itemName]
+        var ret = JSON.stringify([parseInt(toolTipsItem), "Sum:" + sumdeltapt])
+        //console.log([ret,itemName], newarr)
+        return [ret, itemName]
     }
 
-    var tmmmmm = `deltapt rank4sum(铜/银之间): ${sumRank4deltapt_tong} ${sumRank4deltapt_yin};
-rank5sum(铜/银之间): ${sumRank5deltapt_tong} ${sumRank5deltapt_yin};
-rank6sum(铜/银之间): ${sumRank6deltapt_tong} ${sumRank6deltapt_tong};
+    var tmmmmm = `铜/银之间上分统计：雀士⭐(铜/银之间): ${sumRank4deltapt_tong}/${sumRank4deltapt_yin};
+雀士⭐⭐(铜/银之间): ${sumRank5deltapt_tong}/${sumRank5deltapt_yin};
+雀士⭐⭐⭐(铜/银之间): ${sumRank6deltapt_tong}/${sumRank6deltapt_tong};
 铜之间: ${sumDeltapt_tong} 银之间: ${sumDeltapt_yin}`
 
     //console.log(tmmmmm)
@@ -273,7 +260,10 @@ rank6sum(铜/银之间): ${sumRank6deltapt_tong} ${sumRank6deltapt_tong};
                     margin={{ top: 5, right: 30, left: 60, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
 
-                    <XAxis dataKey="endtime" hide={true} axisLine={false} reversed={true} />
+                    <XAxis dataKey="endtime" hide={false} tick={false} tickLine={false} 
+                        axisLine={false} reversed={true} >
+                        <Label value={`玩家：${playerName}`} offset={0} position="insideBottom" stroke="#ff9800"/>
+                    </XAxis>
                     <YAxis yAxisId="1" domain={['dataMin - 0.3', 'dataMax + 0.3']} ticks={[1, 2, 3, 4]}
                         tick={{ stroke: '#76ff03', strokeWidth: 1 }} interval={0} reversed={true} orientation="right"
                         tickFormatter={formatXAxis} type="number" allowDecimals={false} />
@@ -286,14 +276,15 @@ rank6sum(铜/银之间): ${sumRank6deltapt_tong} ${sumRank6deltapt_tong};
                         domain={['dataMin-20', 'dataMax+20']} tick={{ stroke: '#ff8a80', strokeWidth: 1 }} />
 
                     <Tooltip formatter={formatDeltaptToolTips} />
-                    <Legend />
+                    <Legend verticalAlign="top" height={36} />
                     <Line yAxisId="1" type="linear" dataKey="顺位" stroke="#76ff03" strokeWidth={2} animationDuration={300} />
-                    <Line yAxisId="2" type="monotone" dataKey="finalpoint" stroke="#2196f3" strokeWidth={2} strokeDasharray="4 1 2" animationDuration={300} />
-                    <Line yAxisId="3" type="basic" dataKey="deltapt" stroke="#ff9800" strokeWidth={2} animationDuration={300} strokeDasharray="4 1" />
+                    <Line yAxisId="2" type="monotone" dataKey="finalpoint" name="胡牌点数" stroke="#2196f3" strokeWidth={2} strokeDasharray="4 1 2" animationDuration={300} />
+                    <Line yAxisId="3" type="basic" dataKey="deltapt" stroke="#ff9800" name="Δpt(天梯分变动)" strokeWidth={2} animationDuration={300} strokeDasharray="4 1" />
                 </LineChart>
             </ResponsiveContainer>
+            <br/>
             <ResponsiveContainer width="100%" height={400}>
-                <ComposedChart width={800} height={300} data={data}
+                <ComposedChart width={800} height={400} data={data}
                     margin={{ top: 5, right: 30, left: 60, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
 
@@ -301,23 +292,23 @@ rank6sum(铜/银之间): ${sumRank6deltapt_tong} ${sumRank6deltapt_tong};
                         axisLine={false} reversed={true} scale="band">
                         <Label value={tmmmmm} offset={0} position="insideBottom" stroke="#ff9800" />
                     </XAxis>
-                    <YAxis yAxisId="1" domain={['dataMin - 0.3', 'dataMax + 0.3']} ticks={range(1, 17, 1).slice(1)}
-                        tick={{ stroke: '#76ff03', strokeWidth: 0 }} interval={0} orientation="right" minTickGap={10}
-                        tickFormatter={formatRank} type="number" allowDecimals={false} />
-                    <YAxis yAxisId="2" type="number"
+                    <YAxis yAxisId="1" domain={['dataMin - 0.3', 'dataMax + 0.3']} ticks={range(1, RankTitle.length+1, 1).slice(1)}
+                        tick={{ stroke: '#76ff03', strokeWidth: 0.4 }} interval={0} orientation="left" minTickGap={10}
+                        tickFormatter={formatRank} mirror={true} type="number" allowDecimals={false} />
+                    <YAxis yAxisId="2" type="number" orientation="left" mirror={false}
                         domain={['dataMin - 150', 'dataMax + 150']} tick={{ stroke: '#2196f3', strokeWidth: 1 }} />
                     <YAxis yAxisId="3" type="number" allowDataOverflow={false} orientation="right"
                         domain={['dataMin-20', 'dataMax+20']} tick={{ stroke: '#ff8a80', strokeWidth: 1 }} />
                     <Tooltip formatter={formatAreachartToolTips} />
                     {/*<Legend verticalAlign="top" height={36} />*/}
                     <Line yAxisId="1" type="linear" dataKey="rank" dot={false} stroke="#ff9800" strokeWidth={5} animationDuration={300} />
-                    <Line yAxisId="2" type="monotone" dataKey="Curpt" dot={false} stroke="#4caf50" strokeWidth={3} animationDuration={300} />
-                    <Area yAxisId="3" type="monotone" dataKey="rank4deltapt_tong" stroke="#8B4513" fill="#8B4513" />
-                    <Area yAxisId="3" type="monotone" dataKey="rank4deltapt_yin" stroke="#C0C0C0" fill="#C0C0C0" />
-                    <Area yAxisId="3" type="monotone" dataKey="rank5deltapt_tong" stroke="#8B4513" fill="#8B4513" />
-                    <Area yAxisId="3" type="monotone" dataKey="rank5deltapt_yin" stroke="#C0C0C0" fill="#C0C0C0" />
-                    <Area yAxisId="3" type="monotone" dataKey="rank6deltapt_tong" stroke="#8B4513" fill="#8B4513" />
-                    <Area yAxisId="3" type="monotone" dataKey="rank6deltapt_yin" stroke="#C0C0C0" fill="#C0C0C0" />
+                    <Line yAxisId="2" type="monotone" dataKey="Curpt" dot={false} stroke="#4caf50" name="当前pt(天梯分)" strokeWidth={3} animationDuration={300} />
+                    <Area yAxisId="3" type="monotone" dataKey="rank4deltapt_tong" name="雀士⭐铜之间Δpt" stroke="#8B4513" fill="#8B4513" />
+                    <Area yAxisId="3" type="monotone" dataKey="rank4deltapt_yin" name="雀士⭐银之间Δpt" stroke="#C0C0C0" fill="#C0C0C0" />
+                    <Area yAxisId="3" type="monotone" dataKey="rank5deltapt_tong" name="雀士⭐⭐铜之间Δpt" stroke="#8B4513" fill="#8B4513" />
+                    <Area yAxisId="3" type="monotone" dataKey="rank5deltapt_yin" name="雀士⭐⭐银之间Δpt" stroke="#C0C0C0" fill="#C0C0C0" />
+                    <Area yAxisId="3" type="monotone" dataKey="rank6deltapt_tong" name="雀士⭐⭐⭐铜之间Δpt" stroke="#8B4513" fill="#8B4513" />
+                    <Area yAxisId="3" type="monotone" dataKey="rank6deltapt_yin" name="雀士⭐⭐⭐银之间Δpt" stroke="#C0C0C0" fill="#C0C0C0" />
                 </ComposedChart>
             </ResponsiveContainer>
             <ResponsiveContainer width="100%" height={400}>
