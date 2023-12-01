@@ -71,14 +71,8 @@ export default function Cchart(props) {
 
     const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => + (i * step));
 
-    //////////// piechart
-    var piechardata = [
-        { name: 'Group A', value: 400 },
-        { name: 'Group B', value: 300 },
-        { name: 'Group C', value: 300 },
-        { name: 'Group D', value: 200 },
-    ];
-
+    //////////// piechart 统计饼状图
+    var piechardata = {};
     const renderActiveShape = (props) => {
         const RADIAN = Math.PI / 180;
         const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
@@ -127,11 +121,7 @@ export default function Cchart(props) {
             </text>
         );
     };
-    const [piestate1, setPiestate1] = React.useState({ activeIndex: 0, });
-    const [piestate2, setPiestate2] = React.useState({ activeIndex: 0, });
     const [piestate3, setPiestate3] = React.useState({ activeIndex: 0, });
-    const onPieEnter1 = (_, index) => { setPiestate1({ activeIndex: index, }); };
-    const onPieEnter2 = (_, index) => { setPiestate2({ activeIndex: index, }); };
     const onPieEnter3 = (_, index) => { setPiestate3({ activeIndex: index, }); };
 
     const piechart_data_filter = () => {
@@ -142,6 +132,8 @@ export default function Cchart(props) {
         var sum_yin_up = 0;
         var sum_yin_down = 0;
         //金之间
+        var sum_jin_up = 0;
+        var sum_jin_down = 0;
         //玉之间 to be continue
 
         for (var i = 0, len = data.length; i < len; i++) {
@@ -152,6 +144,9 @@ export default function Cchart(props) {
             } else if (data[i].roomType === '银之间') {
                 if (data[i].deltapt >= 0) sum_yin_up += data[i].deltapt;
                 else sum_yin_down += data[i].deltapt;
+            } else if (data[i].roomType === '金之间') {
+                if (data[i].deltapt >= 0) sum_jin_up += data[i].deltapt;
+                else sum_jin_down += data[i].deltapt;
             }
         }
 
@@ -164,9 +159,14 @@ export default function Cchart(props) {
                 { name: '银之间+分：', value: sum_yin_up },
                 { name: '银之间-分：', value: -sum_yin_down },
             ],
+            jin: [
+                { name: '金之间+分：', value: sum_jin_up },
+                { name: '金之间-分：', value: -sum_jin_down },
+            ],
             total: [
                 { name: '铜之间：', value: sum_tong_up + sum_tong_down },
-                { name: '银之间：', value: sum_yin_up + sum_yin_down },]
+                { name: '银之间：', value: sum_yin_up + sum_yin_down },
+                { name: '银之间：', value: sum_jin_up + sum_jin_down },]
 
         };
         return piechardata;
@@ -180,10 +180,17 @@ export default function Cchart(props) {
     var sumRank5deltapt_yin = 0;
     var sumRank6deltapt_tong = 0;
     var sumRank6deltapt_yin = 0;
+    var sumRank7deltapt_yin = 0;
+    var sumRank7deltapt_jin = 0;
+    var sumRank8deltapt_yin = 0;
+    var sumRank8deltapt_jin = 0;
+    var sumRank9deltapt_yin = 0;
+    var sumRank9deltapt_jin = 0;
+    //var sumRankArray = {4:[0,0],5:[0,0],6:[0,0],7:[0,0],8:[0,0],9:[0,0]};
     var sumDeltapt_tong = 0;
     var sumDeltapt_yin = 0;
+    var sumDeltapt_jin = 0;
     const areachart_data_filter = () => {
-        var rank4data = []
         for (var i = 0, len = data.length; i < len; i++) {
             if (data[i].rank == 4 && data[i].roomType === '铜之间') {
                 Object.defineProperty(data[i], "rank4deltapt_tong", { writable: true, configurable: true, value: data[i].deltapt });
@@ -209,10 +216,36 @@ export default function Cchart(props) {
                 Object.defineProperty(data[i], "rank6deltapt_yin", { writable: true, configurable: true, value: data[i].deltapt });
                 sumRank6deltapt_yin += data[i].deltapt;
                 sumDeltapt_yin += data[i].deltapt;
+            } else if (data[i].rank == 7 && data[i].roomType === '银之间') {
+                Object.defineProperty(data[i], "rank7deltapt_yin", { writable: true, configurable: true, value: data[i].deltapt });
+                sumRank7deltapt_yin += data[i].deltapt;
+                sumDeltapt_yin += data[i].deltapt;
+            } else if (data[i].rank == 7 && data[i].roomType === '金之间') {
+                Object.defineProperty(data[i], "rank7deltapt_jin", { writable: true, configurable: true, value: data[i].deltapt });
+                sumRank7deltapt_jin += data[i].deltapt;
+                sumDeltapt_jin += data[i].deltapt;
+            } else if (data[i].rank == 8 && data[i].roomType === '银之间') {
+                Object.defineProperty(data[i], "rank8deltapt_yin", { writable: true, configurable: true, value: data[i].deltapt });
+                sumRank8deltapt_yin += data[i].deltapt;
+                sumDeltapt_yin += data[i].deltapt;
+            } else if (data[i].rank == 8 && data[i].roomType === '金之间') {
+                Object.defineProperty(data[i], "rank8deltapt_jin", { writable: true, configurable: true, value: data[i].deltapt });
+                sumRank8deltapt_jin += data[i].deltapt;
+                sumDeltapt_jin += data[i].deltapt;
+            } else if (data[i].rank == 9 && data[i].roomType === '银之间') {
+                Object.defineProperty(data[i], "rank9deltapt_yin", { writable: true, configurable: true, value: data[i].deltapt });
+                sumRank9deltapt_yin += data[i].deltapt;
+                sumDeltapt_yin += data[i].deltapt;
+            } else if (data[i].rank == 9 && data[i].roomType === '金之间') {
+                Object.defineProperty(data[i], "rank9deltapt_jin", { writable: true, configurable: true, value: data[i].deltapt });
+                sumRank9deltapt_jin += data[i].deltapt;
+                sumDeltapt_jin += data[i].deltapt;
             } else if (data[i].roomType === '铜之间') {
                 sumDeltapt_tong += data[i].deltapt;
             } else if (data[i].roomType === '银之间') {
                 sumDeltapt_yin += data[i].deltapt;
+            } else if (data[i].roomType === '金之间') {
+                sumDeltapt_jin += data[i].deltapt;
             }
             //console.log(data[i])
         }
@@ -222,7 +255,10 @@ export default function Cchart(props) {
     const formatAreachartToolTips = (toolTipsItem, itemName, z) => {
         if (z.dataKey != "rank4deltapt_tong" && z.dataKey != "rank4deltapt_yin" &&
             z.dataKey != "rank5deltapt_tong" && z.dataKey != "rank5deltapt_yin" &&
-            z.dataKey != "rank6deltapt_tong" && z.dataKey != "rank6deltapt_yin")
+            z.dataKey != "rank6deltapt_tong" && z.dataKey != "rank6deltapt_yin" &&
+            z.dataKey != "rank7deltapt_yin" && z.dataKey != "rank7deltapt_jin" &&
+            z.dataKey != "rank8deltapt_yin" && z.dataKey != "rank8deltapt_jin" &&
+            z.dataKey != "rank9deltapt_yin" && z.dataKey != "rank9deltapt_jin")
             return [toolTipsItem, itemName];
         //console.log(toolTipsItem, itemName,z)
         var match = null;
@@ -246,9 +282,12 @@ export default function Cchart(props) {
     }
 
     var tmmmmm = `铜/银之间上分统计：雀士⭐(铜/银之间): ${sumRank4deltapt_tong}/${sumRank4deltapt_yin};
-雀士⭐⭐(铜/银之间): ${sumRank5deltapt_tong}/${sumRank5deltapt_yin};
-雀士⭐⭐⭐(铜/银之间): ${sumRank6deltapt_tong}/${sumRank6deltapt_tong};
-铜之间: ${sumDeltapt_tong} 银之间: ${sumDeltapt_yin}`
+        雀士⭐⭐(铜/银之间): ${sumRank5deltapt_tong}/${sumRank5deltapt_yin};
+        雀士⭐⭐⭐(铜/银之间): ${sumRank6deltapt_tong}/${sumRank6deltapt_tong};`
+    var tmmm2 = `雀杰⭐(银/金之间): ${sumRank7deltapt_yin}/${sumRank7deltapt_jin};
+        雀杰⭐⭐(银/金之间): ${sumRank8deltapt_yin}/${sumRank8deltapt_jin};
+        雀杰⭐⭐⭐(银/金之间): ${sumRank9deltapt_yin}/${sumRank9deltapt_jin};`
+    var tmmm3 = `铜之间: ${sumDeltapt_tong} 银之间: ${sumDeltapt_yin} 金之间: ${sumDeltapt_jin}`
 
     //console.log(tmmmmm)
     ///////////////////////
@@ -260,9 +299,9 @@ export default function Cchart(props) {
                     margin={{ top: 5, right: 30, left: 60, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
 
-                    <XAxis dataKey="endtime" hide={false} tick={false} tickLine={false} 
+                    <XAxis dataKey="endtime" hide={false} tick={false} tickLine={false}
                         axisLine={false} reversed={true} >
-                        <Label value={`玩家：${playerName}`} offset={0} position="insideBottom" stroke="#ff9800"/>
+                        <Label value={`玩家：${playerName}`} offset={0} position="insideBottom" stroke="#ff9800" />
                     </XAxis>
                     <YAxis yAxisId="1" domain={['dataMin - 0.3', 'dataMax + 0.3']} ticks={[1, 2, 3, 4]}
                         tick={{ stroke: '#76ff03', strokeWidth: 1 }} interval={0} reversed={true} orientation="right"
@@ -282,17 +321,21 @@ export default function Cchart(props) {
                     <Line yAxisId="3" type="basic" dataKey="deltapt" stroke="#ff9800" name="Δpt(天梯分变动)" strokeWidth={2} animationDuration={300} strokeDasharray="4 1" />
                 </LineChart>
             </ResponsiveContainer>
-            <br/>
+            <br />
             <ResponsiveContainer width="100%" height={400}>
                 <ComposedChart width={800} height={400} data={data}
                     margin={{ top: 5, right: 30, left: 60, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" />
-
                     <XAxis dataKey="endtime" hide={false} tick={false} tickLine={false}
                         axisLine={false} reversed={true} scale="band">
                         <Label value={tmmmmm} offset={0} position="insideBottom" stroke="#ff9800" />
+                        {/*
+                         <Label value={tmmmmm} offset={0} position="insideBottom" stroke="#ff9800" />
+                        <Label value={tmmm2} offset={-20} position="insideBottom" stroke="#ff9800" />
+                        <Label value={tmmm3} offset={-40} position="insideBottom" stroke="#ff9800" />
+                        */}
                     </XAxis>
-                    <YAxis yAxisId="1" domain={['dataMin - 0.3', 'dataMax + 0.3']} ticks={range(1, RankTitle.length+1, 1).slice(1)}
+                    <YAxis yAxisId="1" domain={['dataMin - 0.3', 'dataMax + 0.3']} ticks={range(1, RankTitle.length + 1, 1).slice(1)}
                         tick={{ stroke: '#76ff03', strokeWidth: 0.4 }} interval={0} orientation="left" minTickGap={10}
                         tickFormatter={formatRank} mirror={true} type="number" allowDecimals={false} />
                     <YAxis yAxisId="2" type="number" orientation="left" mirror={false}
@@ -309,6 +352,12 @@ export default function Cchart(props) {
                     <Area yAxisId="3" type="monotone" dataKey="rank5deltapt_yin" name="雀士⭐⭐银之间Δpt" stroke="#C0C0C0" fill="#C0C0C0" />
                     <Area yAxisId="3" type="monotone" dataKey="rank6deltapt_tong" name="雀士⭐⭐⭐铜之间Δpt" stroke="#8B4513" fill="#8B4513" />
                     <Area yAxisId="3" type="monotone" dataKey="rank6deltapt_yin" name="雀士⭐⭐⭐银之间Δpt" stroke="#C0C0C0" fill="#C0C0C0" />
+                    <Area yAxisId="3" type="monotone" dataKey="rank7deltapt_yin" name="雀杰⭐银之间Δpt" stroke="#8B4513" fill="#8B4513" />
+                    <Area yAxisId="3" type="monotone" dataKey="rank7deltapt_jin" name="雀杰⭐金之间Δpt" stroke="#C0C0C0" fill="#C0C0C0" />
+                    <Area yAxisId="3" type="monotone" dataKey="rank8deltapt_yin" name="雀杰⭐⭐银之间Δpt" stroke="#8B4513" fill="#8B4513" />
+                    <Area yAxisId="3" type="monotone" dataKey="rank8deltapt_jin" name="雀杰⭐⭐金之间Δpt" stroke="#C0C0C0" fill="#C0C0C0" />
+                    <Area yAxisId="3" type="monotone" dataKey="rank9deltapt_yin" name="雀杰⭐⭐⭐银之间Δpt" stroke="#8B4513" fill="#8B4513" />
+                    <Area yAxisId="3" type="monotone" dataKey="rank9deltapt_jin" name="雀杰⭐⭐⭐金之间Δpt" stroke="#C0C0C0" fill="#C0C0C0" />
                 </ComposedChart>
             </ResponsiveContainer>
             <ResponsiveContainer width="100%" height={400}>
@@ -325,10 +374,17 @@ export default function Cchart(props) {
                             <Cell key={`cell-${index}`} fill={COLORS[(index + 2) % COLORS.length]} />
                         ))}
                     </Pie>
+                    <Pie data={piechardata.jin} label={renderCustomizedLabel} labelLine={false}
+                        cx="45%" cy="50%" innerRadius={70} outerRadius={100} fill="#8884d8" dataKey="value">
+                        {data.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[(index + 2) % COLORS.length]} />
+                        ))}
+                    </Pie>
                     <Pie data={piechardata.total} activeIndex={piestate3.activeIndex} activeShape={renderActiveShape}
                         cx="75%" cy="50%" innerRadius={70} outerRadius={100} fill="#8884d8" dataKey="value" onMouseEnter={onPieEnter3} />
                 </PieChart>
             </ResponsiveContainer>
+            <center>{tmmmmm}<br/>{tmmm2}<br/>{tmmm3}</center>
         </>
     )
 }
