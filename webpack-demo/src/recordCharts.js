@@ -42,7 +42,7 @@ export default function Cchart(props) {
 
     const formatRank = (rankItem) => {
         var value = rankItem
-        if (value > RankTitle.length) value = RankTitle.length-1
+        if (value >= RankTitle.length) value = RankTitle.length-1
         return RankTitle[value]
     }
 
@@ -168,7 +168,7 @@ export default function Cchart(props) {
             total: [
                 { name: '铜之间：', value: sum_tong_up + sum_tong_down },
                 { name: '银之间：', value: sum_yin_up + sum_yin_down },
-                { name: '银之间：', value: sum_jin_up + sum_jin_down },]
+                { name: '金之间：', value: sum_jin_up + sum_jin_down },]
 
         };
         return piechardata;
@@ -337,7 +337,7 @@ export default function Cchart(props) {
                         <Label value={tmmm3} offset={-40} position="insideBottom" stroke="#ff9800" />
                         */}
                     </XAxis>
-                    <YAxis yAxisId="1" domain={['dataMin - 0.3', 'dataMax + 0.3']} ticks={range(1, RankTitle.length + 1, 1).slice(1)}
+                    <YAxis yAxisId="1" domain={['dataMin - 0.3', 'dataMax + 0.3']} ticks={range(1, RankTitle.length, 1).slice(1)}
                         tick={{ stroke: '#76ff03', strokeWidth: 0.4 }} interval={0} orientation="left" minTickGap={10}
                         tickFormatter={formatRank} mirror={true} type="number" allowDecimals={false} />
                     <YAxis yAxisId="2" type="number" orientation="left" mirror={false}
@@ -371,19 +371,19 @@ export default function Cchart(props) {
                         ))}
                     </Pie>
                     <Pie data={piechardata.yin} label={renderCustomizedLabel} labelLine={false}
-                        cx="45%" cy="50%" innerRadius={70} outerRadius={100} fill="#8884d8" dataKey="value">
+                        cx="40%" cy="50%" innerRadius={70} outerRadius={100} fill="#8884d8" dataKey="value">
                         {data.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[(index + 2) % COLORS.length]} />
                         ))}
                     </Pie>
                     <Pie data={piechardata.jin} label={renderCustomizedLabel} labelLine={false}
-                        cx="45%" cy="50%" innerRadius={70} outerRadius={100} fill="#8884d8" dataKey="value">
+                        cx="60%" cy="50%" innerRadius={70} outerRadius={100} fill="#8884d8" dataKey="value">
                         {data.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[(index + 2) % COLORS.length]} />
                         ))}
                     </Pie>
                     <Pie data={piechardata.total} activeIndex={piestate3.activeIndex} activeShape={renderActiveShape}
-                        cx="75%" cy="50%" innerRadius={70} outerRadius={100} fill="#8884d8" dataKey="value" onMouseEnter={onPieEnter3} />
+                        cx="80%" cy="50%" innerRadius={70} outerRadius={100} fill="#8884d8" dataKey="value" onMouseEnter={onPieEnter3} />
                 </PieChart>
             </ResponsiveContainer>
             <center>{tmmmmm}<br/>{tmmm2}<br/>{tmmm3}</center>

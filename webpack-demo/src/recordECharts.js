@@ -140,7 +140,7 @@ function myEchart(totaldata, n, dom) {
     }
 
     const formatRank = (value) => {
-        if (value > RankTitle.length) return RankTitle[RankTitle.length - 1]
+        if (value >= RankTitle.length) return RankTitle[RankTitle.length - 1]
         return RankTitle[value]
     }
 

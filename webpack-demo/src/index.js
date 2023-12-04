@@ -162,8 +162,8 @@ function csvDataTrans() {
     getmyChartRoot().render(<Cchart data={jsondata.data} n={document.getElementById('majSoulGameN').value} />);
 }
 
-function showCharts(onoff) {
-    if (!onoff) {
+function showCharts(off) {
+    if (!off) {
         if (document.getElementById("myEEChart").style.display === 'none') {
             document.getElementById("myChart").style.display = 'block';
         } else {
