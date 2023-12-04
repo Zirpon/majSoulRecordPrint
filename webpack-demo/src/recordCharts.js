@@ -41,7 +41,9 @@ export default function Cchart(props) {
     }
 
     const formatRank = (rankItem) => {
-        return RankTitle[rankItem - 1]
+        var value = rankItem
+        if (value > RankTitle.length) value = RankTitle.length-1
+        return RankTitle[value]
     }
 
     const formatDeltaptToolTips = (toolTipsItem, itemName, z) => {
@@ -316,7 +318,7 @@ export default function Cchart(props) {
 
                     <Tooltip formatter={formatDeltaptToolTips} />
                     <Legend verticalAlign="top" height={36} />
-                    <Line yAxisId="1" type="linear" dataKey="顺位" stroke="#76ff03" strokeWidth={2} animationDuration={300} />
+                    <Line yAxisId="1" type="linear" dataKey="pos" name="顺位" stroke="#76ff03" strokeWidth={2} animationDuration={300} />
                     <Line yAxisId="2" type="monotone" dataKey="finalpoint" name="胡牌点数" stroke="#2196f3" strokeWidth={2} strokeDasharray="4 1 2" animationDuration={300} />
                     <Line yAxisId="3" type="basic" dataKey="deltapt" stroke="#ff9800" name="Δpt(天梯分变动)" strokeWidth={2} animationDuration={300} strokeDasharray="4 1" />
                 </LineChart>

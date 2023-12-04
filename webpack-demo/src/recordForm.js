@@ -57,7 +57,7 @@ function stableSort(array, comparator) {
 const headCells = [
     { id: 'uuid', numeric: false, disablePadding: true, label: '牌谱ID' },
     { id: 'endtime', numeric: false, disablePadding: false, label: '结束时间' },
-    { id: '顺位', numeric: true, disablePadding: false, label: '顺位' },
+    { id: 'pos', numeric: true, disablePadding: false, label: '顺位' },
     { id: 'finalpoint', numeric: true, disablePadding: false, label: 'finalpoint' },
     { id: 'pt', numeric: true, disablePadding: false, label: 'pt' },
     { id: 'deltapt', numeric: true, disablePadding: false, label: 'deltapt' },
@@ -302,7 +302,7 @@ export default function EnhancedTable(props) {
                       {row.uuid}
                     </TableCell>
                     <TableCell align="right" sx={{color: 'blue',backgroundColor: '#2196f3',}} >{row.endtime}</TableCell>
-                    <TableCell align="right" sx={{color: 'blue',backgroundColor: '#ff9800',}} >{row.顺位}</TableCell>
+                    <TableCell align="right" sx={{color: 'blue',backgroundColor: '#ff9800',}} >{row.pos}</TableCell>
                     <TableCell align="right" sx={{color: 'blue',backgroundColor: '#18ffff',}}>{row.finalpoint}</TableCell>
                     <TableCell align="right" sx={{color: 'blue',backgroundColor: '#ffff00',}}>{row.pt}</TableCell>
                     <TableCell align="right" sx={{color: 'blue',backgroundColor: '#1de9b6',}}>{row.deltapt}</TableCell>

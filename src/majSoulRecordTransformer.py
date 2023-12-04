@@ -112,7 +112,7 @@ def LoadData():
         # 人机局不计入
         noCountFlag = 0
         for i in range(len(count_dict["playerdata"])):
-            count_dict["playerdata"][i]["顺位"] = i+1
+            count_dict["playerdata"][i]["pos"] = i+1
             #count_dict["playerdata"][i]["rank"] = RankTitle[count_dict["playerdata"][i]["rank"]+1]
             if count_dict["playerdata"][i]['name'] == "电脑" \
             and count_dict["playerdata"][i]['rank'] == 1 \
@@ -160,12 +160,12 @@ def printCountList():
                     rankIndex = len(RankTitle)-1
                 playerdata["rankTitle"] = RankTitle[rankIndex]
                 f.writelines("%d位\t%s\t%s\t%d\t%d\t%d\t%d\t" % 
-                             (playerdata['顺位'], playerdata['name'], playerdata['rankTitle'], 
+                             (playerdata['pos'], playerdata['name'], playerdata['rankTitle'], 
                               playerdata['finalpoint'], playerdata['pt'], playerdata['deltapt'],
                               playerdata['pt']+playerdata['deltapt']))
-                if playerdata['顺位'] == 2:
+                if playerdata['pos'] == 2:
                     f.writelines("\n")      
-                if playerdata['顺位'] == 4:
+                if playerdata['pos'] == 4:
                     f.writelines("\t")
             f.writelines(endtime+'\n')
 
@@ -176,7 +176,7 @@ def printCountList():
 
 #个人战绩
 def printCSV():
-    individualCSV = [["uuid","endtime","id","name","顺位","finalpoint","pt","deltapt","Curpt","rank","rankTitle","roomType"]]
+    individualCSV = [["uuid","endtime","id","name","pos","finalpoint","pt","deltapt","Curpt","rank","rankTitle","roomType"]]
     jsonFileName = "./data/%s-%d.json" % (MJSoulName,MJSoulID)
     os.makedirs(os.path.dirname(jsonFileName), exist_ok=True)
     individualData = []
@@ -195,7 +195,7 @@ def printCSV():
                                 endtime,
                                 playerData['id'],
                                 playerData['name'],
-                                playerData['顺位'],
+                                playerData['pos'],
                                 playerData['finalpoint'],
                                 playerData['pt'],
                                 playerData['deltapt'],
@@ -247,7 +247,7 @@ def graphicCSV():
                 #print(df)
             else:
                 for i in range(len(df_index)):
-                    if df_index[i] in ["顺位","finalpoint","pt","deltapt","Curpt","rank"]:
+                    if df_index[i] in ["pos","finalpoint","pt","deltapt","Curpt","rank"]:
                         df[df_index[i]].append(int(row[i]))
                     else:
                         df[df_index[i]].append(row[i])
@@ -262,10 +262,10 @@ def graphicCSV():
     plt.rcParams['axes.unicode_minus']=False
     plt.rcParams['figure.figsize']=[20,10]
     plt.rcParams['figure.dpi']=100
-    #[["uuid","endtime","id","name","顺位","finalpoint","pt","deltapt","Curpt","rank","rankTitle"]]
+    #[["uuid","endtime","id","name","pos","finalpoint","pt","deltapt","Curpt","rank","rankTitle"]]
     
     def graphicPlacing():
-        plt.plot(df['endtime'][-recentGameN:], df['顺位'][-recentGameN:], label='顺位',
+        plt.plot(df['endtime'][-recentGameN:], df['pos'][-recentGameN:], label='pos',
                     lw=2.5, linestyle='-', color="green", marker='^')
         plt.title('対戦記録')
         plt.grid(True)
@@ -323,12 +323,12 @@ def graphicCSV():
         fig, ax1 = plt.subplots()
         color = 'tab:blue'
         x = df['endtime'][-recentGameN:]
-        y = df['顺位'][-recentGameN:]
+        y = df['pos'][-recentGameN:]
         #print(x,y)
-        ax1.set_ylabel("顺位", color=color)
+        ax1.set_ylabel("pos", color=color)
         ax1.set_xlabel("近期%d场比赛" % recentGameN, color=color)
         #print("近期%d场比赛" % recentGameN)
-        ax1.plot(x, y, color=color, linestyle='-', label="顺位",  marker='h')
+        ax1.plot(x, y, color=color, linestyle='-', label="pos",  marker='h')
         ax1.set_ylim(4.5,0.5)
         ax1.set_yticks([1,2,3,4], ['1st', '2nd', '3rd','4th'])
         ax1.tick_params(axis='y', labelcolor=color, rotation=0)
@@ -359,7 +359,7 @@ def graphicCSV():
                      arrowprops={'facecolor':'yellow', 'shrink':0.15})
         fig.tight_layout()
         plt.title('対戦記録')
-        plt.figlegend(['顺位', 'finalpoint', 'deltapt'])
+        plt.figlegend(['pos', 'finalpoint', 'deltapt'])
         plt.savefig("./data/%sMajSoulTrends.png" % (filenamePrefix))        
         #plt.show()
 

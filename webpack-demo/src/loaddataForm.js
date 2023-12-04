@@ -16,23 +16,21 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
+var openN = 0;
+var initOpenN = 999999999999;
+
 function Row(props) {
-    const { row } = props;
-    const [open, setOpen] = React.useState(false);
-
-    {/*console.log(props)*/ }
-
+    const { row, ret } = props;
+    const [open, setOpen] = React.useState(ret);
+    //console.log(openN, props, open)
+    //console.log(varEndtime); 
     var newDate = new Date();
     newDate.setTime(row.endtime * 1000);
     var varEndtime = newDate.toLocaleString()
 
-    {/* 
-        console.log(varEndtime); 
-    */}
-
     const headCells = [
         { id: 'name', numeric: false, disablePadding: false, label: 'ID' },
-        { id: '顺位', numeric: true, disablePadding: false, label: '顺位' },
+        { id: 'pos', numeric: true, disablePadding: false, label: '顺位' },
         { id: 'rankTitle', numeric: false, disablePadding: false, label: 'rankTitle' },
         { id: 'finalpoint', numeric: true, disablePadding: false, label: 'finalpoint' },
         { id: 'pt', numeric: true, disablePadding: false, label: 'pt' },
@@ -40,8 +38,6 @@ function Row(props) {
         { id: 'Curpt', numeric: true, disablePadding: false, label: 'Curpt' },
         //{ id: 'rank', numeric: true, disablePadding: false, label: 'rank' },
     ];
-
-
     return (
         <React.Fragment>
             <TableRow sx={{ '& > *': { borderBottom: 'unset' }, backgroundColor: '#fce4ec', }}>
@@ -91,7 +87,7 @@ function Row(props) {
                                     {row.playerdata.map((player) => (
                                         <TableRow key={player.id} sx={{ color: 'blue', backgroundColor: '#00bcd4', }}>
                                             <TableCell align="center" sx={{ color: 'blue', backgroundColor: '#2196f3', }} >{player.name}</TableCell>
-                                            <TableCell align="right" sx={{ color: 'blue', backgroundColor: '#ff9800', }} >{player.顺位}</TableCell>
+                                            <TableCell align="right" sx={{ color: 'blue', backgroundColor: '#ff9800', }} >{player.pos}</TableCell>
                                             <TableCell align="center">{player.rankTitle}</TableCell>
                                             <TableCell align="right" sx={{ color: 'blue', backgroundColor: '#18ffff', }}>{player.finalpoint}</TableCell>
                                             <TableCell align="right" sx={{ color: 'blue', backgroundColor: '#ffff00', }}>{player.pt}</TableCell>
@@ -114,6 +110,7 @@ Row.propTypes = {
         endtime: PropTypes.number.isRequired,
         uuid: PropTypes.string.isRequired,
     }).isRequired,
+    ret: PropTypes.bool.isRequired,
 };
 
 export default function CollapsibleTable(props) {
@@ -151,10 +148,13 @@ export default function CollapsibleTable(props) {
                         </TableHead>
                         <TableBody>
                             {rows.map((row) => {
+                                openN++;
                                 if (!includeFriends) {
                                     if (row.roomdata.room === '友人场') return;
                                 }
-                                return <Row key={row.uuid} row={row} />
+                                var ret = (openN < initOpenN) ? true:false;
+                                //console.log(ret, openN);
+                                return <Row key={row.uuid} row={row} ret={ret}/>
                             })}
                         </TableBody>
                     </Table>

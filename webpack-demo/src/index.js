@@ -5,12 +5,15 @@ import Papa from 'papaparse'
 import CollapsibleTable from './loaddataForm'
 import EnhancedTable from './recordForm'
 import Cchart from './recordCharts'
+import { myEchart } from './recordECharts'
 import './assets/styles.css'
 import DemoCarousel from './carousel'
+//import './bg'
 
 const carouselContainer = document.getElementById("demo-carousel");
 const roottom = createRoot(carouselContainer);
 roottom.render(<DemoCarousel />);
+var G_BmyChartRootMounted = false;
 
 window.addEventListener('pywebviewready', async function () {
     var container = document.getElementById('pywebview-status')
@@ -75,39 +78,236 @@ function printCountList(nclick) {
     )
 }
 
+var G_csvData = { field: null, strdata: null };
+import { styled } from '@mui/material/styles';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+
 function printCSV(nclick) {
     pywebview.api.printCSV(nclick).then(
         (response) => {
             //console.log(response.data)
             //console.log(response.strdata)
-            var csv = Papa.unparse({
-                "fields": response.data,
-                "data": response.strdata,
-            });
-            var jsondata = Papa.parse(csv, {
-                header: true,
-                //complete: data => {console.log(data.data);}
-                transform: function (value, column) {
-                    //console.log(value, column);
-                    if (column === 'Curpt' || column === 'pt' ||
-                        column === 'finalpoint' || column === 'deltapt' ||
-                        column === 'rank' || column === '顺位')
-                        return parseInt(value);
-                    return value;
-                },
-            })
-            //console.log(jsondata)
-
+            G_csvData.field = response.data;
+            G_csvData.strdata = response.strdata;
             showResponse(response)
-            getWCollapseRoot().render(<EnhancedTable rows={jsondata.data} />);
-            csvChart(jsondata.data)
+
+            csvDataTrans();
         }
     )
 }
 
+function csvDataTrans() {
+    if (!G_csvData.field || !G_csvData.strdata) {
+        return;
+    }
+    var csv = Papa.unparse({
+        "fields": G_csvData.field,
+        "data": G_csvData.strdata,
+    });
+    //console.log(csv)
+    //console.log(G_csvData)
+    var jsondata = Papa.parse(csv, {
+        header: true,
+        //complete: data => {console.log(data.data);}
+        transform: function (value, column) {
+            //console.log(value, column);
+            if (column === 'Curpt' || column === 'pt' ||
+                column === 'finalpoint' || column === 'deltapt' ||
+                column === 'rank' || column === 'pos')
+                return parseInt(value);
+            return value;
+        },
+    })
+    //console.log(jsondata)
+
+    getWCollapseRoot().render(<EnhancedTable rows={jsondata.data} />);
+
+    var matchColumnIndex = [];
+    var matchColumnText = [];
+    for (let index = 0; index < G_csvData.field.length; index++) {
+        const element = G_csvData.field[index];
+        if (element === 'Curpt' || element === 'pt' ||
+            element === 'finalpoint' || element === 'deltapt' ||
+            element === 'rank' || element === 'pos')
+            matchColumnIndex.push(index);
+        matchColumnText.push(element);
+    }
+    var transformtick = 0;
+    var arraydata = Papa.parse(csv, {
+        header: false,
+        //complete: data => {console.log(data.data);}
+        transform: function (value, column) {
+            //console.log(value, column);
+            transformtick++;
+            if (transformtick > G_csvData.field.length && matchColumnIndex.includes(column)) {
+                //console.log(transformtick, G_csvData.field.length, value, column);
+                return parseInt(value);
+            }
+            return value;
+        },
+    })
+
+    if (document.getElementById("myEEChart").style.display === 'none') {
+        document.getElementById("myChart").style.display = 'none';
+        document.getElementById("myEEChart").style.display = 'block';
+    } else {
+        document.getElementById("myEEChart").style.display = 'none';
+        document.getElementById("myChart").style.display = 'block';
+    }
+    myEchart(arraydata.data, document.getElementById('majSoulGameN').value, document.getElementById("myEEChart"));
+    getmyChartRoot().render(<Cchart data={jsondata.data} n={document.getElementById('majSoulGameN').value} />);
+}
+
+function showCharts(onoff) {
+    if (!onoff) {
+        if (document.getElementById("myEEChart").style.display === 'none') {
+            document.getElementById("myChart").style.display = 'block';
+        } else {
+            document.getElementById("myChart").style.display = 'none';
+        }
+    } else {
+        document.getElementById("myEEChart").style.display = 'none';
+        document.getElementById("myChart").style.display = 'none';
+    }
+}
+
+const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+    width: 62,
+    height: 34,
+    padding: 7,
+    '& .MuiSwitch-switchBase': {
+        margin: 1,
+        padding: 0,
+        transform: 'translateX(6px)',
+        '&.Mui-checked': {
+            color: '#fff',
+            transform: 'translateX(22px)',
+            '& .MuiSwitch-thumb:before': {
+                backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+                    '#fff',
+                )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
+            },
+            '& + .MuiSwitch-track': {
+                opacity: 1,
+                backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+            },
+        },
+    },
+    '& .MuiSwitch-thumb': {
+        backgroundColor: theme.palette.mode === 'dark' ? '#003892' : '#001e3c',
+        width: 32,
+        height: 32,
+        '&:before': {
+            content: "''",
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            left: 0,
+            top: 0,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+                '#fff',
+            )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
+        },
+    },
+    '& .MuiSwitch-track': {
+        opacity: 1,
+        backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+        borderRadius: 20 / 2,
+    },
+}));
+
+
+const IOSSwitch = styled((props) => (
+    <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />))
+    (({ theme }) => ({
+        width: 42,
+        height: 26,
+        padding: 0,
+        '& .MuiSwitch-switchBase': {
+            padding: 0,
+            margin: 2,
+            transitionDuration: '300ms',
+            '&.Mui-checked': {
+                transform: 'translateX(16px)',
+                color: '#fff',
+                '& + .MuiSwitch-track': {
+                    backgroundColor: theme.palette.mode === 'dark' ? '#2ECA45' : '#65C466',
+                    opacity: 1,
+                    border: 0,
+                },
+                '&.Mui-disabled + .MuiSwitch-track': {
+                    opacity: 0.5,
+                },
+            },
+            '&.Mui-focusVisible .MuiSwitch-thumb': {
+                color: '#33cf4d',
+                border: '6px solid #fff',
+            },
+            '&.Mui-disabled .MuiSwitch-thumb': {
+                color:
+                    theme.palette.mode === 'light'
+                        ? theme.palette.grey[100]
+                        : theme.palette.grey[600],
+            },
+            '&.Mui-disabled + .MuiSwitch-track': {
+                opacity: theme.palette.mode === 'light' ? 0.7 : 0.3,
+            },
+        },
+        '& .MuiSwitch-thumb': {
+            boxSizing: 'border-box',
+            width: 22,
+            height: 22,
+        },
+        '& .MuiSwitch-track': {
+            borderRadius: 26 / 2,
+            backgroundColor: theme.palette.mode === 'light' ? '#E9E9EA' : '#39393D',
+            opacity: 1,
+            transition: theme.transitions.create(['background-color'], {
+                duration: 500,
+            }),
+        },
+    }));
+
+export default function CustomizedSwitches() {
+    const [checked, setchecked] = React.useState(true);
+    const [ioschecked, setioschecked] = React.useState(true);
+
+    const handleChange = (event) => {
+        setchecked(event.target.checked);
+        csvDataTrans();
+    };
+    const handleIOSChange = (event) => {
+        setioschecked(event.target.checked);
+        showCharts(ioschecked);
+    };
+    return (
+        <FormGroup>
+            <div>
+            <FormControlLabel control={<MaterialUISwitch sx={{ m: 1 }}
+                    checked={checked}
+                    onChange={handleChange}
+                    inputProps={{ 'aria-label': 'controlled' }}/>}
+                label="MUI switch"
+            />
+            <FormControlLabel control={<IOSSwitch sx={{ m: 1 }} 
+                    checked={ioschecked} onChange={handleIOSChange}
+                    inputProps={{ 'aria-label': 'controlled' }} />}
+                label="Charts on/off"
+            />
+            </div>
+        </FormGroup>
+    );
+}
+
 function csvChart(jsondata) {
-    getmyChartRoot().render(<Cchart data={jsondata} n={document.getElementById('majSoulGameN').value} />);
-    //dddddr.unmount();
+    //getmyChartRoot().render(<Cchart data={jsondata} n={document.getElementById('majSoulGameN').value} />);
+    //getmyChartRoot.unmount();
 }
 
 var G_myChartRoot = null
@@ -187,7 +387,7 @@ function CButtonPage() {
     const [IntResetflag, setIntResetflag] = React.useState(0);
     return (
         <div>
-            <MyInput /><br/><br/>
+            <MyInput /><br />
             {/*<CButton btName="加载数据" btFunc={loadData} tmp={IntResetflag} />*/}
             <CButton btName="战绩表格" btFunc={printCountList} tmp={IntResetflag} />
             <CButton btName="战绩数据曲线图" btFunc={printCSV} tmp={IntResetflag} />
@@ -195,6 +395,7 @@ function CButtonPage() {
             <CButton btName="reset" btFunc={() => {
                 setIntResetflag(IntResetflag + 1);
             }} tmp={IntResetflag} />
+            <CustomizedSwitches />
         </div>
     )
 }
@@ -264,7 +465,7 @@ function WCollapseInst() {
 
     return (
         <div style={{ display: "block" }}>
-            <div className={'column1'}>
+            <div>
                 {/*<span>动画时长500毫秒/折叠后高度40px:</span> style={{display:"none"}} */}
                 <button onClick={collapseA} style={{ width: "100%" }}>折叠/展开</button>
                 <WCollapse transition={`500ms`} collapseHeight={collapseHeight} isOpen={isOpenA}>

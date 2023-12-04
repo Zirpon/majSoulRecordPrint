@@ -365,3 +365,14 @@ label {
 	font-weight: 600;
 	font-style: normal;
 }
+
+.chart-container {
+	height: 800px;
+	width: 100%;
+	margin-top: 20px;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-bottom: 40px;
+	margin: 0 auto;
+	display: none;
+  }
