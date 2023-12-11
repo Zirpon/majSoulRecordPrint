@@ -42,8 +42,9 @@ export default function Cchart(props) {
 
     const formatRank = (rankItem) => {
         var value = rankItem
-        if (value >= RankTitle.length) value = RankTitle.length-1
-        return RankTitle[value]
+        if (value <= 0) return RankTitle[0];
+        if (value-1 >= RankTitle.length) value = RankTitle.length-1
+        return RankTitle[value-1]
     }
 
     const formatDeltaptToolTips = (toolTipsItem, itemName, z) => {

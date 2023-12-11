@@ -140,8 +140,9 @@ function myEchart(totaldata, n, dom) {
     }
 
     const formatRank = (value) => {
-        if (value >= RankTitle.length) return RankTitle[RankTitle.length - 1]
-        return RankTitle[value]
+        if(value<=0) return RankTitle[0];
+        if (value-1 >= RankTitle.length) return RankTitle[RankTitle.length - 1]
+        return RankTitle[value-1]
     }
 
     //console.log(allData)
@@ -359,7 +360,7 @@ function myEchart(totaldata, n, dom) {
                 type: 'line',
                 yAxisIndex: 3,
                 xAxisIndex: 1,
-                data: allData.pt,
+                data: allData.Curpt,
             },
             {
                 name: '段位',
