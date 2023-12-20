@@ -63,11 +63,24 @@ class MenuApi():
     def on_top():
         active_window = webview.active_window()
         if active_window is not None:
+            if not GLOBALS.get_value('DEBUG') and GLOBALS.get_value('PLATFORM') == 'win':
+                active_window.evaluate_js("""alert("bug: windows no ontop");""")
+                return
+
             active_window.on_top = not (active_window.on_top)
             if active_window.on_top:
-                active_window.evaluate_js("""alert("已置顶");""")
+                active_window.evaluate_js('alert("已置顶");')
             else:
-                active_window.evaluate_js("""alert("已取消置顶");""")
+                active_window.evaluate_js('alert("已取消置顶");')
+            return
+            """
+            if MenuApi.RecordWindowTitle in active_window.title:
+                active_window.title = MenuApi.RecordWindowTitle + (active_window.on_top and ' [已置顶]' or '')
+            elif MenuApi.MajSoulWindowTitle in active_window.title:
+                active_window.title = MenuApi.MajSoulWindowTitle + (active_window.on_top and ' [已置顶]' or '')
+            elif MenuApi.ReactWindowsTitle in active_window.title:
+                active_window.title = MenuApi.ReactWindowsTitle + (active_window.on_top and ' [已置顶]' or '')
+            """
         else:
             pass
             

@@ -52,6 +52,7 @@ if __name__ == '__main__':
     if DEBUG:
         windowtmp = webview.create_window(MenuApi.RecordWindowTitle, "https://cn.bing.com/", js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
     else:
+        #windowtmp = webview.create_window(MenuApi.RecordWindowTitle, "https://cn.bing.com/", js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
         windowtmp = webview.create_window(MenuApi.MajSoulWindowTitle, MenuApi.majSoul_url, js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
     def loadWindowUrl(window):
         # mac webkit 加载第一个页面失败 这是研究出来暂时使用的办法
