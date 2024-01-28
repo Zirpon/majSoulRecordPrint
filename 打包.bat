@@ -49,21 +49,26 @@ GOTO START
     --nowindowed ^
     --upx-dir "D:\Program Files\upx-4.1.0-win64" ^
 
+
+    --noconsole ^
+    
 pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview scipy matplotlib pyinstaller --trusted-host mirrors.aliyun.com 
 
 :START
 
-pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview pyinstaller Pillow --trusted-host mirrors.aliyun.com 
+pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview pyinstaller Pillow bottle --trusted-host mirrors.aliyun.com 
 pipenv graph
 
 pipenv run Pyinstaller -F .\src\APP.py ^
     --log-level=WARN ^
     --noconfirm ^
-    --noconsole ^
     --add-data ".\assets\react.html;assets" ^
     --add-data ".\assets\newTab.html;assets" ^
-    --add-data ".\webpack-demo\dist\;./webpack-demo/dist/" ^
+    --add-data ".\assets\hub.html;assets" ^
+    --add-data ".\assets\hub.js;assets" ^
+    --add-data ".\assets\favicon.ico;assets" ^
     --add-data ".\src\browseinject.js;src" ^
+    --add-data ".\webpack-demo\dist\;./webpack-demo/dist/" ^
     --splash ".\webpack-demo\src\assets\images\loading.jpg" ^
     --distpath .\pack\dist\ --workpath .\pack\build\ ^
     -i .\majsoul.ico -n PrintApp --clean

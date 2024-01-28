@@ -91,6 +91,12 @@ class MenuApi():
         newTab = webview.create_window("New Tab", js_api=RecordApi(),
             url=appUtils.formatUrl(g_newtab_path),
             text_select=True, zoomable=True, draggable=True)
+        def on_closed():
+            GLOBALS.get_value('WINDOWS_SET').remove(newTab)
+            if len(GLOBALS.get_value('WINDOWS_SET')) == 1 and GLOBALS.get_value('WINDOWS_SET')[0] == (GLOBALS.get_value('HUB_WINDOW')):
+                GLOBALS.get_value('HUB_WINDOW').destroy()
+        newTab.events.closed += on_closed
+        GLOBALS.get_value('WINDOWS_SET').append(newTab)
         return newTab
         """
         with open('./assets/newTab.html','r',encoding='utf-8') as f:
