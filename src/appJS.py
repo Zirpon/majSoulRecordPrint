@@ -117,5 +117,8 @@ class RecordApi:
         webview.active_window().load_url('https://'+url)
         return True
 
+    def getHubUrl(self):
+        return GLOBALS.get_value('HUB_WINDOW')._server.address + 'hub.html'
+
     def error(self):
         raise Exception('This is a Python exception')

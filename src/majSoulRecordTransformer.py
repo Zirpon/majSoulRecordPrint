@@ -183,7 +183,7 @@ def printCSV():
 
     for gamedata in sortedCountList:
         # 友人场不计入天梯战绩
-        if gamedata['roomdata']['room'] == "友人场":
+        if gamedata['roomdata']['room'] == "友人场" or gamedata['roomdata']['player'] != 4:
             continue
         for playerData in gamedata['playerdata']:
         #for i in range(len(playerDataSorted)):

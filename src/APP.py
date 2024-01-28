@@ -1,3 +1,5 @@
+import bottle
+from bottle import route, run, static_file
 import webview
 import sys
 import os
@@ -59,4 +61,20 @@ if __name__ == '__main__':
         if GLOBALS.get_value('PLATFORM') == 'darwin':
             window.evaluate_js("alert('click me finished');")
             window.load_url(window.original_url)
+    # Define a couple of simple web apps using Bottle
+    app_hub = bottle.Bottle()
+    @app_hub.route('/')
+    def hello():
+        return '<h1>Second Window</h1><p>This one is a web app and has its own server.</p>'
+    
+    @app_hub.route('/<filepath:path>')
+    def server_static(filepath):
+        return static_file(filepath, root='./assets/')
+
+    #ddd = webview.create_window(MenuApi.StorageWindowsTitle, MenuApi.storage_url, text_select=True, zoomable=True, draggable=True, hidden=False)
+   
+    hub_window = webview.create_window(MenuApi.StorageWindowsTitle, app_hub, http_port=33333, text_select=True, zoomable=True, draggable=True, hidden=True)
+    GLOBALS.set_value('HUB_WINDOW', hub_window)
     webview.start(loadWindowUrl, windowtmp, private_mode=False, menu=MenuApi().menu_items, debug=DEBUG)
+    
+

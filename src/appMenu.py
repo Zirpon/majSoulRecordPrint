@@ -16,10 +16,12 @@ class MenuApi():
     RecordWindowTitle = 'Record'
     MajSoulWindowTitle = 'MajSoul'
     ReactWindowsTitle = 'React'
+    StorageWindowsTitle = 'StorageAgent'
 
     record_url = './webpack-demo/dist/index.html'
     majSoul_url = 'https://game.maj-soul.com/1/'
     react_url = './assets/react.html'
+    storage_url = './assets/hub.html'
 
     def __init__(self):
         pass

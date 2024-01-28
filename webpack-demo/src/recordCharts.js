@@ -25,7 +25,10 @@ const RankTitle = ['初心⭐', '初心⭐⭐', '初心⭐⭐⭐',
 export default function Cchart(props) {
     const { data, n } = props;
     //console.log(data);
-    var datatmp = data.slice(0, n);
+    //{"uuid":"240127-4118f865-a839-4b4d-ad6f-fb5ba0a935c4","endtime":"2024-01-27 07:53:36","id":"10118820","name":"砰砰砰砰砰砰砰","pos":1,"finalpoint":30700,"pt":491,"deltapt":41,"Curpt":532,"rank":7,"rankTitle":"雀杰⭐","roomType":"银之间"}
+    var dataRecentSlice = data.slice(0, n);
+    var datatmp = dataRecentSlice
+
     var playerName = data[0].name
 
     const formatXAxis = (tickItem) => {
