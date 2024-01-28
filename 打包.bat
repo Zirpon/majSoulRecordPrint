@@ -56,7 +56,7 @@ pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview scipy 
 
 :START
 
-pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview pyinstaller Pillow bottle --trusted-host mirrors.aliyun.com 
+pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview pyinstaller Pillow --trusted-host mirrors.aliyun.com 
 pipenv graph
 
 pipenv run Pyinstaller -F .\src\APP.py ^
