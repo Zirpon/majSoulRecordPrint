@@ -165,7 +165,12 @@ function myEchart(totaldata, n, dom) {
         legend: {
             orient: 'horizontal',//默认是横向排列，也可以是竖向'vertical'
             left: 'center',//可以是方位词
-            top: '2%'//也可以是数值和百分比
+            top: '2%',//也可以是数值和百分比
+            selected: {
+                '铜之间上分': false,
+                '银之间上分': false,
+                '金之间上分': false,
+            }
         },//标注系列的名称和颜色
         toolbox: {
             top: '2%',
@@ -188,6 +193,7 @@ function myEchart(totaldata, n, dom) {
             //padding: 0,
             //borderWidth: 0,
             formatter: formatToolTips,
+            selectedMode: true,
         },
 
         grid: [
