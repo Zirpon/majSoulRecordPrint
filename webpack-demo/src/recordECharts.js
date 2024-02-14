@@ -60,7 +60,7 @@ function myEchart(totaldata, n, dom) {
         allData['deltapt_jin'] = [];
 
         for (var i = 0, len = totaldata.length - 1; i < len; i++) {
-           // console.log(i, totaldata[i])
+            // console.log(i, totaldata[i])
 
             allData['deltapt_tong'][i] = 0;
             allData['deltapt_yin'][i] = 0;
@@ -111,6 +111,7 @@ function myEchart(totaldata, n, dom) {
         //console.log(params, ticket, callback)
         //还原原始 显示
         let str = '';
+        str += params[0].axisValue + `<br/>`
         params.forEach((item, idx) => {
             if (item.seriesName === '段位') {
                 str += `${item.marker}${item.seriesName}： ${formatRank(item.data)}<br/>`
@@ -120,12 +121,12 @@ function myEchart(totaldata, n, dom) {
         })
 
         // 自定义显示
-        if (params[0].axisId.includes('endtime-all')) {
+        if (params[0].axisId.includes('endtime-all') || params[0].axisIndex == 1) {
             return str;
         } else {
             var sumdeltapt = 0;
-            for (let eleindex = 0; eleindex < recentData.deltapt.length; eleindex++) {
-                sumdeltapt += recentData.deltapt[eleindex];
+            for (let eleindex = 0; eleindex < allData.deltapt.length; eleindex++) {
+                sumdeltapt += allData.deltapt[eleindex];
 
                 if (eleindex == params[0].dataIndex) {
                     //console.log(element.uuid, z.payload.uuid)
@@ -140,9 +141,9 @@ function myEchart(totaldata, n, dom) {
     }
 
     const formatRank = (value) => {
-        if(value<=0) return RankTitle[0];
-        if (value-1 >= RankTitle.length) return RankTitle[RankTitle.length - 1]
-        return RankTitle[value-1]
+        if (value <= 0) return RankTitle[0];
+        if (value - 1 >= RankTitle.length) return RankTitle[RankTitle.length - 1]
+        return RankTitle[value - 1]
     }
 
     //console.log(allData)
@@ -195,7 +196,6 @@ function myEchart(totaldata, n, dom) {
             formatter: formatToolTips,
             selectedMode: true,
         },
-
         grid: [
             {
                 id: 0,
@@ -212,17 +212,92 @@ function myEchart(totaldata, n, dom) {
                 height: '35%'
             }
         ],
+        dataZoom: [
+            {
+                //支持鼠标滚轮缩放
+                type: 'inside',
+                start: 0,
+                end: 20,
+                xAxisIndex: [0],
+            },
+            {
+                //支持鼠标滚轮缩放
+                type: 'slider',
+                start: 0,
+                end: 20,
+                xAxisIndex: [0],
+                left: "center",                           //组件离容器左侧的距离,'left', 'center', 'right','20%'
+                //top: "top",                                //组件离容器上侧的距离,'top', 'middle', 'bottom','20%'
+                right: "auto",                             //组件离容器右侧的距离,'20%'
+                bottom: "45%",                            //组件离容器下侧的距离,'20%'
+            },
+            {
+                //支持鼠标滚轮缩放
+                type: 'inside',
+                start: 0,
+                end: 100,
+                xAxisIndex: [1],
+            },
+            {
+                //支持滑块滑动
+                id: 'dataZoomX',
+                show: true, //是否显示 组件。如果设置为 false，不会显示，但是数据过滤的功能还存在。
+                type: 'slider',
+                xAxisIndex: [1],
+                //yAxisIndex: [3,4,5],    
+                realtime: true,
+                //filterMode: 'filter', // 设定为 'filter' 从而 X 的窗口变化会影响 Y 的范围。
+                //filterMode: 'filter',                   //'filter'：当前数据窗口外的数据，被 过滤掉。即 会 影响其他轴的数据范围。每个数据项，只要有一个维度在数据窗口外，整个数据项就会被过滤掉。
+                //'weakFilter'：当前数据窗口外的数据，被 过滤掉。即 会 影响其他轴的数据范围。每个数据项，只有当全部维度都在数据窗口同侧外部，整个数据项才会被过滤掉。
+                //'empty'：当前数据窗口外的数据，被 设置为空。即 不会 影响其他轴的数据范围。
+                //'none': 不过滤数据，只改变数轴范围。
+
+                //radiusAxisIndex: 3, //设置 dataZoom-inside 组件控制的 radius 轴,可以用数组表示多个轴
+                //angleAxisIndex: [0, 2], //设置 dataZoom-inside 组件控制的 angle 轴,可以用数组表示多个轴
+                start: 0,
+                end: 100,
+                zoomOnMouseWheel: true, //如何触发缩放。可选值为：true：表示不按任何功能键，鼠标滚轮能触发缩放。false：表示鼠标滚轮不能触发缩放。'shift'：表示按住 shift 和鼠标滚轮能触发缩放。'ctrl'：表示按住 ctrl 和鼠标滚轮能触发缩放。'alt'：表示按住 alt 和鼠标滚轮能触发缩放。
+                moveOnMouseMove: true, //如何触发数据窗口平移。true：表示不按任何功能键，鼠标移动能触发数据窗口平移。false：表示鼠标滚轮不能触发缩放。'shift'：表示按住 shift 和鼠标移动能触发数据窗口平移。'ctrl'：表示按住 ctrl 和鼠标移动能触发数据窗口平移。'alt'：表示按住 alt 和鼠标移动能触发数据窗口平移。
+                zoomLock: false, //是否锁定选择区域（或叫做数据窗口）的大小。如果设置为 true 则锁定选择区域的大小，也就是说，只能平移，不能缩放。
+
+                backgroundColor: "rgba(47,69,84,0)",  //组件的背景颜色
+                dataBackground: {                        //数据阴影的样式。
+                    //lineStyle: mylineStyle,              //阴影的线条样式
+                    //areaStyle: myareaStyle,              //阴影的填充样式
+                },
+                fillerColor: "rgba(167,183,204,0.4)",  //选中范围的填充颜色。
+                borderColor: "#ddd",                     //边框颜色。
+
+                //startValue: 10,                           //数据窗口范围的起始数值
+                //endValue: 100,                            //数据窗口范围的结束数值。
+                orient: "horizontal",                    //布局方式是横还是竖。不仅是布局方式，对于直角坐标系而言，也决定了，缺省情况控制横向数轴还是纵向数轴。'horizontal'：水平。'vertical'：竖直。
+                throttle: 100,                             //设置触发视图刷新的频率。单位为毫秒（ms）。
+                left: "center",                           //组件离容器左侧的距离,'left', 'center', 'right','20%'
+                //top: "top",                                //组件离容器上侧的距离,'top', 'middle', 'bottom','20%'
+                right: "auto",                             //组件离容器右侧的距离,'20%'
+                bottom: "auto",                            //组件离容器下侧的距离,'20%'
+            },
+            /*{
+                id: 'dataZoomY',
+                type: 'slider',
+                yAxisIndex: [3, 4, 5],
+                //filterMode: 'empty',
+                start: 0,
+                end: 100
+            }*/],
         xAxis: [{
+            id: 0,
             gridIndex: 0,
             type: 'category',
             show: false,
             //name: 'endtime',
             //xisLabel: { rotate: 50, interval: 0 },
-            data: recentData.endtime,
+            data: allData.endtime,
             inverse: true,
             //axisLine: { onZero: true },
         },
         {
+            id: 1,
             gridIndex: 1,
             type: 'category',
             show: false,
@@ -347,19 +422,22 @@ function myEchart(totaldata, n, dom) {
                 name: '顺位',
                 type: 'line',
                 yAxisIndex: 0,
-                data: recentData.pos,
+                xAxisIndex: 0,
+                data: allData.pos,
             },
             {
                 name: 'Δpt(天梯分变动)',
                 type: 'line',
                 yAxisIndex: 1,
-                data: recentData.deltapt,
+                xAxisIndex: 0,
+                data: allData.deltapt,
             },
             {
                 name: '胡牌点数',
                 type: 'line',
                 yAxisIndex: 2,
-                data: recentData.finalpoint
+                xAxisIndex: 0,
+                data: allData.finalpoint
             },
             {
                 name: '当前pt(天梯分)',
@@ -423,7 +501,7 @@ function myEchart(totaldata, n, dom) {
 
     window.addEventListener("resize", () => {
         if (myChart != null && myChart != "" && myChart != undefined) {
-            myChart.resize();            
+            myChart.resize();
         }
     });
 }
