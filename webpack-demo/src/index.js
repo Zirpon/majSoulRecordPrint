@@ -74,11 +74,13 @@ function loadData(nclick) {
         getWCollapseRoot().render(<CollapsibleTable rows={response.data} />);
     });
 }
-
+var G_matchData = null;
 function printCountList(nclick) {
     pywebview.api.printCountList(nclick).then((response) => {
         //console.log(response)
         showResponse(response);
+        if (response.data)
+            G_matchData = response.data;
         getWCollapseRoot().render(<CollapsibleTable rows={response.data} />);
     });
 }
@@ -200,6 +202,45 @@ function showCharts(off) {
     }
 }
 
+function showForms(off) {
+    if (!off) {
+        if (!G_csvData.field || !G_csvData.strdata) {
+            return; G_csvData
+        }
+        var csv = Papa.unparse({
+            fields: G_csvData.field,
+            data: G_csvData.strdata,
+        });
+        //console.log(csv)
+        //console.log(G_csvData)
+        var jsondata = Papa.parse(csv, {
+            header: true,
+            //complete: data => {console.log(data.data);}
+            transform: function (value, column) {
+                //console.log(value, column);
+                if (
+                    column === "Curpt" ||
+                    column === "pt" ||
+                    column === "finalpoint" ||
+                    column === "deltapt" ||
+                    column === "rank" ||
+                    column === "pos"
+                )
+                    return parseInt(value);
+                return value;
+            },
+        });
+        //console.log(jsondata)
+        getWCollapseRoot().render(<EnhancedTable rows={jsondata.data} />);
+    } else {
+        if (!G_matchData) {
+            console.log('G_matchData is null')
+            return;
+        }
+        getWCollapseRoot().render(<CollapsibleTable rows={G_matchData} />);
+    }
+}
+
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 62,
     height: 34,
@@ -298,9 +339,44 @@ const IOSSwitch = styled((props) => (
     },
 }));
 
+//Android12Switch
+const AntSwitch = styled(Switch)(({ theme }) => ({
+    padding: 8,
+    '& .MuiSwitch-track': {
+        borderRadius: 22 / 2,
+        '&::before, &::after': {
+            content: '""',
+            position: 'absolute',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: 16,
+            height: 16,
+        },
+        '&::before': {
+            backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(
+                theme.palette.getContrastText(theme.palette.primary.main),
+            )}" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/></svg>')`,
+            left: 12,
+        },
+        '&::after': {
+            backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 24 24"><path fill="${encodeURIComponent(
+                theme.palette.getContrastText(theme.palette.primary.main),
+            )}" d="M19,13H5V11H19V13Z" /></svg>')`,
+            right: 12,
+        },
+    },
+    '& .MuiSwitch-thumb': {
+        boxShadow: 'none',
+        width: 16,
+        height: 16,
+        margin: 2,
+    },
+}));
+
 export default function CustomizedSwitches() {
     const [checked, setchecked] = React.useState(true);
     const [ioschecked, setioschecked] = React.useState(true);
+    const [antchecked, setantchecked] = React.useState(true);
 
     const handleChange = (event) => {
         setchecked(event.target.checked);
@@ -309,6 +385,10 @@ export default function CustomizedSwitches() {
     const handleIOSChange = (event) => {
         setioschecked(event.target.checked);
         showCharts(ioschecked);
+    };
+    const handleANTChange = (event) => {
+        setantchecked(event.target.checked);
+        showForms(antchecked);
     };
     return (
         <FormGroup>
@@ -334,6 +414,17 @@ export default function CustomizedSwitches() {
                         />
                     }
                     label="Charts on/off"
+                />
+                <FormControlLabel
+                    control={
+                        <AntSwitch
+                            sx={{ m: 1 }}
+                            checked={antchecked}
+                            onChange={handleANTChange}
+                            inputProps={{ "aria-label": "controlled" }}
+                        />
+                    }
+                    label="Android12Switch on/off"
                 />
             </div>
         </FormGroup>
