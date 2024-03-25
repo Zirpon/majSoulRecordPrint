@@ -48,9 +48,6 @@ GOTO START
     --exclude-module pyinstaller ^
     --nowindowed ^
     --upx-dir "D:\Program Files\upx-4.1.0-win64" ^
-
-
-    --noconsole ^
     
 pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview scipy matplotlib pyinstaller --trusted-host mirrors.aliyun.com 
 
@@ -62,6 +59,7 @@ pipenv graph
 pipenv run Pyinstaller -F .\src\APP.py ^
     --log-level=WARN ^
     --noconfirm ^
+    --noconsole ^
     --add-data ".\assets\react.html;assets" ^
     --add-data ".\assets\newTab.html;assets" ^
     --add-data ".\assets\hub.html;assets" ^

@@ -59,6 +59,7 @@ if __name__ == '__main__':
                                           js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
         # windowtmp = webview.create_window(MenuApi.MajSoulWindowTitle, MenuApi.majSoul_url, js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
 
+    # 创建一个服务 实现跨域存储
     # Define a couple of simple web apps using Bottle
     app_hub = bottle.Bottle()
 
@@ -68,7 +69,7 @@ if __name__ == '__main__':
 
     @app_hub.route('/<filepath:path>')
     def server_static(filepath):
-        print(GLOBALS.get_value('BASE_PATH')+'/assets/')
+        #print(GLOBALS.get_value('BASE_PATH')+'/assets/')
         return static_file(filepath, root=GLOBALS.get_value('BASE_PATH')+'/assets/')
 
     # ddd = webview.create_window(MenuApi.StorageWindowsTitle, MenuApi.storage_url, text_select=True, zoomable=True, draggable=True, hidden=False)

@@ -19,7 +19,12 @@ class MenuApi():
     StorageWindowsTitle = 'StorageAgent'
 
     record_url = './webpack-demo/dist/index.html'
+    # 中文服
     majSoul_url = 'https://game.maj-soul.com/1/'
+    # 日服
+    jp_majSoul_url = 'https://game.mahjongsoul.com/'
+    # 国际服
+    usa_majsoul_url = 'https://mahjongsoul.game.yo-star.com'
     react_url = './assets/react.html'
     storage_url = './assets/hub.html'
 
@@ -44,6 +49,12 @@ class MenuApi():
         active_window = webview.active_window()
         active_window.set_title(MenuApi.MajSoulWindowTitle)
         active_window.load_url(MenuApi.majSoul_url)
+
+    @staticmethod
+    def view_jp_majsoul():
+        active_window = webview.active_window()
+        active_window.set_title(MenuApi.MajSoulWindowTitle)
+        active_window.load_url(MenuApi.jp_majSoul_url)
 
     @staticmethod
     def click_me():
@@ -114,6 +125,7 @@ class MenuApi():
             'Test Menu',
             [
                 wm.MenuAction('雀魂中文服', view_majsoul),
+                wm.MenuAction('雀魂日服', view_jp_majsoul),
                 wm.MenuSeparator(),
                 wm.MenuAction('战绩可视化网页', view_record),
                 wm.MenuSeparator(),
