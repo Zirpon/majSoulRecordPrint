@@ -59,7 +59,7 @@ if __name__ == '__main__':
                                           js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
         # windowtmp = webview.create_window(MenuApi.MajSoulWindowTitle, MenuApi.majSoul_url, js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
 
-    # 创建一个服务 实现跨域存储
+    # 创建一个服务 实现跨域存储 #############################################
     # Define a couple of simple web apps using Bottle
     app_hub = bottle.Bottle()
 
@@ -76,6 +76,7 @@ if __name__ == '__main__':
 
     hub_window = webview.create_window(MenuApi.StorageWindowsTitle, app_hub,
                                        http_port=33333, text_select=True, zoomable=True, draggable=True, hidden=True)
+    ########################################################################
 
     def on_closedhub():
         GLOBALS.get_value('WINDOWS_SET').remove(hub_window)
