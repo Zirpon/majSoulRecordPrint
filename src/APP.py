@@ -76,8 +76,6 @@ if __name__ == '__main__':
     windowtmp = webview.create_window(MenuApi.RecordWindowTitle, "https://cn.bing.com/",
         js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
 
-    # windowtmp = webview.create_window(MenuApi.MajSoulWindowTitle, MenuApi.majSoul_url, js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
-
     # 创建一个服务 实现跨域存储 #############################################
     # Define a couple of simple web apps using Bottleimport bottle
     import bottle
@@ -93,14 +91,6 @@ if __name__ == '__main__':
         print(GLOBALS.get_value('BASE_PATH')+'/assets/')
         return static_file(filepath, root=GLOBALS.get_value('BASE_PATH')+'/assets/')
 
-    # ddd = webview.create_window(MenuApi.StorageWindowsTitle, MenuApi.storage_url, 
-    #                                   text_select=True, zoomable=True, draggable=True, hidden=False)
-
-    # pywebview default port is http_port=42001
-    #hub_window = webview.create_window(MenuApi.StorageWindowsTitle, MenuApi.storage_url,
-    #    text_select=True, zoomable=True, draggable=True, hidden=False)
-    #dd_window = webview.create_window(MenuApi.StorageWindowsTitle, MenuApi.record_url,
-    #    text_select=True, zoomable=True, draggable=True, hidden=False)
     hub_window = webview.create_window(MenuApi.StorageWindowsTitle, app_hub,
                                        http_port=42001, text_select=True, zoomable=True, draggable=True, hidden=True)
     
