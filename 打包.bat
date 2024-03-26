@@ -4,18 +4,13 @@
 ::https://www.zhihu.com/question/268397385
 ::https://zhuanlan.zhihu.com/p/57674343
 ::https://www.zhihu.com/question/281858271
+::https://blog.csdn.net/yetugeng/article/details/86665753
+::https://hoganchen.gitbooks.io/batch-learn-notes/content/pi-chu-li-zhi-duo-xing-zhu-shi.html
 
-GOTO START
-1、:: 注释内容（第一个冒号后也可以跟任何一个非字母数字的字符）
-2、rem 注释内容（不能出现重定向符号和管道符号）
-3、echo 注释内容（不能出现重定向符号和管道符号）〉nul
-4、if not exist nul 注释内容（不能出现重定向符号和管道符号）
-5、:注释内容（注释文本不能与已有标签重名）
-6、%注释内容%（可以用作行间注释，不能出现重定向符号和管道符号）
-7、goto 标签 注释内容（可以用作说明goto的条件和执行内容）
-8、:标签 注释内容（可以用作标签下方段的执行内容）
-::--log-level=WARN
-:: --exclude-module bottle
+GOTO start
+
+@if 1==0 (
+--exclude-module bottle
 --exclude-module pywin32-ctypes ^
 --exclude-module altgraph ^
 --exclude-module tzdata ^
@@ -24,34 +19,35 @@ GOTO START
 --exclude-module Pillow ^
 --exclude-module numpy ^
 --exclude-module pytz ^
-    --exclude-module cycler ^
-    --exclude-module fonttools ^
-    --exclude-module kiwisolver ^
-    --exclude-module pyparsing ^
-    --exclude-module python-dateutil ^
-    --exclude-module six ^
+--exclude-module cycler ^
+--exclude-module fonttools ^
+--exclude-module kiwisolver ^
+--exclude-module pyparsing ^
+--exclude-module python-dateutil ^
+--exclude-module six ^
 --upx-exclude "Qt*.dll" ^
 --upx-exclude "PySide2\*.pyd" ^
+--log-level=WARN
+--add-data ".\assets\record.html;assets" ^
+--add-data ".\assets\logo.jpg;assets" ^
+--add-data ".\assets\bg1.jpg;assets" ^
+--add-data ".\assets\bg2.jpg;assets" ^
+--add-data ".\assets\bg4.png;assets" ^
+--add-data ".\assets\bg5.jpg;assets" ^
+--add-data ".\assets\loading.jpg;assets" ^
+--add-data ".\assets\styles.css;assets" ^
+--add-data ".\assets\slider.js;assets" ^
+--add-data ".\assets\favicon.ico;assets" ^
+--exclude-module pyinstaller ^
+--nowindowed ^
+--upx-dir "D:\Program Files\upx-4.1.0-win64" ^
+)
+
 ::rm Pipfile.lock
 ::rm Pipfile
+::pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview scipy matplotlib pyinstaller --trusted-host mirrors.aliyun.com
 
-    --add-data ".\assets\record.html;assets" ^
-    --add-data ".\assets\logo.jpg;assets" ^
-    --add-data ".\assets\bg1.jpg;assets" ^
-    --add-data ".\assets\bg2.jpg;assets" ^
-    --add-data ".\assets\bg4.png;assets" ^
-    --add-data ".\assets\bg5.jpg;assets" ^
-    --add-data ".\assets\loading.jpg;assets" ^
-    --add-data ".\assets\styles.css;assets" ^
-    --add-data ".\assets\slider.js;assets" ^
-    --add-data ".\assets\favicon.ico;assets" ^
-    --exclude-module pyinstaller ^
-    --nowindowed ^
-    --upx-dir "D:\Program Files\upx-4.1.0-win64" ^
-    
-pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview scipy matplotlib pyinstaller --trusted-host mirrors.aliyun.com 
-
-:START
+:start
 
 pipenv run pip install -i http://mirrors.aliyun.com/pypi/simple pywebview pyinstaller Pillow --trusted-host mirrors.aliyun.com 
 pipenv graph
