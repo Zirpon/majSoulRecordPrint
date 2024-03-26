@@ -66,7 +66,7 @@ pipenv run Pyinstaller -F .\src\APP.py ^
     --add-data ".\assets\hub.js;assets" ^
     --add-data ".\assets\favicon.ico;assets" ^
     --add-data ".\src\browseinject.js;src" ^
-    --add-data ".\webpack-demo\dist\;./webpack-demo/dist/" ^
+    --add-data ".\assets\dist\;./assets/dist/" ^
     --splash ".\webpack-demo\src\assets\images\loading.jpg" ^
     --distpath .\pack\dist\ --workpath .\pack\build\ ^
     -i .\majsoul.ico -n PrintApp --clean

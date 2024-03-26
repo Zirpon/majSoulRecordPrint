@@ -11,7 +11,8 @@ module.exports = {
     output: {
         //filename: "[name].[contenthash].js",
         filename: "dist.js",
-        path: path.resolve(__dirname, "dist"),
+        //path: path.resolve(__dirname, "dist"),
+        path: path.resolve(__dirname, "../assets/dist"),
     },
     optimization: {
         minimize: false,

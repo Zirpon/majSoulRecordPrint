@@ -81,7 +81,7 @@ def LoadData():
             newload_dict = json.load(load_f)
         load_f.close()
     except:
-        #print(data_source+"文件读取出错 请检查文件数据格式")
+        print(data_source+"文件读取出错 请检查文件数据格式")
         return [-1]
 
     global sortedCountList
@@ -232,7 +232,7 @@ def graphicCSV():
 
     csvFileName = "./data/%s-%d.csv" % (MJSoulName,MJSoulID)
     #df = pd_read_csv(csvFileName)
-    #print(recentGameN)
+    print(recentGameN)
     df = {}
     df_index = []
     maxColumn = 0
@@ -245,7 +245,7 @@ def graphicCSV():
                 for i in range(len(df_index)):
                     df.update({df_index[i]:[]})
                 lineCount += 1
-                #print(df)
+                print(df)
             else:
                 for i in range(len(df_index)):
                     if df_index[i] in ["pos","finalpoint","pt","deltapt","Curpt","rank"]:
@@ -255,10 +255,10 @@ def graphicCSV():
                 lineCount += 1
         maxColumn = lineCount - 1
         #for i in range(len(df_index)):
-            #print(len(df[df_index[i]][-recentGameN:]),str(df[df_index[i]][-recentGameN:])+'\n')
+            print(len(df[df_index[i]][-recentGameN:]),str(df[df_index[i]][-recentGameN:])+'\n')
    # for i in range(maxColumn):
-        #print(df, maxColumn, df['endtime'][0])
-    #print(df)
+        print(df, maxColumn, df['endtime'][0])
+    print(df)
     plt.rcParams['font.sans-serif']=['SimHei']
     plt.rcParams['axes.unicode_minus']=False
     plt.rcParams['figure.figsize']=[20,10]
@@ -301,20 +301,20 @@ def graphicCSV():
         #'-' '--' ':' '-.'
         #marker: o h + * . _ | x s d ^ v > < p
         ax2 = ax1.twinx()  # 创建共用x轴的第二个y轴 
-        #print(df['endtime'][-recentGameN:])
+        print(df['endtime'][-recentGameN:])
         ax2.set_ylabel(_ylabel2, color=color)
         ax2.tick_params(axis='y', labelcolor=color)
         ax2.plot(x, _y2, color=color, lw=2, linestyle=linestyle, label=_ylabel2, marker=marker)
 
         peaks, _ = find_peaks(_y2, distance=1)
-        #print(_y2)#346-375
-        #print(peaks)#0-29->375-30+1 ~ 375-30+30
+        print(_y2)#346-375
+        print(peaks)#0-29->375-30+1 ~ 375-30+30
         for peak in peaks:
-            #print(maxColumn, recentGameN) # 376,30
-            #print(maxColumn-recentGameN+1)
+            print(maxColumn, recentGameN) # 376,30
+            print(maxColumn-recentGameN+1)
             peakIndex = maxColumn-recentGameN+peak
 
-            #print(x, '\n', _y2,'\n', peakIndex,peak)
+            print(x, '\n', _y2,'\n', peakIndex,peak)
             annoText = "%s pt:%s" % (_ylabel2, _y2[peak])
             plt.annotate(annoText,xy=(x[peak], _y2[peak]), xytext=(x[peak], _y2[peak]+50),
                         arrowprops={'facecolor':'lightblue', 'shrink':0.15})
@@ -325,10 +325,10 @@ def graphicCSV():
         color = 'tab:blue'
         x = df['endtime'][-recentGameN:]
         y = df['pos'][-recentGameN:]
-        #print(x,y)
+        print(x,y)
         ax1.set_ylabel("pos", color=color)
         ax1.set_xlabel("近期%d场比赛" % recentGameN, color=color)
-        #print("近期%d场比赛" % recentGameN)
+        print("近期%d场比赛" % recentGameN)
         ax1.plot(x, y, color=color, linestyle='-', label="pos",  marker='h')
         ax1.set_ylim(4.5,0.5)
         ax1.set_yticks([1,2,3,4], ['1st', '2nd', '3rd','4th'])
@@ -348,8 +348,8 @@ def graphicCSV():
             int_x_time = int(time.mktime(time.strptime(x_time, "%Y-%m-%d %H:%M:%S")))
             if intLatestTimer - int_x_time > 24*60*60:
                 intTargetTimerIndex = x_index
-        #print(intTargetTimerIndex, x[intTargetTimerIndex], z[intTargetTimerIndex])
-        #print(len(z[-intTargetTimerIndex:]),z[-intTargetTimerIndex:])
+        print(intTargetTimerIndex, x[intTargetTimerIndex], z[intTargetTimerIndex])
+        print(len(z[-intTargetTimerIndex:]),z[-intTargetTimerIndex:])
 
         deltapt_24h = sum([element for element in z[intTargetTimerIndex:]])
         plt.annotate("近24h比赛数据(%s,%s) deltaPtSum=%s" % 
@@ -412,10 +412,10 @@ def graphicCSV():
         prominences = peak_prominences(df['Curpt'], peaks)[0]
         widths_half = peak_widths(df['Curpt'], peaks, rel_height=0.5)
         
-        #print(peaks,'\n', df['endtime'], '\n', df['Curpt'])
+        print(peaks,'\n', df['endtime'], '\n', df['Curpt'])
         x_p = [x[peak] for peak in peaks]  
         y_p = [y[peak] for peak in peaks]  
-        #print(peaks, x_p, y_p)
+        print(peaks, x_p, y_p)
         # '-' '--' ':' '-.'
         # marker:https://blog.csdn.net/Cristianozy/article/details/124536608
         #plt.plot(x_p, y_p, label='ptPeak',lw=2, linestyle='-.', color="red", marker='h')
@@ -448,7 +448,6 @@ def graphicCSV():
 def main():
     #https://pyinstaller.org/en/stable/runtime-information.html
     import sys
-    #print(sys)
     global MJSoulID
     global MJSoulName
     global filenamePrefix
@@ -456,14 +455,13 @@ def main():
     initprofile()
 
     if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-        #print('running in a PyInstaller bundle')
+        print('running in a PyInstaller bundle')
         LoadData()
         printCountList()
         printCSV()
         graphicCSV()
     else:
-        #print('running in a normal Python process')
-        #print(sys.argv)
+        print('running in a normal Python process')
         if len(sys.argv) > 1 and (sys.argv[1] == "-g" or sys.argv[1] == '--graphic'):
             if sys.argv[2].isdecimal():
                 global recentGameN

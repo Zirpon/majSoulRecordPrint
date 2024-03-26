@@ -18,7 +18,7 @@ class MenuApi():
     ReactWindowsTitle = 'React'
     StorageWindowsTitle = 'StorageAgent'
 
-    record_url = './webpack-demo/dist/index.html'
+    record_url = './assets/dist/index.html'
     # 中文服
     majSoul_url = 'https://game.maj-soul.com/1/'
     # 日服
@@ -35,7 +35,7 @@ class MenuApi():
     def view_react():
         active_window = webview.active_window()
         active_window.set_title(MenuApi.ReactWindowsTitle)
-        active_window.load_url(appUtils.formatUrl(MenuApi.react_url))
+        active_window.load_url((MenuApi.react_url))
     
     @staticmethod
     def view_record():

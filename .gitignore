@@ -27,3 +27,4 @@ majsoulJS/
 mac-pack/build/
 mac-pack/dist/
 *.dmg
+assets/dist/
