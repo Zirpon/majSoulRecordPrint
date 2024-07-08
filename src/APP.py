@@ -1,11 +1,14 @@
+# 导入必要的模块
 import webview
 import sys
 import os
 import GLOBALS
 import appUtils
 
+# 初始化 GLOBALS 模块
 GLOBALS._init()
 
+# 根据不同的操作系统设置平台信息和基础路径
 if sys.platform.startswith('linux'):
     #print('当前系统为 Linux')
     GLOBALS.set_value('PLATFORM', 'linux')
@@ -19,6 +22,7 @@ elif sys.platform.startswith('win'):
         GLOBALS.set_value('DEBUG', False)
         GLOBALS.set_value('BASE_PATH', sys._MEIPASS)
     else:
+        # 开发环境设置
         GLOBALS.set_value('DEBUG', True)
         GLOBALS.set_value('BASE_PATH', os.path.abspath(os.curdir))
         # os.path.dirname(sys.argv[0])
@@ -28,23 +32,27 @@ elif sys.platform.startswith('win'):
 elif sys.platform.startswith('darwin'):
     # mac py2app 打包标记
     if len(sys._xoptions) > 0 and getattr(sys._xoptions, 'fronzen_modules', 'off'):
+        # 开发环境设置
         GLOBALS.set_value('DEBUG', True)
         GLOBALS.set_value('BASE_PATH', os.path.abspath(os.curdir))
     else:
         #print('running in a py2app bundle')
+        # 生产环境设置
         GLOBALS.set_value('DEBUG', False)
         GLOBALS.set_value('BASE_PATH', os.path.abspath(os.curdir))
     #print('当前系统为 macOS')
     GLOBALS.set_value('PLATFORM', 'darwin')
     pass
 
+# 设置全局配置参数
 GLOBALS.set_value('CONFIG_FILE', "./setting.json")
 GLOBALS.set_value('NEWTAB_URL', "./assets/newTab.html")
 GLOBALS.set_value('INJECT_SCRIPT', "./src/browseinject.js")
 
+# 获取调试模式标识
 DEBUG = GLOBALS.get_value('DEBUG')
 
-# 打包会去掉标准输出 终端 要重定向
+# 在生产环境中重定向标准输出到文件
 if not DEBUG:
     class Output:
         def __init__(self):
@@ -64,20 +72,26 @@ if not DEBUG:
                 f.write(self.text)
                 f.close()
             self.text = ''
+
+    # 重定向 stdout 和 stderr
     sys.stdout = Output()
     sys.stderr = Output()
 
+# 打印调试和基础路径信息
 print("DEBUG:" + str(GLOBALS.get_value('DEBUG')))
 print("BASE_PATH:" + GLOBALS.get_value('BASE_PATH'))
 
+# 导入特定的 JavaScript API 和菜单处理模块
 from appJS import RecordApi
 from appMenu import MenuApi
-if __name__ == '__main__':
-    windowtmp = webview.create_window(MenuApi.RecordWindowTitle, "https://cn.bing.com/",
-        js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
 
-    # 创建一个服务 实现跨域存储 #############################################
-    # Define a couple of simple web apps using Bottleimport bottle
+# 主程序入口
+if __name__ == '__main__':
+    # 创建主窗口，显示记录器标题并加载 Bing 主页
+    windowtmp = webview.create_window(MenuApi.RecordWindowTitle, "https://cn.bing.com/",
+                                     js_api=RecordApi(), text_select=True, zoomable=True, draggable=True)
+
+    # 创建一个服务来处理跨域存储请求
     import bottle
     from bottle import route, run, static_file
     app_hub = bottle.Bottle()
@@ -91,34 +105,39 @@ if __name__ == '__main__':
         print(GLOBALS.get_value('BASE_PATH')+'/assets/')
         return static_file(filepath, root=GLOBALS.get_value('BASE_PATH')+'/assets/')
 
+    # 创建一个隐藏的窗口来托管服务，并设置其属性
     hub_window = webview.create_window(MenuApi.StorageWindowsTitle, app_hub,
                                        http_port=42001, text_select=True, zoomable=True, draggable=True, hidden=True)
-    
-    ########################################################################
-    # 最后关闭跨域存储窗口
+
+    # 定义关闭 hub_window 的回调函数
     def on_closedhub():
         GLOBALS.get_value('WINDOWS_SET').remove(hub_window)
 
+    # 关联 hub_window 的关闭事件和回调函数
     hub_window.events.closed += on_closedhub
     GLOBALS.set_value('HUB_WINDOW', hub_window)
     GLOBALS.set_value('WINDOWS_SET', [])
     GLOBALS.get_value('WINDOWS_SET').append(hub_window)
 
-    ########################################################################
+    # 定义加载 windowtmp 窗口的 URL 的函数
     def loadWindowUrl(window):
-        # mac webkit 加载第一个页面失败 这是研究出来暂时使用的办法
-        if GLOBALS.get_value('PLATFORM') == 'darwin':
+        # 处理 macOS 上 WebKit 加载第一个页面失败的问题
+        if GLOBALS.get_value('PLATFORM') == 'darwin':  
             window.evaluate_js("alert('click me finished');")
             window.load_url(window.original_url)
 
-        def on_closed():
+        # 定义 windowtmp 窗口关闭时的回调函数
+        def on_closed():  
             hub_window.show()
             GLOBALS.get_value('WINDOWS_SET').remove(window)
-            if len(GLOBALS.get_value('WINDOWS_SET')) == 1 and GLOBALS.get_value('WINDOWS_SET')[0] == (GLOBALS.get_value('HUB_WINDOW')):
+            if len(GLOBALS.get_value('WINDOWS_SET')) == 1 and GLOBALS.get_value('WINDOWS_SET')[0] == (GLOBALS.get_value('HUB_WINDOW')):  
                 GLOBALS.get_value('HUB_WINDOW').destroy()
+
+        # 关联 windowtmp 窗口的关闭事件和回调函数  
         window.events.closed += on_closed
         GLOBALS.get_value('WINDOWS_SET').append(window)
-    
-    ########################################################################
+
+    # 使用 webview.start 启动应用程序，传入 loadWindowUrl 函数作为加载 URL 的回调函数
     webview.start(loadWindowUrl, windowtmp, private_mode=False,
                   menu=MenuApi().menu_items, debug=DEBUG)
+
